@@ -1,9 +1,31 @@
+FROM php:7.3.10-cli
+
+RUN apt-get update \
+    && apt-get install -y \
+    git zip libcurl4-openssl-dev libssl-dev pkg-config
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install the gmp
+RUN apt-get update -y && \
+    apt-get install -y libgmp-dev re2c libmhash-dev file && \
+    ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/ && \
+    docker-php-ext-configure gmp && \
+    docker-php-ext-install gmp
+
+COPY . /var/www/html/
+WORKDIR /var/www/html
+RUN composer install
+
 # Use the official PHP 7.3 image.
 # https://hub.docker.com/_/php
 FROM php:7.3-apache
 
+
 # Copy local code to the container image.
 COPY . /var/www/html/
+COPY --from=0 /var/www/html/vendor /var/www/html/vendor
 
 # Use the PORT environment variable in Apache configuration files.
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf

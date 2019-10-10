@@ -1,0 +1,13 @@
+version: '3.2'
+services:
+  apache-php:
+    build:
+      context: .
+    volumes:
+      - type: bind
+        source: .
+        target: /var/www/html
+    ports:
+      - "8082:80"
+    environment:
+      - PORT=80
