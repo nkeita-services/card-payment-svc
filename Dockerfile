@@ -21,10 +21,25 @@ RUN composer install
 # Use the official PHP 7.3 image.
 # https://hub.docker.com/_/php
 FROM php:7.3-apache
+RUN a2enmod rewrite
 
+# Install pdo
+RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+
+#Install GD and iconv
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+    && docker-php-ext-install -j$(nproc) iconv \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
 
 # Copy local code to the container image.
 COPY . /var/www/html/
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 777 /var/www/html/storage
 COPY --from=0 /var/www/html/vendor /var/www/html/vendor
 
 # Use the PORT environment variable in Apache configuration files.
@@ -33,6 +48,7 @@ RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/a
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!AllowOverride None!AllowOverride All!g' /etc/apache2/apache2.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # Configure PHP for development.
