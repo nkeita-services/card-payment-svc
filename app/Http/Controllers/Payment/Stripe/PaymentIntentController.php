@@ -43,7 +43,7 @@ class PaymentIntentController extends Controller{
     }
     
     public function form(float $amount, string $currency){
-        var_dump($amount,$currency);exit;
         
+        return view('stripe/collect_card_details');
     }
 }
