@@ -8,6 +8,6 @@ services:
         source: .
         target: /var/www/html
     ports:
-      - "8082:80"
+      - "8099:80"
     environment:
       - PORT=80
