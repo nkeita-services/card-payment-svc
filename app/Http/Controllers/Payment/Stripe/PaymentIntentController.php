@@ -35,13 +35,12 @@ class PaymentIntentController extends Controller{
         $intent = PaymentIntent::create([
           'amount' => $request->json()->get('amount'),
           'currency' => $request->json()->get('currency'),
-          // Verify your integration in this guide by including this parameter
           'metadata' => ['integration_check' => 'accept_a_payment'],
         ]);
         
         $collection->insertOne(
             [
-                'client_secret'=>$intent->client_secret,
+                'clientSecret'=>$intent->client_secret,
                 'amount'=> $request->json()->get('amount'),
                 'currency'=>$request->json()->get('currency'),
                 'accountId'=>$request->json()->get('accountId')
@@ -65,7 +64,7 @@ class PaymentIntentController extends Controller{
     
     public function webhook(Request $request){
         $mongoClient = new Client('mongodb+srv://wallet-account-user:ccKUENpgY2Bj0gly@cluster0-ydv8p.mongodb.net/wallet?authSource=admin');
-        $collection = $mongoClient->selectCollection('wallet', 'payments');
+        $collection = $mongoClient->selectCollection('wallet', 'payment_intents');
         Stripe::setApiKey('sk_test_Uz7JHXYgI9Ih0b6oxf9wCyK300e95hcUlt');
 
         try {
@@ -87,9 +86,13 @@ class PaymentIntentController extends Controller{
                  * @var PaymentIntent
                  */
                 $paymentIntent = $event->data->object;
-                $document = $collection->findOne($paymentIntent->client_secret);
-                $paymentIntent->client_secret;
-                Log::info($document->accountId);
+                $document = $collection->findOne(
+                        [
+                            'client_secret' => $paymentIntent->client_secret
+                        ]
+                );
+                //Log::info(get_class($paymentIntent));
+                $collection->insertOne($paymentIntent->toArray());
                 break;
             case 'payment_method.attached':
                 $paymentMethod = $event->data->object; // contains a StripePaymentMethod

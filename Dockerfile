@@ -32,7 +32,8 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
 # install mongodb ext
-RUN apt-get install openssl-dev
+RUN apt-get update
+RUN apt-get install -y openssl libssl-dev libcurl4-openssl-dev
 RUN pecl install mongodb \
     && docker-php-ext-enable mongodb
 
