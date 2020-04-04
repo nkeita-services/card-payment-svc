@@ -19,3 +19,5 @@ $router->get('/', function () use ($router) {
 $router->post('/v1/stripe/payments/intents', 'Payment\Stripe\PaymentIntentController@create');
 
 $router->get('/v1/stripe/payments/form/{amount}/{currency}', 'Payment\Stripe\PaymentIntentController@form');
+
+$router->post('/v1/stripe/payments/intents/webhook', 'Payment\Stripe\PaymentIntentController@webhook');

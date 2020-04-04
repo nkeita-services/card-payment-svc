@@ -14,6 +14,10 @@ RUN apt-get update -y && \
     docker-php-ext-configure gmp && \
     docker-php-ext-install gmp
 
+# install mongodb ext
+RUN pecl install mongodb \
+    && docker-php-ext-enable mongodb
+
 COPY . /var/www/html/
 WORKDIR /var/www/html
 RUN composer install
@@ -26,6 +30,11 @@ RUN a2enmod rewrite
 # Install pdo
 RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+
+# install mongodb ext
+RUN apt-get install openssl-dev
+RUN pecl install mongodb \
+    && docker-php-ext-enable mongodb
 
 #Install GD and iconv
 RUN apt-get update && apt-get install -y \

@@ -12,7 +12,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
-
+use Stripe\Event;
+use Log;
+use MongoClient;
+use MongoDB\Client;
  
 
 /**
@@ -23,6 +26,10 @@ use Stripe\PaymentIntent;
 class PaymentIntentController extends Controller{
     
     public function create(Request $request){
+                
+        $mongoClient = new Client('mongodb+srv://wallet-account-user:ccKUENpgY2Bj0gly@cluster0-ydv8p.mongodb.net/wallet?authSource=admin');
+        $collection = $mongoClient->selectCollection('wallet', 'payments');
+        
         Stripe::setApiKey('sk_test_Uz7JHXYgI9Ih0b6oxf9wCyK300e95hcUlt');
 
         $intent = PaymentIntent::create([
@@ -32,11 +39,20 @@ class PaymentIntentController extends Controller{
           'metadata' => ['integration_check' => 'accept_a_payment'],
         ]);
         
+        $collection->insertOne(
+            [
+                'client_secret'=>$intent->client_secret,
+                'amount'=> $request->json()->get('amount'),
+                'currency'=>$request->json()->get('currency'),
+                'accountId'=>$request->json()->get('accountId')
+            ]
+        );
         return response()->json([
             'status'=>'success',
             'data'=>[
                 'PaymentIntent'=>[
-                    'clientSecret'=> $intent->client_secret
+                    'clientSecret'=> $intent->client_secret,
+                    'publishableKey'=> 'pk_test_muG8jSMNY9OyPOQFCN3JtYMx00w4hXalgG'
                 ]
             ]
         ]);
@@ -45,5 +61,50 @@ class PaymentIntentController extends Controller{
     public function form(float $amount, string $currency){
         
         return view('stripe/collect_card_details');
+    }
+    
+    public function webhook(Request $request){
+        $mongoClient = new Client('mongodb+srv://wallet-account-user:ccKUENpgY2Bj0gly@cluster0-ydv8p.mongodb.net/wallet?authSource=admin');
+        $collection = $mongoClient->selectCollection('wallet', 'payments');
+        Stripe::setApiKey('sk_test_Uz7JHXYgI9Ih0b6oxf9wCyK300e95hcUlt');
+
+        try {
+            $event = \Stripe\Event::constructFrom(
+                $request->json()->all()
+            );
+        } catch(\UnexpectedValueException $e) {
+            
+            return response()->json([
+                'status'=>'failure',
+            ]);
+            
+        }
+
+        // Handle the event
+        switch ($event->type) {
+            case 'payment_intent.succeeded':
+                /**
+                 * @var PaymentIntent
+                 */
+                $paymentIntent = $event->data->object;
+                $document = $collection->findOne($paymentIntent->client_secret);
+                $paymentIntent->client_secret;
+                Log::info($document->accountId);
+                break;
+            case 'payment_method.attached':
+                $paymentMethod = $event->data->object; // contains a StripePaymentMethod
+                Log::info($paymentIntent);
+                break;
+            // ... handle other event types
+            default:
+                // Unexpected event type
+                http_response_code(400);
+                exit();
+        }
+
+        return response()->json(
+            [
+                'status'=>'success',
+            ], 200);
     }
 }

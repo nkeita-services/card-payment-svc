@@ -2,9 +2,12 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+use Jenssegers\Mongodb\MongodbServiceProvider;
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
 ))->bootstrap();
+
+use App\Providers\Infrastructure\Api\Rest\Client\Account\AccountApiClientProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +24,10 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+ $app->withFacades();
 
-// $app->withEloquent();
+ $app->register(MongodbServiceProvider::class);
+ $app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +69,8 @@ $app->singleton(
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
@@ -76,7 +82,7 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+ $app->register(AccountApiClientProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 

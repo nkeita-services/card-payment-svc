@@ -3,13 +3,15 @@ var stripe;
 
 var orderData = {
   items: [{ id: "photo-subscription" }],
-  currency: "usd"
+  currency: "usd",
+  amount: 9000,
+  accountId: "5e3acc66b1dabddf0e21fa25"
 };
 
 // Disable the button until we have Stripe set up on the page
 document.querySelector("button").disabled = true;
 
-fetch("/create-payment-intent", {
+fetch("/v1/stripe/payments/intents", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
@@ -36,7 +38,7 @@ fetch("/create-payment-intent", {
 
 // Set up Stripe.js and Elements to use in checkout form
 var setupElements = function(data) {
-  stripe = Stripe(data.publishableKey);
+  stripe = Stripe(data.data.PaymentIntent.publishableKey);
   var elements = stripe.elements();
   var style = {
     base: {
@@ -60,7 +62,7 @@ var setupElements = function(data) {
   return {
     stripe: stripe,
     card: card,
-    clientSecret: data.clientSecret
+    clientSecret: data.data.PaymentIntent.clientSecret
   };
 };
 
