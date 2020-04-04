@@ -70,9 +70,15 @@ class PaymentIntentController extends Controller{
         ]);
     }
     
-    public function form(float $amount, string $currency){
+    public function form(float $amount, string $currency, string $accountId){
         
-        return view('stripe/collect_card_details');
+        return view(
+                'stripe/collect_card_details',
+                [
+                    'amount' => $amount,
+                    'currency'=> $currency,
+                    'accountId'=>$accountId
+                ]);
     }
     
     public function webhook(Request $request){

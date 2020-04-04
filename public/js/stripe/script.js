@@ -1,13 +1,6 @@
 // A reference to Stripe.js
 var stripe;
 
-var orderData = {
-  items: [{ id: "photo-subscription" }],
-  currency: "eur",
-  amount: 9000,
-  accountId: "5e722980eb4b250683f10cad"
-};
-
 // Disable the button until we have Stripe set up on the page
 document.querySelector("button").disabled = true;
 
