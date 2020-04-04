@@ -8,6 +8,8 @@ use Jenssegers\Mongodb\MongodbServiceProvider;
 ))->bootstrap();
 
 use App\Providers\Infrastructure\Api\Rest\Client\Account\AccountApiClientProvider;
+use App\Providers\Domain\Account\Service\AccountServiceProvider;
+use App\Providers\Domain\Account\Respository\AccountRepositoryProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,8 +85,8 @@ $app->singleton(
 */
 
  $app->register(AccountApiClientProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+ $app->register(AccountServiceProvider::class);
+ $app->register(AccountRepositoryProvider::class);
 
 /*
 |--------------------------------------------------------------------------

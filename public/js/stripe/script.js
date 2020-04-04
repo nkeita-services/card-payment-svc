@@ -3,9 +3,9 @@ var stripe;
 
 var orderData = {
   items: [{ id: "photo-subscription" }],
-  currency: "usd",
+  currency: "eur",
   amount: 9000,
-  accountId: "5e3acc66b1dabddf0e21fa25"
+  accountId: "5e722980eb4b250683f10cad"
 };
 
 // Disable the button until we have Stripe set up on the page

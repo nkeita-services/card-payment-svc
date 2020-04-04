@@ -5,10 +5,10 @@ namespace Infrastructure\Api\Rest\Client\Account\Mapper;
 
 
 use Psr\Http\Message\ResponseInterface;
-use Wallet\Account\Entity\AccountEntityInterface;
-use Wallet\Account\Entity\AccountEntity;
-use Wallet\Wallet\Account\Collection\AccountCollection;
-use Wallet\Wallet\Account\Collection\AccountCollectionInterface;
+use Payment\Account\Entity\AccountEntityInterface;
+use Payment\Account\Entity\AccountEntity;
+use Payment\Account\Collection\AccountCollection;
+use Payment\Account\Collection\AccountCollectionInterface;
 
 class AccountMapper implements AccountMapperInterface
 {

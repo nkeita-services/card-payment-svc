@@ -16,6 +16,8 @@ use Stripe\Event;
 use Log;
 use MongoClient;
 use MongoDB\Client;
+use Payment\Account\Service\AccountServiceInterface ;
+use Payment\Account\Service\AccountService;
  
 
 /**
@@ -25,8 +27,19 @@ use MongoDB\Client;
  */
 class PaymentIntentController extends Controller{
     
+    /**
+     *
+     * @var AccountServiceInterface 
+     */
+    private $accountService;
+    
+    public function __construct(AccountService $accountService) {
+        $this->accountService = $accountService;
+    }
+
+
     public function create(Request $request){
-                
+
         $mongoClient = new Client('mongodb+srv://wallet-account-user:ccKUENpgY2Bj0gly@cluster0-ydv8p.mongodb.net/wallet?authSource=admin');
         $collection = $mongoClient->selectCollection('wallet', 'payments');
         
@@ -64,7 +77,8 @@ class PaymentIntentController extends Controller{
     
     public function webhook(Request $request){
         $mongoClient = new Client('mongodb+srv://wallet-account-user:ccKUENpgY2Bj0gly@cluster0-ydv8p.mongodb.net/wallet?authSource=admin');
-        $collection = $mongoClient->selectCollection('wallet', 'payment_intents');
+        $paymentIntentsCollection = $mongoClient->selectCollection('wallet', 'payment_intents');
+        $paymentCollection = $mongoClient->selectCollection('wallet', 'payments');
         Stripe::setApiKey('sk_test_Uz7JHXYgI9Ih0b6oxf9wCyK300e95hcUlt');
 
         try {
@@ -86,13 +100,14 @@ class PaymentIntentController extends Controller{
                  * @var PaymentIntent
                  */
                 $paymentIntent = $event->data->object;
-                $document = $collection->findOne(
+                $document = $paymentCollection->findOne(
                         [
-                            'client_secret' => $paymentIntent->client_secret
+                            'clientSecret' => $paymentIntent->client_secret
                         ]
                 );
-                //Log::info(get_class($paymentIntent));
-                $collection->insertOne($paymentIntent->toArray());
+                $paymentIntentsCollection->insertOne($paymentIntent->toArray());
+                
+                $this->accountService->topUp('eeee', $document->accountId, ['eee'], $paymentIntent->amount);
                 break;
             case 'payment_method.attached':
                 $paymentMethod = $event->data->object; // contains a StripePaymentMethod

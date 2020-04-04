@@ -7,8 +7,8 @@ namespace Infrastructure\Api\Rest\Client\Account;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Infrastructure\Api\Rest\Client\Account\Mapper\AccountMapperInterface;
-use Wallet\Account\Entity\AccountEntityInterface;
-use Wallet\Wallet\Account\Collection\AccountCollectionInterface;
+use Payment\Account\Entity\AccountEntityInterface;
+use Payment\Account\Collection\AccountCollectionInterface;
 
 class AccountApiGuzzleHttpClient implements AccountApiClientInterface
 {
