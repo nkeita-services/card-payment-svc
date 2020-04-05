@@ -99,10 +99,6 @@ class PaymentIntentController extends Controller
 
         switch ($event->type) {
             case 'payment_intent.succeeded':
-                /**
-                 * @var PaymentIntent
-                 */
-
                 $intent = $this
                     ->paymentIntentService
                     ->storeEvent(

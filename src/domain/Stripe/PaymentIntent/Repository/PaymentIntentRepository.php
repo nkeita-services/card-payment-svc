@@ -60,7 +60,7 @@ class PaymentIntentRepository implements PaymentIntentRepositoryInterface
             ->paymentIntentCollection
             ->updateOne(
                 ['clientSecret' => $clientSecret],
-                $data
+                ['$set' => $data]
             );
 
         return $updateResult->getUpsertedId();
