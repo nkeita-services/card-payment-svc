@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: Wallet Payment Gateway Service
+  version: 0.0.1
+  description: |
+    Wallet Payment Gateway Service is a REST HTTP API for handling payment. It exposes REST endpoint for
+
+    # Responses
+
+    ## HTTP Response Codes
+    | Status Code | Usage                                                       |
+    |-------------|-------------------------------------------------------------|
+    | 200         | The request completed successfully                          |
+    | 201         | A new resource has been created                             |
+    | 400         | Malformed request                                           |
+    | 401         | Missing access token                                        |
+    | 403         | The client does not have permission to access this resource |
+    | 404         | Resource not found                                          |
+    | 405         | Method not supported                                        |
+    | 500         | Internal server error                                       |
+    | 503         | Service unvailable                                          |
+
+    ## Errors
+    whenever an error occured within the platform, an error response that describes the problem will be returned
+
+    | Field Name        | Field Description     |
+    |-------------------|-----------------------|
+    | Status            | "fail" or "error"     |
+    | StatusCode        | A business error code |
+    | StatusDescription | Error description     |
+
+    ## Error codes
+
+    | Error Code | Error Description                                |
+    |------------|--------------------------------------------------|
+    | 9001       | Wallet event created                             |
+    | 9010       | Wallet event not found                           |
+
+    # Changelog
+
+    ## 2019-11-05
+    * Created .....
+
+    # Useful links
+  termsOfService: 'http://swagger.io/terms/'
+  x-logo:
+    url: '/static/img/NBK_logo.jpeg'
+    backgroundColor: '#FFFFFF'
+    altText: NBK Logo
+servers:
+  - url: 'https://wallet-payment-svc-fjhmnd5asa-ew.a.run.app'
+    description: Testing Server
+tags:
+  - name: Stripe Integration
+    description: Uses Stripe API
+    externalDocs:
+      url: 'https://wallet-payment-svc-fjhmnd5asa-ew.a.run.app'
+paths:
+  /v1/stripe/payments/form/{amount}/{currency}/{accountId}:
+    get:
+      summary: Return a form
+      tags:
+        - Stripe Integration
+      parameters:
+        - name: amount
+          in: path
+          required: true
+          schema:
+            type: number
+            description: amount to top up
+            example: 12
+        - name: currency
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Currency
+            example: USD
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Account to top up
+            example: 45466ea6-512d-42c7-b57f-d11c53890456
+      responses:
+        '200':
+          description: Successfully obtained the list of wallet events
+          content:
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: Error when obtaining card payment form
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4001
+                statusDescription: Error when obtaining card payment form         
+  /v1/stripe/payments/intents:
+    post:
+      summary: Create a payment intent
+      tags:
+        - Stripe Integration
+      requestBody:
+        description: Payment Intent
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentIntentRequest'
+      responses:
+        '201':
+          description: Successfully created payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      PaymentIntent:
+                        $ref: '#/components/schemas/PaymentIntentResponse'
+        '500':
+          description: Error when creating payment intent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4010
+                statusDescription: Error when creating payment intent
+components:
+  schemas:
+    ResponseStatus:
+      type: string
+      enum:
+        - success
+        - fail
+        - error
+    ErrorResponseStatus:
+      type: string
+      enum:
+        - fail
+        - error
+    ResponseStatusCode:
+      type: number
+      example: 1023
+    ResponseStatusDescription:
+      type: string
+      example: wallet event does not exist within the system
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ErrorResponseStatus'
+        statusCode:
+          $ref: '#/components/schemas/ResponseStatusCode'
+        statusDescription:
+          $ref: '#/components/schemas/ResponseStatusDescription'
+    PaymentIntentRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: amount to top up
+          example: 20
+        currency:
+          type: string
+          description: Currency
+        accountId:
+          type: string
+          description: account to top up
+          example: 45466ea6-512d-42c7-b57f-d11c53890456
+    PaymentIntentResponse:
+      type: object
+      properties:
+        clientSecret:
+          type: string
+          description: client secret
+          example: pi_1GUXqnI7cAZaA1PNcmH7sYhO_secret_PIX3t9agUEFjSTtmcPU0EtnJu
+        publishableKey:
+          type: string
+          description: Stripe plublishabe key
+          example: pk_test_muG8jSMNY9OyPOQFCN3JtYMx00w4hXalgG
