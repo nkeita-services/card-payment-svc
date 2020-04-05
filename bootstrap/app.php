@@ -10,6 +10,8 @@ use Jenssegers\Mongodb\MongodbServiceProvider;
 use App\Providers\Infrastructure\Api\Rest\Client\Account\AccountApiClientProvider;
 use App\Providers\Domain\Account\Service\AccountServiceProvider;
 use App\Providers\Domain\Account\Respository\AccountRepositoryProvider;
+use App\Providers\Domain\Stripe\PaymentIntent\Service\PaymentIntentServiceProvider;
+use App\Providers\Domain\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryServiceProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +89,8 @@ $app->singleton(
  $app->register(AccountApiClientProvider::class);
  $app->register(AccountServiceProvider::class);
  $app->register(AccountRepositoryProvider::class);
+ $app->register(PaymentIntentServiceProvider::class);
+ $app->register(PaymentIntentRepositoryServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
