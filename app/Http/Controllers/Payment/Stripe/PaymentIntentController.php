@@ -100,8 +100,8 @@ class PaymentIntentController extends Controller
         $intent = $this
             ->paymentIntentService
             ->storeEvent(
-                'pi_1GUgoiI7cAZaA1PNoDshcDne_secret_RhN5E2hVytvvjDVdubSX4hFK5',
-                //$event->data->object->client_secret,
+                //'pi_1GUgoiI7cAZaA1PNoDshcDne_secret_RhN5E2hVytvvjDVdubSX4hFK5',
+                $event->data->object->client_secret,
                 $event->type,
                 $event->data->object->toArray()
             );
