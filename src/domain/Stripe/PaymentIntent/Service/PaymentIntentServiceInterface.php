@@ -35,9 +35,9 @@ interface PaymentIntentServiceInterface{
 
     /**
      * @param string $clientSecret
-     * @return stdClass
+     * @return PaymentIntentInterface
      */
     public function fromClientSecret(
         string $clientSecret
-    ):stdClass;
+    ):PaymentIntentInterface;
 }

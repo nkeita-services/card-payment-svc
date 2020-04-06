@@ -97,32 +97,19 @@ class PaymentIntentController extends Controller
 
         }
 
-        switch ($event->type) {
-            case 'payment_intent.succeeded':
-                $intent = $this
-                    ->paymentIntentService
-                    ->storeEvent(
-                        $event->data->object->client_secret,
-                        $event->type,
-                        $event->data->object->toArray()
-                    );
+        $intent = $this
+            ->paymentIntentService
+            ->storeEvent(
+                'pi_1GUgoiI7cAZaA1PNoDshcDne_secret_RhN5E2hVytvvjDVdubSX4hFK5',
+                //$event->data->object->client_secret,
+                $event->type,
+                $event->data->object->toArray()
+            );
 
-                $this->accountService->topUp(
-                    'eeee',
-                    $intent->getAccountId(),
-                    ['eee'],
-                    $intent->getAmount()
-                );
-                break;
-            case 'payment_method.attached':
-                $paymentMethod = $event->data->object; // contains a StripePaymentMethod
-
-                break;
-            // ... handle other event types
-            default:
-                // Unexpected event type
-                http_response_code(400);
-                exit();
+        if('payment_intent.succeeded' == $event->type){
+            $this->accountService->topUpFromPaymentIntent(
+                $intent
+            );
         }
 
         return response()->json(

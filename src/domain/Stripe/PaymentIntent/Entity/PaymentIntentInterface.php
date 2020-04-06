@@ -25,4 +25,16 @@ interface PaymentIntentInterface
      * @return string
      */
     public function getAccountId(): string;
+
+    /**
+     * @param string $publishableKey
+     * @return PaymentIntent
+     */
+    public function setPublishableKey(string $publishableKey): PaymentIntent;
+
+    /**
+     * @param $document
+     * @return PaymentIntentInterface
+     */
+    public static function fromStdClass($document): PaymentIntentInterface;
 }

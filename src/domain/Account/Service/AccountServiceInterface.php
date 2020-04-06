@@ -6,6 +6,7 @@ namespace Payment\Account\Service;
 
 use Payment\Account\Entity\AccountEntityInterface;
 use Payment\Account\Collection\AccountCollectionInterface;
+use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 
 interface AccountServiceInterface
 {
@@ -47,11 +48,11 @@ interface AccountServiceInterface
 
     /**
      * @param string $accountId
-     * @return mixed
+     * @return AccountEntityInterface
      */
     public function fetchWithAccountId(
         string $accountId
-    );
+    ): AccountEntityInterface;
 
     /**
      * @param string $userId
@@ -79,5 +80,13 @@ interface AccountServiceInterface
         string $accountId,
         array $organizations,
         float $amount
+    ): AccountEntityInterface;
+
+    /**
+     * @param PaymentIntentInterface $intent
+     * @return AccountEntityInterface
+     */
+    public function topUpFromPaymentIntent(
+        PaymentIntentInterface $intent
     ): AccountEntityInterface;
 }

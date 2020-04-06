@@ -5,7 +5,8 @@ namespace Payment\Stripe\PaymentIntent\Repository;
 
 
 use MongoDB\Collection;
-use stdClass;
+use Payment\Stripe\PaymentIntent\Entity\PaymentIntent as Intent;
+use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 
 class PaymentIntentRepository implements PaymentIntentRepositoryInterface
 {
@@ -55,27 +56,27 @@ class PaymentIntentRepository implements PaymentIntentRepositoryInterface
     public function updateWithClientSecret(
         string $clientSecret,
         array $data
-    ): string{
+    ): int{
         $updateResult = $this
             ->paymentIntentCollection
             ->updateOne(
                 ['clientSecret' => $clientSecret],
-                ['$set' => $data]
+                ['$addToSet' => $data]
             );
 
-        return $updateResult->getUpsertedId();
+        return $updateResult->getUpsertedCount();
     }
     /**
      * @inheritDoc
      */
-    public function find(array $filters): stdClass
+    public function find(array $filters): PaymentIntentInterface
     {
-        return $this
+        $result =  $this
             ->paymentIntentCollection
             ->findOne(
                 $filters
             );
+
+        return Intent::fromStdClass($result);
     }
-
-
 }

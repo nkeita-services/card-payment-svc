@@ -73,7 +73,7 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function fetchWithAccountId(string $accountId)
+    public function fetchWithAccountId(string $accountId): AccountEntityInterface
     {
         return $this
             ->accountApiClient

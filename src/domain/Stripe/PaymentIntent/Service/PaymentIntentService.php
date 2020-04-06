@@ -6,7 +6,6 @@ namespace Payment\Stripe\PaymentIntent\Service;
 
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryInterface;
-use stdClass;
 use Stripe\PaymentIntent;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntent as Intent;
 
@@ -65,6 +64,7 @@ class PaymentIntentService implements PaymentIntentServiceInterface
             $intent->client_secret,
             $amount,
             $accountId,
+            $currency,
             $this->publishableKey
         );
     }
@@ -82,9 +82,7 @@ class PaymentIntentService implements PaymentIntentServiceInterface
             ->updateWithClientSecret(
                 $clientSecret,
                 [
-                    "events" => [
-                        $eventType => $event
-                    ]
+                    "events" => [$event]
                 ]
             );
 
@@ -92,10 +90,7 @@ class PaymentIntentService implements PaymentIntentServiceInterface
             $clientSecret
         );
 
-        return new Intent(
-            $clientSecret,
-            $intent->amount,
-            $intent->accountId,
+        return $intent->setPublishableKey(
             $this->publishableKey
         );
     }
@@ -103,13 +98,13 @@ class PaymentIntentService implements PaymentIntentServiceInterface
     /**
      * @inheritDoc
      */
-    public function fromClientSecret(string $clientSecret): stdClass
+    public function fromClientSecret(string $clientSecret): PaymentIntentInterface
     {
         return $this
             ->paymentIntentRepository
             ->find(
                 [
-                    'client_secret' => $clientSecret
+                    'clientSecret' => $clientSecret
                 ]
             );
     }

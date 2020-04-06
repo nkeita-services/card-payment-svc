@@ -12,6 +12,7 @@ use App\Providers\Domain\Account\Service\AccountServiceProvider;
 use App\Providers\Domain\Account\Respository\AccountRepositoryProvider;
 use App\Providers\Domain\Stripe\PaymentIntent\Service\PaymentIntentServiceProvider;
 use App\Providers\Domain\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryServiceProvider;
+use App\Providers\Infrastructure\Api\Auth\OAuth2\WalletGatewayGuzzleHttpClientProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +92,7 @@ $app->singleton(
  $app->register(AccountRepositoryProvider::class);
  $app->register(PaymentIntentServiceProvider::class);
  $app->register(PaymentIntentRepositoryServiceProvider::class);
+ $app->register(WalletGatewayGuzzleHttpClientProvider::class);
 
 /*
 |--------------------------------------------------------------------------

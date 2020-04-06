@@ -48,11 +48,11 @@ interface AccountRepositoryInterface
 
     /**
      * @param string $accountId
-     * @return mixed
+     * @return AccountEntityInterface
      */
     public function fetchWithAccountId(
         string $accountId
-    );
+    ): AccountEntityInterface;
 
     /**
      * @param string $userId

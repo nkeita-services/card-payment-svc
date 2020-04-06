@@ -3,6 +3,7 @@
 
 namespace Payment\Stripe\PaymentIntent\Repository;
 
+use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 use stdClass;
 
 interface PaymentIntentRepositoryInterface
@@ -25,18 +26,18 @@ interface PaymentIntentRepositoryInterface
     /**
      * @param string $clientSecret
      * @param array $data
-     * @return string
+     * @return int
      */
     public function updateWithClientSecret(
         string $clientSecret,
         array $data
-    ):string;
+    ):int;
 
     /**
      * @param array $filters
-     * @return stdClass
+     * @return PaymentIntentInterface
      */
     public function find(
         array $filters
-    ):stdClass;
+    ):PaymentIntentInterface;
 }
