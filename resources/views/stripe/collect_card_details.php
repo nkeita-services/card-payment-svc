@@ -35,7 +35,7 @@
       </div>
     </div>
   </body>
-  
+
   <script>
       var orderData = {
         items: [{ id: "photo-subscription" }],
@@ -43,5 +43,7 @@
         amount: <?php echo $amount ?>,
         accountId: "<?php echo $accountId ?>"
       };
+
+      var accessToken = "<?php echo $accessToken ?>"
   </script>
 </html>

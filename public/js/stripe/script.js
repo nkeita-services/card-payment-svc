@@ -7,7 +7,8 @@ document.querySelector("button").disabled = true;
 fetch("/v1/stripe/payments/intents", {
   method: "POST",
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+      "Authorization": "Bearer "+ accessToken
   },
   body: JSON.stringify(orderData)
 })

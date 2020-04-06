@@ -4,14 +4,13 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- */
+*/
 
 namespace App\Http\Controllers\Payment\Stripe;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Payment\Stripe\PaymentIntent\Service\PaymentIntentServiceInterface;
-use Stripe\PaymentIntent;
 use Log;
 use Payment\Account\Service\AccountServiceInterface;
 use Stripe\Event;
@@ -24,7 +23,6 @@ use Stripe\Event;
  */
 class PaymentIntentController extends Controller
 {
-
     /**
      *
      * @var AccountServiceInterface
@@ -79,7 +77,8 @@ class PaymentIntentController extends Controller
             [
                 'amount' => $amount,
                 'currency' => $currency,
-                'accountId' => $accountId
+                'accountId' => $accountId,
+                'accessToken' =>  app('WalletGatewayOauthClient')->accessToken()
             ]);
     }
 

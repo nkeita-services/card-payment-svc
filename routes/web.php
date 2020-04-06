@@ -16,7 +16,11 @@ $router->get('/', function () use ($router) {
 });
 
 
-$router->post('/v1/stripe/payments/intents', 'Payment\Stripe\PaymentIntentController@create');
+$router->post('/v1/stripe/payments/intents', [
+    'uses' => 'Payment\Stripe\PaymentIntentController@create',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/StripeCreatePaymentIntent'
+]);
 
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}', 'Payment\Stripe\PaymentIntentController@form');
 

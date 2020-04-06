@@ -14,11 +14,10 @@ class WalletGatewayGuzzleHttpClientProvider extends ServiceProvider
     {
         $this->app->singleton('WalletGatewayGuzzleHttpClient', function ($app) {
 
-            $oauth2Client = new OAuth2Client(
-                '1t37i9t15h3rvlib7g1u7odp23',
-                'avqbjl9vfeo1spfhv5qfp4ojrplg6guf3gv44q1hpvffk6nab8g',
-                'https://nbk-wallet.auth.eu-west-1.amazoncognito.com/oauth2/token'
-            );
+            /**
+             * @var $oauth2Client OAuth2Client
+             */
+            $oauth2Client = $app->make('WalletGatewayOauthClient');
 
             $headers = [
                 'Authorization' => 'Bearer ' . $oauth2Client->accessToken(),

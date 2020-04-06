@@ -13,6 +13,9 @@ use App\Providers\Domain\Account\Respository\AccountRepositoryProvider;
 use App\Providers\Domain\Stripe\PaymentIntent\Service\PaymentIntentServiceProvider;
 use App\Providers\Domain\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryServiceProvider;
 use App\Providers\Infrastructure\Api\Auth\OAuth2\WalletGatewayGuzzleHttpClientProvider;
+use App\Http\Middleware\OAuth2ClientCredentials;
+use App\Providers\Infrastructure\Api\Auth\OAuth2\WalletGatewayOauthClientProvider;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -70,9 +73,9 @@ $app->singleton(
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+ $app->routeMiddleware([
+     'auth' => OAuth2ClientCredentials::class,
+ ]);
 
 
 
@@ -93,6 +96,7 @@ $app->singleton(
  $app->register(PaymentIntentServiceProvider::class);
  $app->register(PaymentIntentRepositoryServiceProvider::class);
  $app->register(WalletGatewayGuzzleHttpClientProvider::class);
+ $app->register(WalletGatewayOauthClientProvider::class);
 
 /*
 |--------------------------------------------------------------------------
