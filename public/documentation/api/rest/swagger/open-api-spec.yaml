@@ -85,7 +85,7 @@ paths:
             example: 45466ea6-512d-42c7-b57f-d11c53890456
       responses:
         '200':
-          description: Successfully obtained the list of wallet events
+          description: Successfully obtained card payment form
           content:
             text/html:
               schema:
@@ -99,7 +99,7 @@ paths:
               example:
                 status: fail
                 statusCode: 4001
-                statusDescription: Error when obtaining card payment form         
+                statusDescription: Error when obtaining card payment form
   /v1/stripe/payments/intents:
     post:
       summary: Create a payment intent
@@ -138,6 +138,15 @@ paths:
                 statusCode: 4010
                 statusDescription: Error when creating payment intent
 components:
+  securitySchemes:
+    oAuth2:
+      type: oauth2
+      description: This API uses OAuth 2 with the client credentials grant flow
+      flows:
+        clientCredentials:
+          tokenUrl: https://nbk-wallet.auth.eu-west-1.amazoncognito.com/oauth2/token
+          scopes:
+            StripeCreatePaymentIntent: Create a Stripe Payment Intent
   schemas:
     ResponseStatus:
       type: string
