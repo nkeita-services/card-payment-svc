@@ -9,7 +9,7 @@ use GuzzleHttp\RequestOptions;
 use Infrastructure\Api\Rest\Client\MTN\Collection\Mapper\RequestToPayMapperInterface;
 use Infrastructure\Api\Rest\Client\MTN\Collection\Response\RequestToPayResponseInterface;
 
-class RequestToPayApiGuzzleHttpClient implements RequestToPayApiClientInterface
+class CollectionApiGuzzleHttpClient implements CollectionApiClientInterface
 {
     /**
      * @var Client
@@ -38,10 +38,10 @@ class RequestToPayApiGuzzleHttpClient implements RequestToPayApiClientInterface
     /**
      * @inheritDoc
      */
-    public function create(array $requestToPay): RequestToPayResponseInterface
+    public function createRequestToPay(array $requestToPayPayload): RequestToPayResponseInterface
     {
         $response = $this->guzzleClient->post('/v1_0/requesttopay', [
-            RequestOptions::JSON => $requestToPay
+            RequestOptions::JSON => $requestToPayPayload
         ]);
 
         return $this->requestToPayMapper->createRequestToPayResponseFromApiResponse(

@@ -6,15 +6,15 @@ namespace App\Providers\Infrastructure\Api\Rest\Client\MTN\Collection;
 
 use Illuminate\Support\ServiceProvider;
 use Infrastructure\Api\Rest\Client\MTN\Collection\Mapper\RequestToPayMapper;
-use Infrastructure\Api\Rest\Client\MTN\Collection\RequestToPayApiClientInterface;
-use Infrastructure\Api\Rest\Client\MTN\Collection\RequestToPayApiGuzzleHttpClient;
+use Infrastructure\Api\Rest\Client\MTN\Collection\CollectionApiClientInterface;
+use Infrastructure\Api\Rest\Client\MTN\Collection\CollectionApiGuzzleHttpClient;
 
-class RequestToPayApiServiceProvider extends ServiceProvider
+class CollectionApiServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton(RequestToPayApiClientInterface::class, function ($app) {
-            return new RequestToPayApiGuzzleHttpClient(
+        $this->app->singleton(CollectionApiClientInterface::class, function ($app) {
+            return new CollectionApiGuzzleHttpClient(
                 $app->make('CollectionApiGuzzleHttpClient'),
                 new RequestToPayMapper()
             );

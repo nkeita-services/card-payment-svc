@@ -15,9 +15,11 @@ use App\Providers\Domain\Stripe\PaymentIntent\Repository\PaymentIntentRepository
 use App\Providers\Infrastructure\Api\Auth\OAuth2\WalletGatewayGuzzleHttpClientProvider;
 use App\Http\Middleware\OAuth2ClientCredentials;
 use App\Providers\Infrastructure\Api\Auth\OAuth2\WalletGatewayOauthClientProvider;
-use App\Providers\Infrastructure\Api\Rest\Client\MTN\Collection\RequestToPayApiServiceProvider;
+use App\Providers\Infrastructure\Api\Rest\Client\MTN\Collection\CollectionApiServiceProvider;
 use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\CollectionOauthClientProvider;
 use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\CollectionApiGuzzleHttpClientProvider;
+use App\Providers\Domain\MTN\Collection\Repository\MTNCollectionRepositoryServiceProvider;
+use App\Providers\Domain\MTN\Collection\Service\MTNCollectionServiceProvider;
 
 
 /*
@@ -100,9 +102,11 @@ $app->singleton(
  $app->register(PaymentIntentRepositoryServiceProvider::class);
  $app->register(WalletGatewayGuzzleHttpClientProvider::class);
  $app->register(WalletGatewayOauthClientProvider::class);
- $app->register(RequestToPayApiServiceProvider::class);
+ $app->register(CollectionApiServiceProvider::class);
  $app->register(CollectionOauthClientProvider::class);
  $app->register(CollectionApiGuzzleHttpClientProvider::class);
+ $app->register(MTNCollectionRepositoryServiceProvider::class);
+ $app->register(MTNCollectionServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
