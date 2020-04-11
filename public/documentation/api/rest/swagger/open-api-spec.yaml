@@ -55,6 +55,10 @@ tags:
     description: Uses Stripe API
     externalDocs:
       url: 'https://wallet-payment-svc-fjhmnd5asa-ew.a.run.app'
+  - name: Cash Out
+    description: Cash Out
+  - name: Cash In
+    description: Cash In
 paths:
   /v1/stripe/payments/form/{amount}/{currency}/{accountId}:
     get:
@@ -137,6 +141,66 @@ paths:
                 status: fail
                 statusCode: 4010
                 statusDescription: Error when creating payment intent
+  /v1/cash-out/{accountId}:
+    post:
+      summary: Create a cash out transaction
+      tags:
+        - Cash Out
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: af1db7ec-e0a8-4866-b72b-aed49a360ffc
+      requestBody:
+        description: Cash Out Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashOutRequest'
+      responses:
+        '201':
+          description: Successfully created cash out request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+  /v1/cash-in/{accountId}:
+    post:
+      summary: Create a cash in transaction
+      tags:
+        - Cash In
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: af1db7ec-e0a8-4866-b72b-aed49a360ffc
+      requestBody:
+        description: Cash In Request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashInRequest'
+      responses:
+        '201':
+          description: Successfully created cash in request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
 components:
   securitySchemes:
     oAuth2:
@@ -199,3 +263,30 @@ components:
           type: string
           description: Stripe plublishabe key
           example: pk_test_muG8jSMNY9OyPOQFCN3JtYMx00w4hXalgG
+    CashOutRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: amount to cash out
+          example: 20
+        type:
+          type: string
+          enum:
+            - MTN
+            - OrangeMoney
+            - BankAccount
+    CashInRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: amount to cash out
+          example: 20
+        type:
+          type: string
+          enum:
+            - MTN
+            - OrangeMoney
+            - BankAccount
+
