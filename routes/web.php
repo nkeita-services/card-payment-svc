@@ -22,6 +22,13 @@ $router->post('/v1/stripe/payments/intents', [
     'as'=>'payment-gateway/StripeCreatePaymentIntent'
 ]);
 
+$router->post('/v1/payments/accounts/{accountId}/cash-in', [
+    'uses' => 'Payment\CashIn\IndexController@create',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/CreateCashIn'
+]);
+
+
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}', 'Payment\Stripe\PaymentIntentController@form');
 
 $router->post('/v1/stripe/payments/intents/webhook', 'Payment\Stripe\PaymentIntentController@webhook');
