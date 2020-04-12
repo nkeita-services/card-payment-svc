@@ -21,6 +21,8 @@ use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\CollectionApiGuzzleHttpClie
 use App\Providers\Domain\MTN\Collection\Repository\MTNCollectionRepositoryServiceProvider;
 use App\Providers\Domain\MTN\Collection\Service\MTNCollectionServiceProvider;
 use App\Providers\Infrastructure\Api\Rest\Client\WalletGateway\User\UserApiClientProvider;
+use App\Providers\Domain\Wallet\User\Repository\UserRepositoryServiceProvider;
+use App\Providers\Domain\Wallet\User\Service\UserServiceProvider;
 
 
 /*
@@ -109,6 +111,8 @@ $app->singleton(
  $app->register(MTNCollectionRepositoryServiceProvider::class);
  $app->register(MTNCollectionServiceProvider::class);
  $app->register(UserApiClientProvider::class);
+ $app->register(UserRepositoryServiceProvider::class);
+ $app->register(UserServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
