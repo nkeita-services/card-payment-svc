@@ -37,6 +37,16 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     private $originator;
 
     /**
+     * @var string
+     */
+    private $status;
+
+    /**
+     * @var int
+     */
+    private $timestamp;
+
+    /**
      * CashInTransactionEntity constructor.
      * @param string $transactionId
      * @param float $amount
@@ -44,6 +54,8 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
      * @param string $description
      * @param string $accountId
      * @param array $originator
+     * @param string $status
+     * @param int $timestamp
      */
     public function __construct(
         ?string $transactionId,
@@ -51,7 +63,9 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         ?string $currency,
         ?string $description,
         ?string $accountId,
-        ?array $originator
+        ?array $originator,
+        ?string $status,
+        ?int $timestamp
     ){
         $this->transactionId = $transactionId;
         $this->amount = $amount;
@@ -59,6 +73,8 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         $this->description = $description;
         $this->accountId = $accountId;
         $this->originator = $originator;
+        $this->status = $status;
+        $this->timestamp = $timestamp;
     }
 
     /**
@@ -107,5 +123,31 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     public function getTransactionId(): string
     {
         return $this->transactionId;
+    }
+
+    /**
+     * @param string $transactionId
+     * @return CashInTransactionEntity
+     */
+    public function setTransactionId(string $transactionId): CashInTransactionEntity
+    {
+        $this->transactionId = $transactionId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimestamp(): int
+    {
+        return $this->timestamp;
     }
 }

@@ -24,6 +24,8 @@ use App\Providers\Infrastructure\Api\Rest\Client\WalletGateway\User\UserApiClien
 use App\Providers\Domain\Wallet\User\Repository\UserRepositoryServiceProvider;
 use App\Providers\Domain\Wallet\User\Service\UserServiceProvider;
 use App\Providers\Infrastructure\Storage\Database\MongoDB\MongoDBClientServiceProvider;
+use App\Providers\Domain\CashIn\Transaction\Repository\CashInTransactionRepositoryServiceProvider;
+use App\Providers\Domain\CashIn\Transaction\Service\CashInTransactionServiceProvider;
 
 
 /*
@@ -115,6 +117,8 @@ $app->singleton(
  $app->register(UserRepositoryServiceProvider::class);
  $app->register(UserServiceProvider::class);
  $app->register(MongoDBClientServiceProvider::class);
+ $app->register(CashInTransactionRepositoryServiceProvider::class);
+ $app->register(CashInTransactionServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

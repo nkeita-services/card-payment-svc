@@ -5,6 +5,9 @@ namespace Payment\MTN\Collection\Service;
 
 
 use Payment\Account\Service\AccountServiceInterface;
+use Payment\CashIn\Transaction\CashInTransactionEntity;
+use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
+use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\MTN\Collection\Entity\RequestToPayEntity;
 use Payment\MTN\Collection\Repository\CollectionRepositoryInterface;
 use Payment\MTN\Collection\Repository\Exception\RequestToPayException;
@@ -30,19 +33,27 @@ class CollectionService implements CollectionServiceInterface
     private $userService;
 
     /**
+     * @var CashInTransactionServiceInterface
+     */
+    private $cashInTransactionService;
+
+    /**
      * CollectionService constructor.
      * @param CollectionRepositoryInterface $collectionRepository
      * @param AccountServiceInterface $accountService
      * @param UserServiceInterface $userService
+     * @param CashInTransactionServiceInterface $cashInTransactionService
      */
     public function __construct(
         CollectionRepositoryInterface $collectionRepository,
         AccountServiceInterface $accountService,
-        UserServiceInterface $userService
+        UserServiceInterface $userService,
+        CashInTransactionServiceInterface $cashInTransactionService
     ){
         $this->collectionRepository = $collectionRepository;
         $this->accountService = $accountService;
         $this->userService = $userService;
+        $this->cashInTransactionService = $cashInTransactionService;
     }
 
 
@@ -66,6 +77,21 @@ class CollectionService implements CollectionServiceInterface
         $user= $this
             ->userService
             ->fetchFromUserId($originator['originatorId']);
+
+        $this
+            ->cashInTransactionService
+            ->store(
+                new CashInTransactionEntity(
+                    null,
+                    $amount,
+                    'EUR',
+                    $message ?? 'request to pay',
+                    $accountId,
+                    $originator,
+                    CashInTransactionEntityInterface::STATUS_PENDING,
+                    mktime()
+                )
+            );
 
         try{
             $this
