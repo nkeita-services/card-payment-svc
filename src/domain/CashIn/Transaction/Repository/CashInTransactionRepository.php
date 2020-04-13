@@ -33,14 +33,15 @@ class CashInTransactionRepository implements CashInTransactionRepositoryInterfac
     ): CashInTransactionEntityInterface{
         $insertOneResult = $this->cashInTransactionCollection->insertOne(
             [
+                'type'=>$transactionEntity->getType(),
                 'accountId' => $transactionEntity->getAccountId(),
                 'amount' => $transactionEntity->getAmount(),
                 'currency' => $transactionEntity->getCurrency(),
                 'description' => $transactionEntity->getDescription(),
                 'originator'=>$transactionEntity->getOriginator(),
                 'status'=> $transactionEntity->getStatus(),
-                'timestamp'=> $transactionEntity->getTimestamp()
-
+                'timestamp'=> $transactionEntity->getTimestamp(),
+                'extras'=>$transactionEntity->getExtras()
             ]
         );
 

@@ -6,9 +6,13 @@ namespace Payment\CashIn\Transaction;
 
 interface CashInTransactionEntityInterface
 {
+    const TYPE_MTN = 'MTN';
+
     const STATUS_PENDING = 'pending';
     const STATUS_ERROR = 'error';
     const STATUS_SUCCESSFUL = 'successful';
+
+    const DESCRIPTION_DEFAULT = 'request to pay';
     /**
      * @return float
      */
@@ -54,5 +58,15 @@ interface CashInTransactionEntityInterface
      * @return int
      */
     public function getTimestamp(): int;
+
+    /**
+     * @return array
+     */
+    public function getExtras(): ?array;
+
+    /**
+     * @return string
+     */
+    public function getType(): string;
 
 }

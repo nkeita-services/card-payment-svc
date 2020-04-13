@@ -10,6 +10,11 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     /**
      * @var string
      */
+    private $type;
+
+    /**
+     * @var string
+     */
     private $transactionId;
     /**
      * @var float
@@ -47,7 +52,13 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     private $timestamp;
 
     /**
+     * @var array
+     */
+    private $extras;
+
+    /**
      * CashInTransactionEntity constructor.
+     * @param string $type
      * @param string $transactionId
      * @param float $amount
      * @param string $currency
@@ -56,8 +67,10 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
      * @param array $originator
      * @param string $status
      * @param int $timestamp
+     * @param array $extras
      */
     public function __construct(
+        ?string $type,
         ?string $transactionId,
         ?float $amount,
         ?string $currency,
@@ -65,8 +78,10 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         ?string $accountId,
         ?array $originator,
         ?string $status,
-        ?int $timestamp
+        ?int $timestamp,
+        ?array $extras
     ){
+        $this->type = $type;
         $this->transactionId = $transactionId;
         $this->amount = $amount;
         $this->currency = $currency;
@@ -75,6 +90,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         $this->originator = $originator;
         $this->status = $status;
         $this->timestamp = $timestamp;
+        $this->extras = $extras;
     }
 
     /**
@@ -149,5 +165,21 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     public function getTimestamp(): int
     {
         return $this->timestamp;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExtras(): ?array
+    {
+        return $this->extras;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 }

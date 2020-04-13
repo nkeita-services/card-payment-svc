@@ -30,7 +30,7 @@ class IndexController extends Controller
     public function create(string $accountId, Request $request)
     {
         try {
-            $this->collectionService->requestToPay(
+            $cashInTransactionEntity = $this->collectionService->requestToPay(
                 $accountId,
                 $request->json('amount'),
                 $request->json('originator')
@@ -46,7 +46,10 @@ class IndexController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => [
-                'CashIn' => 'successful'
+                'CashIn' => [
+                    'transactionId' => $cashInTransactionEntity->getTransactionId(),
+                    'status'=> $cashInTransactionEntity->getStatus()
+                ]
             ]
         ]);
     }

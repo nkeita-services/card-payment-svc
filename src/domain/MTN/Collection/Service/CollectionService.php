@@ -66,7 +66,8 @@ class CollectionService implements CollectionServiceInterface
         array $originator,
         string $message = null,
         string $note = null
-    ): string{
+    ): CashInTransactionEntityInterface{
+
         $account = $this
             ->accountService
             ->fetchWithUserIdAndAccountId(
@@ -78,23 +79,26 @@ class CollectionService implements CollectionServiceInterface
             ->userService
             ->fetchFromUserId($originator['originatorId']);
 
-        $this
-            ->cashInTransactionService
-            ->store(
-                new CashInTransactionEntity(
-                    null,
-                    $amount,
-                    'EUR',
-                    $message ?? 'request to pay',
-                    $accountId,
-                    $originator,
-                    CashInTransactionEntityInterface::STATUS_PENDING,
-                    mktime()
-                )
-            );
-
         try{
-            $this
+
+            $cashInTransactionEntity = $this
+                ->cashInTransactionService
+                ->store(
+                    new CashInTransactionEntity(
+                        CashInTransactionEntityInterface::TYPE_MTN,
+                        null,
+                        $amount,
+                        'EUR',
+                        $message ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
+                        $accountId,
+                        $originator,
+                        CashInTransactionEntityInterface::STATUS_PENDING,
+                        time(),
+                        null
+                    )
+                );
+
+            $referenceId = $this
                 ->collectionRepository
                 ->requestToPay(
                     new RequestToPayEntity(
@@ -102,15 +106,18 @@ class CollectionService implements CollectionServiceInterface
                         'EUR',
                         'MSISDN',
                         $user->getMobileNumber(),
-                        $message ?? 'request to pay',
-                        $note ?? 'request to pay',
-                        '78ba84fe-43b7-4dd4-b2b7-c9326a02f458'
+                        $message ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
+                        $note ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
+                        $cashInTransactionEntity->getTransactionId()
                     )
                 );
+
         }catch (RequestToPayException $exception){
             throw new RequestToPayServiceException(
                 'Unable to fullfil cash-in request'
             );
         }
+
+        return $cashInTransactionEntity;
     }
 }

@@ -4,6 +4,8 @@
 namespace Payment\MTN\Collection\Service;
 
 
+use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
+
 interface CollectionServiceInterface
 {
 
@@ -13,7 +15,7 @@ interface CollectionServiceInterface
      * @param array $originator
      * @param string|null $message
      * @param string|null $note
-     * @return string
+     * @return CashInTransactionEntityInterface
      */
     public function requestToPay(
         string $accountId,
@@ -21,5 +23,5 @@ interface CollectionServiceInterface
         array $originator,
         string $message = null,
         string $note = null
-    ): string;
+    ): CashInTransactionEntityInterface;
 }
