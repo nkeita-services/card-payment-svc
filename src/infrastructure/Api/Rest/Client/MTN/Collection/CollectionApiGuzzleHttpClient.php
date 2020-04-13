@@ -10,6 +10,7 @@ use Infrastructure\Api\Rest\Client\MTN\Collection\Exception\ReferenceIdAlreadyEx
 use Infrastructure\Api\Rest\Client\MTN\Collection\Mapper\RequestToPayMapperInterface;
 use Infrastructure\Api\Rest\Client\MTN\Collection\Response\RequestToPayResponseInterface;
 use GuzzleHttp\Exception\ClientException;
+use Ramsey\Uuid\Uuid;
 
 class CollectionApiGuzzleHttpClient implements CollectionApiClientInterface
 {
@@ -44,8 +45,12 @@ class CollectionApiGuzzleHttpClient implements CollectionApiClientInterface
     public function createRequestToPay(array $requestToPayPayload): RequestToPayResponseInterface
     {
         try {
+            $referenceId = Uuid::uuid4()->toString();
             $response = $this->guzzleClient->post('/collection/v1_0/requesttopay', [
-                RequestOptions::JSON => $requestToPayPayload
+                RequestOptions::JSON => $requestToPayPayload,
+                RequestOptions::HEADERS => [
+                    'X-Reference-Id'=> $referenceId,
+                ]
             ]);
         } catch (ClientException $exception) {
             if (409 == $exception->getResponse()->getStatusCode()) {
@@ -57,8 +62,9 @@ class CollectionApiGuzzleHttpClient implements CollectionApiClientInterface
             throw $exception;
         }
 
-        return $this->requestToPayMapper->createRequestToPayResponseFromApiResponse(
-            $response
+        return $this->requestToPayMapper->createRequestToPayResponseFromApiResponseAndReferenceId(
+            $response,
+            $referenceId
         );
     }
 }

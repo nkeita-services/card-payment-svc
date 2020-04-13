@@ -14,15 +14,18 @@ class RequestToPayMapper implements RequestToPayMapperInterface
     /**
      * @inheritDoc
      */
-    public function createRequestToPayResponseFromApiResponse(
-        ResponseInterface $response
+    public function createRequestToPayResponseFromApiResponseAndReferenceId(
+        ResponseInterface $response,
+        string $referenceId
     ): RequestToPayResponseInterface{
         $data = json_decode(
             $response->getBody()->getContents(),
             true
         );
 
-        return new RequestToPayResponse();
+        return new RequestToPayResponse(
+            $referenceId
+        );
 
     }
 }

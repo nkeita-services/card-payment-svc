@@ -57,6 +57,16 @@ interface AccountServiceInterface
     /**
      * @param string $userId
      * @param string $accountId
+     * @return AccountEntityInterface
+     */
+    public function fetchWithUserIdAndAccountId(
+        string $userId,
+        string $accountId
+    ): AccountEntityInterface;
+
+    /**
+     * @param string $userId
+     * @param string $accountId
      * @param array $organizations
      * @param float $amount
      * @return AccountEntityInterface

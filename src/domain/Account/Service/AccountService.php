@@ -91,6 +91,22 @@ class AccountService implements AccountServiceInterface
     /**
      * @inheritDoc
      */
+    public function fetchWithUserIdAndAccountId(
+        string $userId,
+        string $accountId
+    ): AccountEntityInterface{
+        return $this
+            ->accountRepository
+            ->fetchWithUserIdAndAccountId(
+                $userId,
+                $accountId
+            );
+    }
+
+
+    /**
+     * @inheritDoc
+     */
     public function topUp(
         string $userId,
         string $accountId,

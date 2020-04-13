@@ -275,6 +275,8 @@ components:
             - MTN
             - OrangeMoney
             - BankAccount
+        originator:
+          $ref: '#/components/schemas/Originator'
     CashInRequest:
       type: object
       properties:
@@ -288,4 +290,17 @@ components:
             - MTN
             - OrangeMoney
             - BankAccount
+        originator:
+          $ref: '#/components/schemas/Originator'
+    Originator:
+      type: object
+      properties:
+        originatorType:
+          type: string
+          enum:
+            - User
+            - Process
+        originatorId:
+          type: string
+          example: 8cd240f3-6d7b-40f3-b0df-37d6e2fc8145
 

@@ -85,6 +85,22 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function fetchWithUserIdAndAccountId(
+        string $userId,
+        string $accountId
+    ): AccountEntityInterface{
+        return $this
+            ->accountApiClient
+            ->fetchWithUserIdAndAccountId(
+                $userId,
+                $accountId
+            );
+    }
+
+
+    /**
+     * @inheritDoc
+     */
     public function topUp(
         string $userId,
         string $accountId,

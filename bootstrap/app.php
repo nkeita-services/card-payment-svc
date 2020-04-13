@@ -23,6 +23,7 @@ use App\Providers\Domain\MTN\Collection\Service\MTNCollectionServiceProvider;
 use App\Providers\Infrastructure\Api\Rest\Client\WalletGateway\User\UserApiClientProvider;
 use App\Providers\Domain\Wallet\User\Repository\UserRepositoryServiceProvider;
 use App\Providers\Domain\Wallet\User\Service\UserServiceProvider;
+use App\Providers\Infrastructure\Storage\Database\MongoDB\MongoDBClientServiceProvider;
 
 
 /*
@@ -113,6 +114,7 @@ $app->singleton(
  $app->register(UserApiClientProvider::class);
  $app->register(UserRepositoryServiceProvider::class);
  $app->register(UserServiceProvider::class);
+ $app->register(MongoDBClientServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

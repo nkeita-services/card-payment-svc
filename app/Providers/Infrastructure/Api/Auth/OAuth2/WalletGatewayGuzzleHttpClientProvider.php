@@ -24,8 +24,8 @@ class WalletGatewayGuzzleHttpClientProvider extends ServiceProvider
                 'Accept' => 'application/json',
             ];
             return new Client([
-                'base_uri' => 'https://wallet-account-svc-py-fjhmnd5asa-ew.a.run.app',
-                $headers
+                'base_uri' => 'https://wallet-gateway-svc-fjhmnd5asa-ew.a.run.app',
+                'headers' => $headers
             ]);
         });
     }

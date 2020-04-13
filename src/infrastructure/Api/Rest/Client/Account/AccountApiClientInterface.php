@@ -32,4 +32,14 @@ interface AccountApiClientInterface
      * @return AccountEntityInterface
      */
     public function fetch(string $accountId): AccountEntityInterface;
+
+    /**
+     * @param string $userId
+     * @param string $accountId
+     * @return AccountEntityInterface
+     */
+    public function fetchWithUserIdAndAccountId(
+        string $userId,
+        string $accountId
+    ):AccountEntityInterface;
 }

@@ -10,7 +10,7 @@ interface CollectionRepositoryInterface
 {
     /**
      * @param RequestToPayEntityInterface $requestToPayEntity
-     * @return bool
+     * @return string
      */
-    public function requestToPay(RequestToPayEntityInterface $requestToPayEntity): bool;
+    public function requestToPay(RequestToPayEntityInterface $requestToPayEntity): string;
 }

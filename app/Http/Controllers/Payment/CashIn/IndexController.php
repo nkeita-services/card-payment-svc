@@ -32,7 +32,8 @@ class IndexController extends Controller
         try {
             $this->collectionService->requestToPay(
                 $accountId,
-                $request->json('amount')
+                $request->json('amount'),
+                $request->json('originator')
             );
         } catch (RequestToPayException $exception) {
             return response()->json([

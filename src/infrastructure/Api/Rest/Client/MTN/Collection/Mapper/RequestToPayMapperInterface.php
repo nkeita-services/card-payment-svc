@@ -11,10 +11,12 @@ interface RequestToPayMapperInterface
 {
     /**
      * @param ResponseInterface $response
+     * @param string $referenceId
      * @return RequestToPayResponseInterface
      */
-    public function createRequestToPayResponseFromApiResponse(
-        ResponseInterface $response
+    public function createRequestToPayResponseFromApiResponseAndReferenceId(
+        ResponseInterface $response,
+        string $referenceId
     ):RequestToPayResponseInterface;
 
 }

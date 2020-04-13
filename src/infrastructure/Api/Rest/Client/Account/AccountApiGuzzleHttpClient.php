@@ -82,7 +82,23 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
     public function fetch(string $accountId): AccountEntityInterface
     {
         $response = $this->guzzleClient->get(
-            sprintf('/v1/accounts/%s', $accountId)
+            sprintf('/v1/wallets/accounts/%s', $accountId)
+        );
+
+        return $this->accountMapper->createAccountFromApiResponse(
+            $response
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchWithUserIdAndAccountId(
+        string $userId,
+        string $accountId
+    ): AccountEntityInterface{
+        $response = $this->guzzleClient->get(
+            sprintf('/v1/wallets/users/%s/accounts/%s', $userId, $accountId)
         );
 
         return $this->accountMapper->createAccountFromApiResponse(

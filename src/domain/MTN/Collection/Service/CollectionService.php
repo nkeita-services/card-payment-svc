@@ -9,6 +9,7 @@ use Payment\MTN\Collection\Entity\RequestToPayEntity;
 use Payment\MTN\Collection\Repository\CollectionRepositoryInterface;
 use Payment\MTN\Collection\Repository\Exception\RequestToPayException;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException as RequestToPayServiceException;
+use Payment\Wallet\User\Service\UserServiceInterface;
 
 class CollectionService implements CollectionServiceInterface
 {
@@ -24,16 +25,24 @@ class CollectionService implements CollectionServiceInterface
     private $accountService;
 
     /**
+     * @var UserServiceInterface
+     */
+    private $userService;
+
+    /**
      * CollectionService constructor.
      * @param CollectionRepositoryInterface $collectionRepository
      * @param AccountServiceInterface $accountService
+     * @param UserServiceInterface $userService
      */
     public function __construct(
         CollectionRepositoryInterface $collectionRepository,
-        AccountServiceInterface $accountService
+        AccountServiceInterface $accountService,
+        UserServiceInterface $userService
     ){
         $this->collectionRepository = $collectionRepository;
         $this->accountService = $accountService;
+        $this->userService = $userService;
     }
 
 
@@ -43,14 +52,21 @@ class CollectionService implements CollectionServiceInterface
     public function requestToPay(
         string $accountId,
         float $amount,
+        array $originator,
         string $message = null,
         string $note = null
-    ){
+    ): string{
         $account = $this
             ->accountService
-            ->fetchWithAccountId($accountId);
+            ->fetchWithUserIdAndAccountId(
+                $originator['originatorId'],
+                $accountId
+            );
 
-        //die($account->get)
+        $user= $this
+            ->userService
+            ->fetchFromUserId($originator['originatorId']);
+
         try{
             $this
                 ->collectionRepository
@@ -59,7 +75,7 @@ class CollectionService implements CollectionServiceInterface
                         $amount,
                         'EUR',
                         'MSISDN',
-                        '46733123454',
+                        $user->getMobileNumber(),
                         $message ?? 'request to pay',
                         $note ?? 'request to pay',
                         '78ba84fe-43b7-4dd4-b2b7-c9326a02f458'

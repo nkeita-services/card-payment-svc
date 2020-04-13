@@ -34,7 +34,7 @@ class CollectionRepository implements CollectionRepositoryInterface
      */
     public function requestToPay(
         RequestToPayEntityInterface $requestToPayEntity
-    ): bool{
+    ): string {
         try {
             $response = $this
                 ->collectionApiClient
@@ -57,6 +57,6 @@ class CollectionRepository implements CollectionRepositoryInterface
             );
         }
 
-        return true;
+        return $response->getReferenceId();
     }
 }

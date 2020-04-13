@@ -23,7 +23,7 @@ class CollectionApiGuzzleHttpClientProvider extends ServiceProvider
             $headers = [
                 'Authorization' => 'Bearer ' . $oauth2Client->getToken(),
                 'Accept' => 'application/json',
-                'X-Reference-Id'=> '70316346-81f5-478c-bf26-a5cbe4ab26dd',
+                //'X-Reference-Id'=> '70316346-81f5-478c-bf26-a5cbe4ab26dd',
                 'X-Target-Environment'=>'sandbox',
                 'Ocp-Apim-Subscription-Key'=> 'a1b2dd2992b941279ff726ccfc4c842a',
                 'Content-Type'=>'application/json'
