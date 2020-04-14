@@ -16,4 +16,14 @@ interface CashInTransactionServiceInterface
     public function store(
         CashInTransactionEntityInterface $transactionEntity
     ): CashInTransactionEntityInterface;
+
+    /**
+     * @param string $transactionId
+     * @param array $additionalInfo
+     * @return bool
+     */
+    public function addAdditionalInfo(
+        string $transactionId,
+        array $additionalInfo
+    ): bool;
 }

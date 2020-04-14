@@ -69,4 +69,5 @@ interface CashInTransactionEntityInterface
      */
     public function getType(): string;
 
+
 }

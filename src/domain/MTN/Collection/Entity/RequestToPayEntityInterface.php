@@ -6,6 +6,7 @@ namespace Payment\MTN\Collection\Entity;
 
 interface RequestToPayEntityInterface
 {
+    const PARTY_ID_TYPE_MSISDN = 'MSISDN';
     /**
      * @return float
      */

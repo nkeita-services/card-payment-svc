@@ -9,6 +9,7 @@ use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\MTN\Collection\Entity\RequestToPayEntity;
+use Payment\MTN\Collection\Entity\RequestToPayEntityInterface;
 use Payment\MTN\Collection\Repository\CollectionRepositoryInterface;
 use Payment\MTN\Collection\Repository\Exception\RequestToPayException;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException as RequestToPayServiceException;
@@ -93,8 +94,7 @@ class CollectionService implements CollectionServiceInterface
                         $accountId,
                         $originator,
                         CashInTransactionEntityInterface::STATUS_PENDING,
-                        time(),
-                        null
+                        time()
                     )
                 );
 
@@ -104,12 +104,21 @@ class CollectionService implements CollectionServiceInterface
                     new RequestToPayEntity(
                         $amount,
                         'EUR',
-                        'MSISDN',
+                        RequestToPayEntityInterface::PARTY_ID_TYPE_MSISDN,
                         $user->getMobileNumber(),
                         $message ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $note ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $cashInTransactionEntity->getTransactionId()
                     )
+                );
+
+            $this
+                ->cashInTransactionService
+                ->addAdditionalInfo(
+                    $cashInTransactionEntity->getTransactionId(),
+                    [
+                        'referenceId' => $referenceId
+                    ]
                 );
 
         }catch (RequestToPayException $exception){

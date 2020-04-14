@@ -140,7 +140,7 @@ paths:
                 status: fail
                 statusCode: 4010
                 statusDescription: Error when creating payment intent
-  /v1/payments/accounts/{accountId}/cash-out:
+  /v1/payments/accounts/{accountId}/cash-out/mtn:
     post:
       summary: Create a cash out transaction
       tags:
@@ -170,7 +170,7 @@ paths:
                 properties:
                   status:
                     $ref: '#/components/schemas/ResponseStatus'
-  /v1/payments/accounts/{accountId}/cash-in:
+  /v1/payments/accounts/{accountId}/cash-in/mtn:
     post:
       summary: Create a cash in transaction
       tags:

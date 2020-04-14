@@ -79,7 +79,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         ?array $originator,
         ?string $status,
         ?int $timestamp,
-        ?array $extras
+        array $extras = []
     ){
         $this->type = $type;
         $this->transactionId = $transactionId;

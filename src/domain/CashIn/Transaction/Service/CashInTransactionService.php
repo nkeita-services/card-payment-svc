@@ -38,4 +38,21 @@ class CashInTransactionService implements CashInTransactionServiceInterface
                 $transactionEntity
             );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function addAdditionalInfo(
+        string $transactionId,
+        array $additionalInfo
+    ): bool{
+        return $this
+            ->cashInTransactionRepository
+            ->addExtras(
+                $transactionId,
+                $additionalInfo
+            );
+    }
+
+
 }

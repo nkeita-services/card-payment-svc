@@ -22,8 +22,8 @@ $router->post('/v1/stripe/payments/intents', [
     'as'=>'payment-gateway/StripeCreatePaymentIntent'
 ]);
 
-$router->post('/v1/payments/accounts/{accountId}/cash-in', [
-    'uses' => 'Payment\CashIn\IndexController@create',
+$router->post('/v1/payments/accounts/{accountId}/cash-in/mtn', [
+    'uses' => 'Payment\CashIn\MTN\IndexController@create',
     'middleware' => 'auth',
     'as'=>'payment-gateway/CreateCashIn'
 ]);

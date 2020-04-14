@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Payment\CashIn;
+namespace App\Http\Controllers\Payment\CashIn\MTN;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
