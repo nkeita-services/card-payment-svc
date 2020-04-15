@@ -4,7 +4,6 @@
 namespace Payment\MTN\Collection\Service;
 
 
-use Payment\Account\Service\AccountServiceInterface;
 use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
@@ -13,7 +12,7 @@ use Payment\MTN\Collection\Entity\RequestToPayEntityInterface;
 use Payment\MTN\Collection\Repository\CollectionRepositoryInterface;
 use Payment\MTN\Collection\Repository\Exception\RequestToPayException;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException as RequestToPayServiceException;
-use Payment\Wallet\User\Service\UserServiceInterface;
+use Payment\Wallet\WalletGateway\WalletGatewayServiceInterface;
 
 class CollectionService implements CollectionServiceInterface
 {
@@ -24,37 +23,29 @@ class CollectionService implements CollectionServiceInterface
     private $collectionRepository;
 
     /**
-     * @var AccountServiceInterface
-     */
-    private $accountService;
-
-    /**
-     * @var UserServiceInterface
-     */
-    private $userService;
-
-    /**
      * @var CashInTransactionServiceInterface
      */
     private $cashInTransactionService;
 
     /**
+     * @var WalletGatewayServiceInterface
+     */
+    private $walletGatewayService;
+
+    /**
      * CollectionService constructor.
      * @param CollectionRepositoryInterface $collectionRepository
-     * @param AccountServiceInterface $accountService
-     * @param UserServiceInterface $userService
      * @param CashInTransactionServiceInterface $cashInTransactionService
+     * @param WalletGatewayServiceInterface $walletGatewayService
      */
     public function __construct(
         CollectionRepositoryInterface $collectionRepository,
-        AccountServiceInterface $accountService,
-        UserServiceInterface $userService,
-        CashInTransactionServiceInterface $cashInTransactionService
+        CashInTransactionServiceInterface $cashInTransactionService,
+        WalletGatewayServiceInterface $walletGatewayService
     ){
         $this->collectionRepository = $collectionRepository;
-        $this->accountService = $accountService;
-        $this->userService = $userService;
         $this->cashInTransactionService = $cashInTransactionService;
+        $this->walletGatewayService = $walletGatewayService;
     }
 
 
@@ -68,20 +59,7 @@ class CollectionService implements CollectionServiceInterface
         string $message = null,
         string $note = null
     ): CashInTransactionEntityInterface{
-
-        $account = $this
-            ->accountService
-            ->fetchWithUserIdAndAccountId(
-                $originator['originatorId'],
-                $accountId
-            );
-
-        $user= $this
-            ->userService
-            ->fetchFromUserId($originator['originatorId']);
-
         try{
-
             $cashInTransactionEntity = $this
                 ->cashInTransactionService
                 ->store(
@@ -89,7 +67,10 @@ class CollectionService implements CollectionServiceInterface
                         CashInTransactionEntityInterface::TYPE_MTN,
                         null,
                         $amount,
-                        'EUR',
+                        $this->walletGatewayService->accountCurrencyFromUserIdAndAccountId(
+                            $originator['originatorId'],
+                            $accountId
+                        ),
                         $message ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $accountId,
                         $originator,
@@ -103,9 +84,12 @@ class CollectionService implements CollectionServiceInterface
                 ->requestToPay(
                     new RequestToPayEntity(
                         $amount,
-                        'EUR',
+                        $this->walletGatewayService->accountCurrencyFromUserIdAndAccountId(
+                            $originator['originatorId'],
+                            $accountId
+                        ),
                         RequestToPayEntityInterface::PARTY_ID_TYPE_MSISDN,
-                        $user->getMobileNumber(),
+                        $this->walletGatewayService->mobileNumberFromUserId($originator['originatorId']),
                         $message ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $note ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $cashInTransactionEntity->getTransactionId()
@@ -123,7 +107,7 @@ class CollectionService implements CollectionServiceInterface
 
         }catch (RequestToPayException $exception){
             throw new RequestToPayServiceException(
-                'Unable to fullfil cash-in request'
+                'Unable to fulfill cash-in request'
             );
         }
 
