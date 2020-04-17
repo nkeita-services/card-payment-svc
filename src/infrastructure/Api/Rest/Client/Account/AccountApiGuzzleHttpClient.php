@@ -33,63 +33,6 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
         $this->accountMapper = $accountMapper;
     }
 
-
-    public function create(array $accountPayload): AccountEntityInterface
-    {
-
-        $response = $this->guzzleClient->post('/v1/accounts', [
-            RequestOptions::JSON => $accountPayload
-        ]);
-
-        return $this->accountMapper->createAccountFromApiResponse(
-            $response
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetchAll(array $filter): AccountCollectionInterface
-    {
-        $response = $this->guzzleClient->get('/v1/accounts', [
-            RequestOptions::QUERY => $filter
-        ]);
-
-        return $this
-            ->accountMapper
-            ->createAccountCollectionFromApiResponse(
-                $response
-            );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function update(string $accountId, array $data): AccountEntityInterface
-    {
-        $response = $this->guzzleClient->patch(sprintf('/v1/accounts/%s', $accountId), [
-            RequestOptions::JSON => $data
-        ]);
-
-        return $this->accountMapper->createAccountFromApiResponse(
-            $response
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetch(string $accountId): AccountEntityInterface
-    {
-        $response = $this->guzzleClient->get(
-            sprintf('/v1/wallets/accounts/%s', $accountId)
-        );
-
-        return $this->accountMapper->createAccountFromApiResponse(
-            $response
-        );
-    }
-
     /**
      * @inheritDoc
      */
@@ -100,6 +43,36 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
         $response = $this->guzzleClient->get(
             sprintf('/v1/wallets/users/%s/accounts/%s', $userId, $accountId)
         );
+
+        return $this->accountMapper->createAccountFromApiResponse(
+            $response
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function topUpWithUserIdAndAccountId(
+        string $userId,
+        string $accountId,
+        string $amount,
+        string $description
+    ): AccountEntityInterface{
+        $response = $this
+            ->guzzleClient
+            ->patch(
+                sprintf(
+                    '/v1/wallets/users/%s/accounts/%s/balance/topUp',
+                    $userId,
+                    $accountId
+                ),
+                [
+                    RequestOptions::JSON => [
+                        'amount'=>$amount,
+                        'description'=>$description
+                    ]
+                ]
+            );
 
         return $this->accountMapper->createAccountFromApiResponse(
             $response

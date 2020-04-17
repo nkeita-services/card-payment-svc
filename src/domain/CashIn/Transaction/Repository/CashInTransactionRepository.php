@@ -4,11 +4,13 @@
 namespace Payment\CashIn\Transaction\Repository;
 
 
+use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use MongoDB\Collection;
 use MongoDB\BSON\ObjectId;
 
-class CashInTransactionRepository implements CashInTransactionRepositoryInterface
+class CashInTransactionRepository implements
+    CashInTransactionRepositoryInterface
 {
 
     /**
@@ -58,16 +60,92 @@ class CashInTransactionRepository implements CashInTransactionRepositoryInterfac
     public function addExtras(
         string $transactionId,
         array $extras
-    ): bool{
-        $updateResult = $this->cashInTransactionCollection->updateOne(
+    ): CashInTransactionRepositoryInterface
+    {
+        $this->cashInTransactionCollection->updateOne(
             ['_id' => new ObjectId($transactionId)],
             [
-                '$addToSet' => ['extras' => $extras]
+                '$set' => ['extras' => $extras]
             ]
         );
 
-        return $updateResult->isAcknowledged();
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchWithTransactionId(
+        string $transactionId
+    ): CashInTransactionEntityInterface
+    {
+        $transaction = $this->cashInTransactionCollection->findOne(
+            ['_id' => new ObjectId($transactionId)]
+        );
+
+        return $this->createCashInTransactionEntityFromDocument(
+        $transaction
+    );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addTransactionEvent(
+        string $transactionId,
+        string $eventType,
+        array $event
+    ): CashInTransactionEntityInterface
+    {
+        $this
+            ->cashInTransactionCollection
+            ->updateOne(
+                ['_id' => new ObjectId($transactionId)],
+                ['$addToSet' => [
+                    'events' => [$event]
+                ]]
+            );
+
+        return $this->fetchWithTransactionId(
+            $transactionId
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function lookUpExtraInformationFor(
+        array $criteria
+    ): CashInTransactionEntityInterface
+    {
+        $transaction = $this->cashInTransactionCollection->findOne(
+            ['extras.clientSecret' => $criteria['clientSecret']]
+        );
+
+        return $this->createCashInTransactionEntityFromDocument(
+            $transaction
+        );
     }
 
 
+    /**
+     * @param $transaction
+     * @return CashInTransactionEntity
+     */
+    private function createCashInTransactionEntityFromDocument(
+        $transaction
+    ){
+        return new CashInTransactionEntity(
+            $transaction->type,
+            $transaction->_id->__toString(),
+            $transaction->amount,
+            $transaction->currency,
+            $transaction->description,
+            $transaction->accountId,
+            $transaction->originator->getArrayCopy(),
+            $transaction->status,
+            $transaction->timestamp,
+            $transaction->extras->getArrayCopy()
+        );
+    }
 }

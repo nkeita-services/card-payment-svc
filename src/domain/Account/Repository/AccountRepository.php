@@ -20,68 +20,6 @@ class AccountRepository implements AccountRepositoryInterface
     {
         $this->accountApiClient = $accountApiClient;
     }
-
-    public function create(
-        AccountEntityInterface $accountEntity,
-        string $userId,
-        array $organizations
-    ): AccountEntityInterface
-    {
-        return $this->accountApiClient->create(
-            [
-                'accountType' => $accountEntity->getAccountType(),
-                'balance' => $accountEntity->getBalance(),
-                'walletPlanId' => $accountEntity->getWalletPlanId(),
-                'userId' => $userId,
-                'organizations' => $organizations
-            ]
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetchAllWithUserAndOrganizations(
-        string $userId,
-        array $organizations
-    ): AccountCollectionInterface
-    {
-        return $this
-            ->accountApiClient
-            ->fetchAll([
-                'userId' => $userId
-            ]);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function updateWithUserAndAccountAndOrganizations(
-        string $userId,
-        string $accountId,
-        array $organizations,
-        array $data
-    ): AccountEntityInterface
-    {
-        return $this
-            ->accountApiClient
-            ->update(
-                $accountId,
-                $data);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetchWithAccountId(string $accountId): AccountEntityInterface
-    {
-        return $this
-            ->accountApiClient
-            ->fetch(
-                $accountId
-            );
-    }
-
     /**
      * @inheritDoc
      */
@@ -101,46 +39,20 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function topUp(
+    public function topUpWithUserIdAndAccountId(
         string $userId,
         string $accountId,
-        array $organizations,
-        float $amount
+        float $amount,
+        string $description
     ): AccountEntityInterface
     {
-        $account = $this->fetchWithAccountId($accountId);
-
-        return $this->updateWithUserAndAccountAndOrganizations(
-            $userId,
-            $accountId,
-            $organizations,
-            [
-                'balance' => $account->getBalance() + $amount
-            ]
-        );
+        return $this
+            ->accountApiClient
+            ->topUpWithUserIdAndAccountId(
+                $userId,
+                $accountId,
+                $amount,
+                $description
+            );
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function debit(
-        string $userId,
-        string $accountId,
-        array $organizations,
-        float $amount
-    ): AccountEntityInterface
-    {
-        $account = $this->fetchWithAccountId($accountId);
-
-        return $this->updateWithUserAndAccountAndOrganizations(
-            $userId,
-            $accountId,
-            $organizations,
-            [
-                'balance' => $account->getBalance() - $amount
-            ]
-        );
-    }
-
-
 }

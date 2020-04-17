@@ -32,7 +32,7 @@ fetch("/v1/stripe/payments/intents", {
 
 // Set up Stripe.js and Elements to use in checkout form
 var setupElements = function(data) {
-  stripe = Stripe(data.data.PaymentIntent.publishableKey);
+  stripe = Stripe(data.data.CashIn.extras.publishableKey);
   var elements = stripe.elements();
   var style = {
     base: {
@@ -56,7 +56,7 @@ var setupElements = function(data) {
   return {
     stripe: stripe,
     card: card,
-    clientSecret: data.data.PaymentIntent.clientSecret
+    clientSecret: data.data.CashIn.extras.clientSecret
   };
 };
 

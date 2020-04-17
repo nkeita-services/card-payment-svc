@@ -20,10 +20,38 @@ interface CashInTransactionServiceInterface
     /**
      * @param string $transactionId
      * @param array $additionalInfo
-     * @return bool
      */
     public function addAdditionalInfo(
         string $transactionId,
         array $additionalInfo
-    ): bool;
+    ): void;
+
+    /**
+     * @param string $transactionId
+     * @return CashInTransactionEntityInterface
+     */
+    public function fetchWithTransactionId(
+        string $transactionId
+    ): CashInTransactionEntityInterface;
+
+    /**
+     * @param string $transactionId
+     * @param string $eventType
+     * @param array $event
+     * @return CashInTransactionEntityInterface
+     */
+    public function addTransactionEvent(
+        string $transactionId,
+        string $eventType,
+        array $event
+    ):CashInTransactionEntityInterface;
+
+
+    /**
+     * @param array $criteria
+     * @return CashInTransactionEntityInterface
+     */
+    public function lookUpExtraInformationFor(
+        array $criteria
+    ):CashInTransactionEntityInterface;
 }

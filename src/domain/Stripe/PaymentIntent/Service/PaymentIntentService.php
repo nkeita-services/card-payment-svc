@@ -4,6 +4,9 @@
 namespace Payment\Stripe\PaymentIntent\Service;
 
 
+use Payment\CashIn\Transaction\CashInTransactionEntity;
+use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
+use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryInterface;
 use Stripe\PaymentIntent;
@@ -23,16 +26,21 @@ class PaymentIntentService implements PaymentIntentServiceInterface
     private $publishableKey;
 
     /**
+     * @var CashInTransactionServiceInterface
+     */
+    private $cashInTransactionService;
+
+    /**
      * PaymentIntentService constructor.
-     * @param PaymentIntentRepositoryInterface $paymentIntentRepository
      * @param string $publishableKey
+     * @param CashInTransactionServiceInterface $cashInTransactionService
      */
     public function __construct(
-        PaymentIntentRepositoryInterface $paymentIntentRepository,
-        string $publishableKey)
-    {
-        $this->paymentIntentRepository = $paymentIntentRepository;
+        string $publishableKey,
+        CashInTransactionServiceInterface $cashInTransactionService
+    ){
         $this->publishableKey = $publishableKey;
+        $this->cashInTransactionService = $cashInTransactionService;
     }
 
 
@@ -40,33 +48,34 @@ class PaymentIntentService implements PaymentIntentServiceInterface
      * @inheritDoc
      */
     public function create(
-        float $amount,
-        string $currency,
-        string $accountId
-    ): PaymentIntentInterface
+        CashInTransactionEntity $transactionEntity
+    ): CashInTransactionEntityInterface
     {
+        $transaction = $this
+            ->cashInTransactionService
+            ->store($transactionEntity);
+
         $intent = PaymentIntent::create([
-            'amount' => $amount,
-            'currency' => $currency,
+            'amount' => $transactionEntity->getAmount(),
+            'currency' => $transactionEntity->getCurrency(),
             'metadata' => ['integration_check' => 'accept_a_payment'],
         ]);
 
         $this
-            ->paymentIntentRepository
-            ->store(
-                $intent->client_secret,
-                $amount,
-                $currency,
-                $accountId
+            ->cashInTransactionService
+            ->addAdditionalInfo(
+                $transaction->getTransactionId(),
+                [
+                    'clientSecret' => $intent->client_secret,
+                    'publishableKey'=> $this->publishableKey
+                ]
             );
 
-        return new Intent(
-            $intent->client_secret,
-            $amount,
-            $accountId,
-            $currency,
-            $this->publishableKey
-        );
+        return $this
+            ->cashInTransactionService
+            ->fetchWithTransactionId(
+                $transaction->getTransactionId()
+            );
     }
 
     /**
@@ -76,23 +85,26 @@ class PaymentIntentService implements PaymentIntentServiceInterface
         string $clientSecret,
         string $eventType,
         array $event
-    ): PaymentIntentInterface{
-        $this
-            ->paymentIntentRepository
-            ->updateWithClientSecret(
-                $clientSecret,
+    ): CashInTransactionEntityInterface{
+
+        $transaction = $this
+            ->cashInTransactionService
+            ->lookUpExtraInformationFor(
                 [
-                    "events" => [$event]
+                    'clientSecret'=> $clientSecret
                 ]
             );
 
-        $intent = $this->fromClientSecret(
-            $clientSecret
-        );
 
-        return $intent->setPublishableKey(
-            $this->publishableKey
-        );
+        $this->cashInTransactionService
+            ->addTransactionEvent(
+                $transaction->getTransactionId(),
+                $eventType,
+                $event
+            );
+
+
+        return $transaction;
     }
 
     /**

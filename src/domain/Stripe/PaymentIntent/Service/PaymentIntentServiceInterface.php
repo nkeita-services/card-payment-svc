@@ -3,35 +3,32 @@
 namespace Payment\Stripe\PaymentIntent\Service;
 
 
+use Payment\CashIn\Transaction\CashInTransactionEntity;
+use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
-use stdClass;
 
 interface PaymentIntentServiceInterface{
 
     /**
-     * @param float $amount
-     * @param string $currency
-     * @param string $accountId
-     * @return PaymentIntentInterface
+     * @param CashInTransactionEntity $transactionEntity
+     * @return CashInTransactionEntityInterface
      */
     public function create(
-        float $amount,
-        string $currency,
-        string $accountId
-    ): PaymentIntentInterface ;
+        CashInTransactionEntity $transactionEntity
+    ): CashInTransactionEntityInterface ;
 
 
     /**
      * @param string $clientSecret
      * @param string $eventType
      * @param array $event
-     * @return PaymentIntentInterface
+     * @return CashInTransactionEntityInterface
      */
     public function storeEvent(
         string $clientSecret,
         string $eventType,
         array $event
-    ):PaymentIntentInterface;
+    ):CashInTransactionEntityInterface;
 
     /**
      * @param string $clientSecret

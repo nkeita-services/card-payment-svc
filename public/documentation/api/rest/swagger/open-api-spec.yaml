@@ -114,7 +114,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentIntentRequest'
+              $ref: '#/components/schemas/CashInRequest'
       responses:
         '201':
           description: Successfully created payment intent
@@ -128,8 +128,8 @@ paths:
                   data:
                     type: object
                     properties:
-                      PaymentIntent:
-                        $ref: '#/components/schemas/PaymentIntentResponse'
+                      CashIn:
+                        $ref: '#/components/schemas/StripeCashInResponse'
         '500':
           description: Error when creating payment intent
           content:
@@ -252,31 +252,6 @@ components:
           $ref: '#/components/schemas/ResponseStatusCode'
         statusDescription:
           $ref: '#/components/schemas/ResponseStatusDescription'
-    PaymentIntentRequest:
-      type: object
-      properties:
-        amount:
-          type: number
-          description: amount to top up
-          example: 20
-        currency:
-          type: string
-          description: Currency
-        accountId:
-          type: string
-          description: account to top up
-          example: 45466ea6-512d-42c7-b57f-d11c53890456
-    PaymentIntentResponse:
-      type: object
-      properties:
-        clientSecret:
-          type: string
-          description: client secret
-          example: pi_1GUXqnI7cAZaA1PNcmH7sYhO_secret_PIX3t9agUEFjSTtmcPU0EtnJu
-        publishableKey:
-          type: string
-          description: Stripe plublishabe key
-          example: pk_test_muG8jSMNY9OyPOQFCN3JtYMx00w4hXalgG
     CashOutRequest:
       type: object
       properties:
@@ -305,6 +280,13 @@ components:
             - MTN
             - OrangeMoney
             - BankAccount
+        currency:
+          type: string
+          description: Currency
+        accountId:
+          type: string
+          description: account to top up
+          example: 45466ea6-512d-42c7-b57f-d11c53890456
         originator:
           $ref: '#/components/schemas/Originator'
     Originator:
@@ -318,4 +300,22 @@ components:
         originatorId:
           type: string
           example: 8cd240f3-6d7b-40f3-b0df-37d6e2fc8145
+    StripeCashInResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 5e99a07063389569485205f3
+        extras:
+          type: object
+          properties:
+            clientSecret:
+              type: string
+              description: client secret
+              example: pi_1GUXqnI7cAZaA1PNcmH7sYhO_secret_PIX3t9agUEFjSTtmcPU0EtnJu
+            publishableKey:
+              type: string
+              description: Stripe plublishabe key
+              example: pk_test_muG8jSMNY9OyPOQFCN3JtYMx00w4hXalgG
+
 

@@ -37,13 +37,18 @@
   </body>
 
   <script>
+      var originator= {
+          originatorType: "User",
+          originatorId: "<?php echo $userId ?>"
+      };
       var orderData = {
         items: [{ id: "photo-subscription" }],
         currency: "<?php echo $currency ?>",
         amount: <?php echo $amount ?>,
-        accountId: "<?php echo $accountId ?>"
+        accountId: "<?php echo $accountId ?>",
+        description: "<?php echo $description ?>",
+        originator: originator
       };
-
       var accessToken = "<?php echo $accessToken ?>"
   </script>
 </html>

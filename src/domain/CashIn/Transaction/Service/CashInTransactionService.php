@@ -45,8 +45,8 @@ class CashInTransactionService implements CashInTransactionServiceInterface
     public function addAdditionalInfo(
         string $transactionId,
         array $additionalInfo
-    ): bool{
-        return $this
+    ): void{
+         $this
             ->cashInTransactionRepository
             ->addExtras(
                 $transactionId,
@@ -54,5 +54,46 @@ class CashInTransactionService implements CashInTransactionServiceInterface
             );
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function fetchWithTransactionId(
+        string $transactionId
+    ): CashInTransactionEntityInterface{
+        return $this
+            ->cashInTransactionRepository
+            ->fetchWithTransactionId(
+                $transactionId
+            );
+    }
 
+    /**
+     * @inheritDoc
+     */
+    public function addTransactionEvent(
+        string $transactionId,
+        string $eventType,
+        array $event
+    ): CashInTransactionEntityInterface{
+        return $this
+            ->cashInTransactionRepository
+            ->addTransactionEvent(
+                $transactionId,
+                $eventType,
+                $event
+            );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function lookUpExtraInformationFor(
+        array $criteria
+    ): CashInTransactionEntityInterface{
+        return $this
+            ->cashInTransactionRepository
+            ->lookUpExtraInformationFor(
+                $criteria
+            );
+    }
 }

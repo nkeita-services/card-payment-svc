@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Payment\Stripe;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\Stripe\PaymentIntent\Service\PaymentIntentServiceInterface;
 use Log;
 use Payment\Account\Service\AccountServiceInterface;
@@ -52,25 +53,39 @@ class PaymentIntentController extends Controller
     public function create(Request $request)
     {
 
-        $intent = $this->paymentIntentService->create(
-            $request->json()->get('amount'),
-            $request->json()->get('currency'),
-            $request->json()->get('accountId')
+        $transaction = $this->paymentIntentService->create(
+            new CashInTransactionEntity(
+                'STRIPE',
+                null,
+                $request->json()->get('amount'),
+                $request->json()->get('currency'),
+                $request->json()->get('description'),
+                $request->json()->get('accountId'),
+                $request->json()->get('originator'),
+                'pending',
+                time()
+            )
         );
 
         return response()->json([
             'status' => 'success',
             'data' => [
-                'PaymentIntent' => [
-                    'clientSecret' => $intent->getClientSecret(),
-                    'publishableKey' => $intent->getPublishableKey()
+                'CashIn' => [
+                    'transactionId'=> $transaction->getTransactionId(),
+                    'amount'=> $transaction->getAmount(),
+                    'status'=> $transaction->getStatus(),
+                    'extras' => $transaction->getExtras()
                 ]
             ]
         ]);
     }
 
-    public function form(float $amount, string $currency, string $accountId)
-    {
+    public function form(
+        float $amount,
+        string $currency,
+        string $accountId,
+        string $userId
+    ){
 
         return view(
             'stripe/collect_card_details',
@@ -78,6 +93,8 @@ class PaymentIntentController extends Controller
                 'amount' => $amount,
                 'currency' => $currency,
                 'accountId' => $accountId,
+                'userId' => $userId,
+                'description' => 'Top Up',
                 'accessToken' =>  app('WalletGatewayOauthClient')->accessToken()
             ]);
     }
@@ -96,18 +113,19 @@ class PaymentIntentController extends Controller
 
         }
 
-        $intent = $this
+        $transaction = $this
             ->paymentIntentService
             ->storeEvent(
-                //'pi_1GUgoiI7cAZaA1PNoDshcDne_secret_RhN5E2hVytvvjDVdubSX4hFK5',
-                $event->data->object->client_secret,
+                'pi_1GYtH4I7cAZaA1PNJs5AfaY2_secret_YbXig4ONJDxy7W2hsGSOx2n5A',
+                //$event->data->object->client_secret,
                 $event->type,
                 $event->data->object->toArray()
             );
 
+
         if('payment_intent.succeeded' == $event->type){
-            $this->accountService->topUpFromPaymentIntent(
-                $intent
+            $this->accountService->topUpFromCashInTransaction(
+                $transaction
             );
         }
 

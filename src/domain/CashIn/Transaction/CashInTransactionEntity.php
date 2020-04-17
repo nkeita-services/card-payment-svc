@@ -93,6 +93,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         $this->extras = $extras;
     }
 
+
     /**
      * @return float
      */
@@ -132,6 +133,15 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     {
         return $this->originator;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOriginatorId(): string
+    {
+        return $this->originator['originatorId'];
+    }
+
 
     /**
      * @return string

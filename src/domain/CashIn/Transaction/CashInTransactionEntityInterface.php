@@ -13,6 +13,7 @@ interface CashInTransactionEntityInterface
     const STATUS_SUCCESSFUL = 'successful';
 
     const DESCRIPTION_DEFAULT = 'request to pay';
+
     /**
      * @return float
      */
@@ -37,6 +38,11 @@ interface CashInTransactionEntityInterface
      * @return array
      */
     public function getOriginator(): array;
+
+    /**
+     * @return string
+     */
+    public function getOriginatorId():string;
 
     /**
      * @return string
