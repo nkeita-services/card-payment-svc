@@ -50,8 +50,10 @@ class PaymentIntentController extends Controller
     }
 
 
-    public function create(Request $request)
-    {
+    public function create(
+        string $accountId,
+        Request $request
+    ){
 
         $transaction = $this->paymentIntentService->create(
             new CashInTransactionEntity(
@@ -60,7 +62,7 @@ class PaymentIntentController extends Controller
                 $request->json()->get('amount'),
                 $request->json()->get('currency'),
                 $request->json()->get('description'),
-                $request->json()->get('accountId'),
+                $accountId,
                 $request->json()->get('originator'),
                 'pending',
                 time()

@@ -49,21 +49,22 @@ info:
 servers:
   - url: 'https://wallet-payment-svc-fjhmnd5asa-ew.a.run.app'
     description: Testing Server
+  - url: 'http://localhost:8099'
+    description: Local Server
 tags:
   - name: Stripe Integration
     description: Uses Stripe API
-    externalDocs:
-      url: 'https://wallet-payment-svc-fjhmnd5asa-ew.a.run.app'
-  - name: Cash Out
-    description: Cash Out
-  - name: Cash In
-    description: Cash In
+  - name: MTN Integration
+    description: MTN Integration
 paths:
   /v1/stripe/payments/form/{amount}/{currency}/{accountId}:
     get:
       summary: Return a form
       tags:
         - Stripe Integration
+      security:
+        - oAuth2:
+            - StripeCreatePaymentIntent
       parameters:
         - name: amount
           in: path
@@ -85,7 +86,7 @@ paths:
           schema:
             type: string
             description: Account to top up
-            example: 45466ea6-512d-42c7-b57f-d11c53890456
+            example: 5e6e9889f5aae9439c41757b
       responses:
         '200':
           description: Successfully obtained card payment form
@@ -103,11 +104,22 @@ paths:
                 status: fail
                 statusCode: 4001
                 statusDescription: Error when obtaining card payment form
-  /v1/stripe/payments/intents:
+  /v1/stripe/payments/intents/{accountId}:
     post:
       summary: Create a payment intent
       tags:
         - Stripe Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: 5e6e9889f5aae9439c41757b
       requestBody:
         description: Payment Intent
         required: true
@@ -144,7 +156,10 @@ paths:
     post:
       summary: Create a cash out transaction
       tags:
-        - Cash Out
+        - MTN Integration
+      security:
+        - oAuth2:
+            - MTNCashOut
       parameters:
         - name: accountId
           in: path
@@ -152,7 +167,7 @@ paths:
           schema:
             type: string
             description: Wallet Account ID
-            example: af1db7ec-e0a8-4866-b72b-aed49a360ffc
+            example: 5e6e9889f5aae9439c41757b
       requestBody:
         description: Cash Out Request
         required: true
@@ -174,7 +189,10 @@ paths:
     post:
       summary: Create a MTN cash in transaction
       tags:
-        - Cash In
+        - MTN Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
       parameters:
         - name: accountId
           in: path
@@ -182,7 +200,7 @@ paths:
           schema:
             type: string
             description: Wallet Account ID
-            example: af1db7ec-e0a8-4866-b72b-aed49a360ffc
+            example: 5e6e9889f5aae9439c41757b
       requestBody:
         description: Cash In Request
         required: true
@@ -225,6 +243,8 @@ components:
           tokenUrl: https://nbk-wallet.auth.eu-west-1.amazoncognito.com/oauth2/token
           scopes:
             StripeCreatePaymentIntent: Create a Stripe Payment Intent
+            MTNCashIn: MTN Cash In
+            MTNCashOut: MTN Cash In
   schemas:
     ResponseStatus:
       type: string
@@ -256,37 +276,22 @@ components:
       type: object
       properties:
         amount:
-          type: number
-          description: amount to cash out
-          example: 20
+          $ref: '#/components/schemas/Amount'
         type:
-          type: string
-          enum:
-            - MTN
-            - OrangeMoney
-            - BankAccount
+          $ref: '#/components/schemas/CashInRequestType'
+        currency:
+          $ref: '#/components/schemas/Currency'
         originator:
           $ref: '#/components/schemas/Originator'
     CashInRequest:
       type: object
       properties:
         amount:
-          type: number
-          description: amount to cash out
-          example: 20
+          $ref: '#/components/schemas/Amount'
         type:
-          type: string
-          enum:
-            - MTN
-            - OrangeMoney
-            - BankAccount
+          $ref: '#/components/schemas/CashInRequestType'
         currency:
-          type: string
-          description: Currency
-        accountId:
-          type: string
-          description: account to top up
-          example: 45466ea6-512d-42c7-b57f-d11c53890456
+          $ref: '#/components/schemas/Currency'
         originator:
           $ref: '#/components/schemas/Originator'
     Originator:
@@ -299,7 +304,7 @@ components:
             - Process
         originatorId:
           type: string
-          example: 8cd240f3-6d7b-40f3-b0df-37d6e2fc8145
+          example: 5e6bf1567127a743ad93e3b2
     StripeCashInResponse:
       type: object
       properties:
@@ -317,5 +322,20 @@ components:
               type: string
               description: Stripe plublishabe key
               example: pk_test_muG8jSMNY9OyPOQFCN3JtYMx00w4hXalgG
-
-
+    Currency:
+      type: string
+      description: Currency
+      enum:
+        - EUR
+        - USD
+        - GBP
+    CashInRequestType:
+      type: string
+      enum:
+        - MTN
+        - OrangeMoney
+        - BankAccount
+    Amount:
+      type: number
+      description: amount to cash out
+      example: 20

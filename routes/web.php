@@ -16,7 +16,7 @@ $router->get('/', function () use ($router) {
 });
 
 
-$router->post('/v1/stripe/payments/intents', [
+$router->post('/v1/stripe/payments/intents/{accountId}', [
     'uses' => 'Payment\Stripe\PaymentIntentController@create',
     'middleware' => 'auth',
     'as'=>'payment-gateway/StripeCreatePaymentIntent'
@@ -25,7 +25,7 @@ $router->post('/v1/stripe/payments/intents', [
 $router->post('/v1/payments/accounts/{accountId}/cash-in/mtn', [
     'uses' => 'Payment\CashIn\MTN\IndexController@create',
     'middleware' => 'auth',
-    'as'=>'payment-gateway/CreateCashIn'
+    'as'=>'payment-gateway/MTNCashIn'
 ]);
 
 
