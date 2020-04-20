@@ -43,7 +43,7 @@ info:
     # Useful links
   termsOfService: 'http://swagger.io/terms/'
   x-logo:
-    url: '/static/img/NBK_logo.jpeg'
+    url: '/img/NBK_logo.jpeg'
     backgroundColor: '#FFFFFF'
     altText: NBK Logo
 servers:
