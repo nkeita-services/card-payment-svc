@@ -5,6 +5,7 @@ namespace App\Providers\Domain\Stripe\PaymentIntent\Repository;
 
 
 use Illuminate\Support\ServiceProvider;
+use Infrastructure\Secrets\SecretManagerInterface;
 use MongoDB\Client;
 use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepository;
 use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryInterface;
@@ -15,7 +16,9 @@ class PaymentIntentRepositoryServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PaymentIntentRepositoryInterface::class, function ($app) {
 
-            $mongoClient = new Client('mongodb+srv://wallet-account-user:ccKUENpgY2Bj0gly@cluster0-ydv8p.mongodb.net/wallet?authSource=admin');
+            $mongoClient = new Client(
+                $app->make(SecretManagerInterface::class)->get('DB_MONGODB_URI')
+            );
             $collection = $mongoClient->selectCollection('wallet', 'payments');
             return new PaymentIntentRepository(
                 $collection

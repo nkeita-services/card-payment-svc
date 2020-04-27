@@ -31,4 +31,4 @@ $router->post('/v1/payments/accounts/{accountId}/cash-in/mtn', [
 
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Stripe\PaymentIntentController@form');
 
-$router->post('/v1/stripe/payments/intents/webhook', 'Payment\Stripe\PaymentIntentController@webhook');
+$router->post('/v1/stripe/payments/webhook', 'Payment\Stripe\PaymentIntentController@webhook');

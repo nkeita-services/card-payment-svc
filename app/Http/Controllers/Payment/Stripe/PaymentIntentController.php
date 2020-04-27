@@ -9,8 +9,15 @@
 namespace App\Http\Controllers\Payment\Stripe;
 
 use App\Http\Controllers\Controller;
+use App\Rules\CashIn\CashInOriginatorRule;
+use App\Rules\Wallet\WalletPlanIdRule;
+use App\Rules\Wallet\WalletUserIdRule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Infrastructure\Secrets\SecretManagerInterface;
 use Payment\CashIn\Transaction\CashInTransactionEntity;
+use Payment\Stripe\PaymentIntent\Service\Exception\PaymentIntentException;
 use Payment\Stripe\PaymentIntent\Service\PaymentIntentServiceInterface;
 use Log;
 use Payment\Account\Service\AccountServiceInterface;
@@ -53,29 +60,59 @@ class PaymentIntentController extends Controller
     public function create(
         string $accountId,
         Request $request
-    ){
-
-        $transaction = $this->paymentIntentService->create(
-            new CashInTransactionEntity(
-                'STRIPE',
-                null,
-                $request->json()->get('amount'),
-                $request->json()->get('currency'),
-                $request->json()->get('description'),
-                $accountId,
-                $request->json()->get('originator'),
-                'pending',
-                time()
-            )
+    )
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'amount' => ['required', 'numeric'],
+                'originator' => ['required', 'array', app(CashInOriginatorRule::class)],
+                'description' => ['required', 'string'],
+                'currency' => ['required', 'string']
+            ]
         );
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'StatusCode' => 0,
+                    'StatusDescription' => $validator->errors()
+                ]
+            );
+        }
+
+        try {
+            $transaction = $this->paymentIntentService->create(
+                new CashInTransactionEntity(
+                    'STRIPE',
+                    null,
+                    $request->json()->get('amount'),
+                    $request->json()->get('currency'),
+                    $request->json()->get('description'),
+                    $accountId,
+                    $request->json()->get('originator'),
+                    'pending',
+                    time()
+                )
+            );
+        } catch (PaymentIntentException $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'StatusCode' => 0,
+                    'StatusDescription' => $e->getMessage()
+                ]
+            );
+        }
 
         return response()->json([
             'status' => 'success',
             'data' => [
                 'CashIn' => [
-                    'transactionId'=> $transaction->getTransactionId(),
-                    'amount'=> $transaction->getAmount(),
-                    'status'=> $transaction->getStatus(),
+                    'transactionId' => $transaction->getTransactionId(),
+                    'amount' => $transaction->getAmount(),
+                    'status' => $transaction->getStatus(),
                     'extras' => $transaction->getExtras()
                 ]
             ]
@@ -87,7 +124,8 @@ class PaymentIntentController extends Controller
         string $currency,
         string $accountId,
         string $userId
-    ){
+    )
+    {
 
         return view(
             'stripe/collect_card_details',
@@ -97,7 +135,7 @@ class PaymentIntentController extends Controller
                 'accountId' => $accountId,
                 'userId' => $userId,
                 'description' => 'Top Up',
-                'accessToken' =>  app('WalletGatewayOauthClient')->accessToken()
+                'accessToken' => app('WalletGatewayOauthClient')->accessToken()
             ]);
     }
 
@@ -118,14 +156,14 @@ class PaymentIntentController extends Controller
         $transaction = $this
             ->paymentIntentService
             ->storeEvent(
-                'pi_1GYtH4I7cAZaA1PNJs5AfaY2_secret_YbXig4ONJDxy7W2hsGSOx2n5A',
+                'pi_1GcU8BI7cAZaA1PNpWDb23hG_secret_V4SRX3tJLKbRFEpviT8867y9X',
                 //$event->data->object->client_secret,
                 $event->type,
                 $event->data->object->toArray()
             );
 
 
-        if('payment_intent.succeeded' == $event->type){
+        if ('payment_intent.succeeded' == $event->type) {
             $this->accountService->topUpFromCashInTransaction(
                 $transaction
             );

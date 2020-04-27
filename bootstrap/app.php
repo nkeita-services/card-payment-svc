@@ -30,6 +30,13 @@ use App\Providers\Domain\Wallet\Plan\Repository\WalletPlanRepositoryServiceProvi
 use App\Providers\Domain\Wallet\Plan\Service\WalletPlanServiceProvider;
 use App\Providers\Infrastructure\Api\Rest\Client\WalletGateway\Plan\WalletPlanApiClientProvider;
 use App\Providers\Domain\Wallet\WalletGatewayServiceProvider;
+use App\Providers\Infrastructure\CloudRun\Metadata\OAuth\IDToken\OAuthIDTokenServiceProvider;
+use App\Providers\Infrastructure\CloudRun\Metadata\ProjectID\CloudRunProjectIDServiceProvider;
+use App\Providers\Infrastructure\CloudRun\Metadata\CloudRunMetadataGuzzleClientProvider;
+use App\Providers\Infrastructure\Secrets\SecretManagerServiceProvider;
+use App\Providers\Validation\Rules\Wallet\WalletUserIdRuleServiceProvider;
+use App\Providers\Validation\Rules\Wallet\WalletPlanIdRuleServiceProvider;
+use App\Providers\Validation\Rules\CashIn\CashInOriginatorRuleServiceProvider;
 
 
 /*
@@ -127,6 +134,15 @@ $app->singleton(
  $app->register(WalletPlanServiceProvider::class);
  $app->register(WalletPlanApiClientProvider::class);
  $app->register(WalletGatewayServiceProvider::class);
+
+ $app->register(OAuthIDTokenServiceProvider::class);
+ $app->register(CloudRunProjectIDServiceProvider::class);
+ $app->register(CloudRunMetadataGuzzleClientProvider::class);
+ $app->register(SecretManagerServiceProvider::class);
+
+ $app->register(WalletUserIdRuleServiceProvider::class);
+ $app->register(WalletPlanIdRuleServiceProvider::class);
+ $app->register(CashInOriginatorRuleServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

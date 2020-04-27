@@ -21,8 +21,8 @@ gcloud beta run deploy --image gcr.io/wallet-254709/card-payment-svc:0.0.1 --pla
 #### Test Stripe Webhook
 ```
 stripe login
-stripe listen --forward-to http://localhost:8099/v1/stripe/payments/intents/webhook
-stripe trigger payment_intent.created
+stripe listen --forward-to http://localhost:8099/v1/stripe/payments/webhook
+stripe trigger payment_intent.succeeded
 ```
 
 #### Test Stripe Pay In Form

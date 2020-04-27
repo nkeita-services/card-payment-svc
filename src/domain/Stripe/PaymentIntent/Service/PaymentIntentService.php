@@ -9,6 +9,8 @@ use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryInterface;
+use Payment\Stripe\PaymentIntent\Service\Exception\PaymentIntentException;
+use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntent as Intent;
 
@@ -38,7 +40,8 @@ class PaymentIntentService implements PaymentIntentServiceInterface
     public function __construct(
         string $publishableKey,
         CashInTransactionServiceInterface $cashInTransactionService
-    ){
+    )
+    {
         $this->publishableKey = $publishableKey;
         $this->cashInTransactionService = $cashInTransactionService;
     }
@@ -55,27 +58,31 @@ class PaymentIntentService implements PaymentIntentServiceInterface
             ->cashInTransactionService
             ->store($transactionEntity);
 
-        $intent = PaymentIntent::create([
-            'amount' => $transactionEntity->getAmount(),
-            'currency' => $transactionEntity->getCurrency(),
-            'metadata' => ['integration_check' => 'accept_a_payment'],
-        ]);
-
-        $this
-            ->cashInTransactionService
-            ->addAdditionalInfo(
-                $transaction->getTransactionId(),
-                [
-                    'clientSecret' => $intent->client_secret,
-                    'publishableKey'=> $this->publishableKey
-                ]
+        try {
+            $intent = PaymentIntent::create([
+                'amount' => $transactionEntity->getAmount(),
+                'currency' => $transactionEntity->getCurrency(),
+                'metadata' => ['integration_check' => 'accept_a_payment'],
+            ]);
+            $this
+                ->cashInTransactionService
+                ->addAdditionalInfo(
+                    $transaction->getTransactionId(),
+                    [
+                        'clientSecret' => $intent->client_secret,
+                        'publishableKey' => $this->publishableKey
+                    ]
+                );
+            return $this
+                ->cashInTransactionService
+                ->fetchWithTransactionId(
+                    $transaction->getTransactionId()
+                );
+        } catch (ApiErrorException $e) {
+            throw new PaymentIntentException(
+                $e->getMessage()
             );
-
-        return $this
-            ->cashInTransactionService
-            ->fetchWithTransactionId(
-                $transaction->getTransactionId()
-            );
+        }
     }
 
     /**
@@ -85,13 +92,14 @@ class PaymentIntentService implements PaymentIntentServiceInterface
         string $clientSecret,
         string $eventType,
         array $event
-    ): CashInTransactionEntityInterface{
+    ): CashInTransactionEntityInterface
+    {
 
         $transaction = $this
             ->cashInTransactionService
             ->lookUpExtraInformationFor(
                 [
-                    'clientSecret'=> $clientSecret
+                    'clientSecret' => $clientSecret
                 ]
             );
 

@@ -7,6 +7,7 @@ namespace App\Providers\Infrastructure\Api\Auth\OAuth2\MTN;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Infrastructure\Api\Auth\OAuth2\Client as OAuth2Client;
+use Infrastructure\Secrets\SecretManagerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 
 class CollectionApiGuzzleHttpClientProvider extends ServiceProvider
@@ -23,13 +24,12 @@ class CollectionApiGuzzleHttpClientProvider extends ServiceProvider
             $headers = [
                 'Authorization' => 'Bearer ' . $oauth2Client->getToken(),
                 'Accept' => 'application/json',
-                //'X-Reference-Id'=> '70316346-81f5-478c-bf26-a5cbe4ab26dd',
-                'X-Target-Environment'=>'sandbox',
-                'Ocp-Apim-Subscription-Key'=> 'a1b2dd2992b941279ff726ccfc4c842a',
+                'X-Target-Environment'=>$app->make(SecretManagerInterface::class)->get('MTN_TARGET_ENVIRONMENT'),
+                'Ocp-Apim-Subscription-Key'=> $app->make(SecretManagerInterface::class)->get('MTN_COLLECTION_OCP_APIM_SUBSCRIPTION_KEY'),
                 'Content-Type'=>'application/json'
             ];
             return new Client([
-                'base_uri' => 'https://sandbox.momodeveloper.mtn.com',
+                'base_uri' => $app->make(SecretManagerInterface::class)->get('MTN_MOMO_API_URI'),
                 'headers'=> $headers
             ]);
         });

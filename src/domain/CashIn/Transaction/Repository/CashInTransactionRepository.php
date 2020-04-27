@@ -102,7 +102,7 @@ class CashInTransactionRepository implements
             ->updateOne(
                 ['_id' => new ObjectId($transactionId)],
                 ['$addToSet' => [
-                    'events' => [$event]
+                    'events' => $event
                 ]]
             );
 

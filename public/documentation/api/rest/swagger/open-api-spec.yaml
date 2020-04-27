@@ -294,6 +294,8 @@ components:
           $ref: '#/components/schemas/Currency'
         originator:
           $ref: '#/components/schemas/Originator'
+        description:
+          $ref: '#/components/schemas/Description'
     Originator:
       type: object
       properties:
@@ -339,3 +341,7 @@ components:
       type: number
       description: amount to cash out
       example: 20
+    Description:
+      type: string
+      description: transaction description
+      example: Top Up

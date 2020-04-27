@@ -7,6 +7,7 @@ namespace App\Providers\Infrastructure\Api\Auth\OAuth2;
 use Illuminate\Support\ServiceProvider;
 use GuzzleHttp\Client;
 use Infrastructure\Api\Auth\OAuth2\Client as OAuth2Client;
+use Infrastructure\Secrets\SecretManagerInterface;
 
 class WalletGatewayGuzzleHttpClientProvider extends ServiceProvider
 {
@@ -24,7 +25,7 @@ class WalletGatewayGuzzleHttpClientProvider extends ServiceProvider
                 'Accept' => 'application/json',
             ];
             return new Client([
-                'base_uri' => 'https://wallet-gateway-svc-fjhmnd5asa-ew.a.run.app',
+                'base_uri' => $app->make(SecretManagerInterface::class)->get('WALLET_GATEWAY_URI'),
                 'headers' => $headers
             ]);
         });
