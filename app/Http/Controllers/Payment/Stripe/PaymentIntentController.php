@@ -9,13 +9,9 @@
 namespace App\Http\Controllers\Payment\Stripe;
 
 use App\Http\Controllers\Controller;
-use App\Rules\CashIn\CashInOriginatorRule;
-use App\Rules\Wallet\WalletPlanIdRule;
-use App\Rules\Wallet\WalletUserIdRule;
+use App\Rules\CashIn\CashInOriginatorAccountRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Infrastructure\Secrets\SecretManagerInterface;
 use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\Stripe\PaymentIntent\Service\Exception\PaymentIntentException;
 use Payment\Stripe\PaymentIntent\Service\PaymentIntentServiceInterface;
@@ -63,10 +59,18 @@ class PaymentIntentController extends Controller
     )
     {
         $validator = Validator::make(
-            $request->all(),
+            array_merge(
+                $request->all(),
+                [
+                    'originator'=> array_merge(
+                        $request->json('originator'),
+                        ['accountId' => $accountId]
+                    )
+                ]
+            ),
             [
                 'amount' => ['required', 'numeric'],
-                'originator' => ['required', 'array', app(CashInOriginatorRule::class)],
+                'originator' => ['required', 'array', app(CashInOriginatorAccountRule::class)],
                 'description' => ['required', 'string'],
                 'currency' => ['required', 'string']
             ]

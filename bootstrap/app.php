@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+use App\Providers\Validation\Rules\CashIn\CashInOriginatorAccountRuleServiceProvider;
 use Jenssegers\Mongodb\MongodbServiceProvider;
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -140,9 +141,8 @@ $app->singleton(
  $app->register(CloudRunMetadataGuzzleClientProvider::class);
  $app->register(SecretManagerServiceProvider::class);
 
- $app->register(WalletUserIdRuleServiceProvider::class);
- $app->register(WalletPlanIdRuleServiceProvider::class);
  $app->register(CashInOriginatorRuleServiceProvider::class);
+ $app->register(CashInOriginatorAccountRuleServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

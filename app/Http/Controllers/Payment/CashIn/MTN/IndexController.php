@@ -29,6 +29,7 @@ class IndexController extends Controller
 
     public function create(string $accountId, Request $request)
     {
+
         try {
             $cashInTransactionEntity = $this->collectionService->requestToPay(
                 $accountId,
