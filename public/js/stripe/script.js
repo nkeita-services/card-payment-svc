@@ -4,7 +4,7 @@ var stripe;
 // Disable the button until we have Stripe set up on the page
 document.querySelector("button").disabled = true;
 
-fetch("/v1/stripe/payments/intents", {
+fetch("/v1/stripe/payments/intents/"+ orderData.accountId, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
