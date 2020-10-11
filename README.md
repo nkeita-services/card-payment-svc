@@ -28,3 +28,4 @@ stripe trigger payment_intent.succeeded
 #### Test Stripe Pay In Form
 [Stripe Payment Form](http://localhost:8099/v1/stripe/payments/form/1000/EUR/5e6e9889f5aae9439c41757b/5e6bf1567127a743ad93e3b2)
 [Credit Cards](https://stripe.com/docs/payments/accept-a-payment)
+https://stripe.com/docs/testing

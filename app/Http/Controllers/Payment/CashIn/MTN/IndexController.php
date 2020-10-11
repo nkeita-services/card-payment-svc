@@ -27,6 +27,25 @@ class IndexController extends Controller
     }
 
 
+
+    public function form(
+        float $amount,
+        string $currency,
+        string $accountId,
+        string $userId
+    )
+    {
+
+        return view(
+            'mtn/collection_widget',
+            [
+                'amount' => $amount,
+                'currency' => $currency,
+                'accountId' => $accountId,
+                'userId' => $userId
+            ]);
+    }
+
     public function create(string $accountId, Request $request)
     {
 

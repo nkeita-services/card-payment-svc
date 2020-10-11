@@ -3,6 +3,7 @@ services:
   apache-php:
     build:
       context: .
+      dockerfile: Dockerfile-dev
     volumes:
       - type: bind
         source: .

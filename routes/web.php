@@ -34,5 +34,6 @@ $router->post('/v1/payments/accounts/{accountId}/cash-in/mtn', [
 
 
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Stripe\PaymentIntentController@form');
+$router->get('/v1/mtn/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\CashIn\MTN\IndexController@form');
 
 
