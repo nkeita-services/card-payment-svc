@@ -60,7 +60,7 @@ class PaymentExecutionController extends Controller
                 $request->all(),
                 [
                     'originator'=> array_merge(
-                        $request->json('originator'),
+                        $request->get('originator'),
                         ['accountId' => $accountId]
                     )
                 ]
