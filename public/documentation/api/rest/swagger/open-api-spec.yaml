@@ -56,6 +56,8 @@ tags:
     description: Uses Stripe API
   - name: MTN Integration
     description: MTN Integration
+  - name: Paypal Integration
+    description: Uses Paypal API
 paths:
   /v1/stripe/payments/form/{amount}/{currency}/{accountId}:
     get:
@@ -233,6 +235,108 @@ paths:
                               - pending
                               - successful
                               - error
+  /v1/paypal/payments/form/{amount}/{currency}/{accountId}/{userId}:
+    get:
+      summary: Return a form
+      tags:
+        - Paypal Integration
+      security:
+        - oAuth2:
+            - PaypalCreateOrderPayment
+      parameters:
+        - name: amount
+          in: path
+          required: true
+          schema:
+            type: number
+            description: amount to top up
+            example: 12
+        - name: currency
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Currency
+            example: USD
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Account to top up
+            example: 5e6e9889f5aae9439c41757b
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: UserId to top up
+            example: 5e6bf1567127a743ad93e3b2
+      responses:
+        '200':
+          description: Successfully obtained creating an order payment form
+          content:
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: Error when obtaining creating an order payment form
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4001
+                statusDescription: Error when obtaining creating an order payment payment form
+  /v1/paypal/payments/execution/{accountId}:
+    post:
+      summary: Create an order payment
+      tags:
+        - Paypal Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: 5e6e9889f5aae9439c41757b
+      requestBody:
+        description: Create Order for Payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaypalRequest'
+      responses:
+        '201':
+          description: Successfully created payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        $ref: '#/components/schemas/PaypalCashInResponse'
+        '500':
+          description: Error when creating order payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4010
+                statusDescription: Error when creating order payment
 components:
   securitySchemes:
     oAuth2:
@@ -242,6 +346,7 @@ components:
         clientCredentials:
           tokenUrl: https://nbk-wallet.auth.eu-west-1.amazoncognito.com/oauth2/token
           scopes:
+            PaypalCreateOrderPayment: Create a Paypal order fo payment
             StripeCreatePaymentIntent: Create a Stripe Payment Intent
             MTNCashIn: MTN Cash In
             MTNCashOut: MTN Cash In
@@ -324,6 +429,48 @@ components:
               type: string
               description: Stripe plublishabe key
               example: pk_test_muG8jSMNY9OyPOQFCN3JtYMx00w4hXalgG
+    PaypalRequest:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        type:
+          type: string
+          example: PAYPAL
+        currency:
+          $ref: '#/components/schemas/Currency'
+        originator:
+          $ref: '#/components/schemas/Originator'
+        description:
+          $ref: '#/components/schemas/Description'
+        applicationContext:
+          $ref: '#/components/schemas/ApplicationContext'
+    PaypalCashInResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 5e99a07063389569485205f3
+        amount:
+          $ref: '#/components/schemas/Amount'
+        status:
+          type: string
+          example: pending
+        extras:
+          type: object
+          properties:
+            approveUrl:
+              type: string
+              description: Approve Url
+              example: https://www.sandbox.paypal.com/checkoutnow?token=6LS64528XG914772C
+            orderId:
+              type: string
+              description: Oerder Identifiant
+              example: 6LS64528XG914772C
+            payerID:
+              type: string
+              description: Payer Identifiant
+              example: U7AFM93EDQUMY
     Currency:
       type: string
       description: Currency
@@ -335,6 +482,8 @@ components:
       type: string
       enum:
         - MTN
+        - STRIPE
+        - PAYPAL
         - OrangeMoney
         - BankAccount
     Amount:
@@ -345,3 +494,14 @@ components:
       type: string
       description: transaction description
       example: Top Up
+    ApplicationContext:
+      type: object
+      properties:
+        successUrl:
+          type: string
+          description: Success Url
+          example: https://your-domain/sucsess
+        cancelOrFailUrl:
+          type: string
+          description: Cancel or fail Url
+          example: https://your-domain/cancel

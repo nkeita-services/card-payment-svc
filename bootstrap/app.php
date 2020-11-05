@@ -38,6 +38,10 @@ use App\Providers\Infrastructure\Secrets\SecretManagerServiceProvider;
 use App\Providers\Validation\Rules\Wallet\WalletUserIdRuleServiceProvider;
 use App\Providers\Validation\Rules\Wallet\WalletPlanIdRuleServiceProvider;
 use App\Providers\Validation\Rules\CashIn\CashInOriginatorRuleServiceProvider;
+use App\Providers\Domain\Paypal\PaymentExecution\Service\PaymentExecutionServiceProvider;
+use App\Providers\Domain\Paypal\PaymentExecution\Repository\PaymentExecutionRepositoryServiceProvider;
+use App\Providers\Domain\Payment\PaymentCommon\Service\PaymentServiceProvider;
+use App\Http\Middleware\VerifyCsrfToken;
 
 
 /*
@@ -118,6 +122,12 @@ $app->singleton(
  $app->register(AccountRepositoryProvider::class);
  $app->register(PaymentIntentServiceProvider::class);
  $app->register(PaymentIntentRepositoryServiceProvider::class);
+
+ $app->register(PaymentExecutionServiceProvider::class);
+ $app->register(PaymentExecutionRepositoryServiceProvider::class);
+
+
+
  $app->register(WalletGatewayGuzzleHttpClientProvider::class);
  $app->register(WalletGatewayOauthClientProvider::class);
  $app->register(CollectionApiServiceProvider::class);

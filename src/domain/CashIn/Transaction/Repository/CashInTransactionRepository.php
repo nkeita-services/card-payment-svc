@@ -84,8 +84,8 @@ class CashInTransactionRepository implements
         );
 
         return $this->createCashInTransactionEntityFromDocument(
-        $transaction
-    );
+            $transaction
+        );
     }
 
     /**
@@ -118,8 +118,10 @@ class CashInTransactionRepository implements
         array $criteria
     ): CashInTransactionEntityInterface
     {
+        $key = array_key_first($criteria);
+
         $transaction = $this->cashInTransactionCollection->findOne(
-            ['extras.clientSecret' => $criteria['clientSecret']]
+            [sprintf('extras.%s',$key) => $criteria[$key]]
         );
 
         return $this->createCashInTransactionEntityFromDocument(
