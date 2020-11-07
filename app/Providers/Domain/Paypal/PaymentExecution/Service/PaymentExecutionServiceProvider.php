@@ -5,6 +5,7 @@ namespace App\Providers\Domain\Paypal\PaymentExecution\Service;
 
 
 use Illuminate\Support\ServiceProvider;
+use Infrastructure\Secrets\SecretManagerInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\Paypal\PaymentExecution\Service\PaymentExecutionService;
 use Payment\Paypal\PaymentExecution\Service\PaymentExecutionServiceInterface;
@@ -19,8 +20,8 @@ class PaymentExecutionServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PaymentExecutionServiceInterface::class, function ($app) {
             $environment = new SandboxEnvironment(
-                env('PAYPAL_CLIENT_ID'),
-                env('PAYPAL_CLIENT_SECRET')
+                $app->make(SecretManagerInterface::class)->get('PAYPAL_CLIENT_ID'),
+                $app->make(SecretManagerInterface::class)->get('PAYPAL_CLIENT_SECRET')
             );
 
             return new PaymentExecutionService(

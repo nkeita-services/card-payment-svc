@@ -7,6 +7,7 @@ use App\Rules\CashIn\CashInOriginatorAccountRule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Laravel\Lumen\Http\Redirector;
 use Payment\Account\Service\AccountServiceInterface;
@@ -108,7 +109,7 @@ class PaymentExecutionController extends Controller
                     $accountId,
                     [
                         'originatorType' => "User",
-                        'originatorId' => $request->get('userId')
+                        'originatorId' => $request->get('originator')['originatorId']
                     ],
                     'pending',
                     time()
@@ -125,7 +126,7 @@ class PaymentExecutionController extends Controller
             );
         }
 
-        return response()->json([
+        /*return response()->json([
             'status' => 'success',
             'data' => [
                 'CashIn' => [
@@ -135,12 +136,12 @@ class PaymentExecutionController extends Controller
                     'extras' => $transaction->getExtras()
                 ]
             ]
-        ]);
+        ]);*/
 
-       /* return redirect(
+        return redirect(
             $transaction->getExtras()
             ['approveUrl']
-        );*/
+        );
     }
 
 
@@ -191,25 +192,23 @@ class PaymentExecutionController extends Controller
         }
 
         $event = $request->all();
-
-        $transaction = $this
-            ->paymentExecutionService
-            ->storeEvent(
-                $event['resource']['id'],
-                $event['event_type'],
-                $event['resource']
-            );
-
-
         if ('CHECKOUT.ORDER.APPROVED' ==  $event['event_type']) {
-            $this->accountService->topUpFromCashInTransaction(
+            $transaction = $this
+                ->paymentExecutionService
+                ->storeEvent(
+                    $event['resource']['id'],
+                    $event['event_type'],
+                    $event['resource']
+                );
+
+           /* $this->accountService->topUpFromCashInTransaction(
                 $transaction
-            );
+            );*/
         }
 
         return response()->json(
             [
-                'ressource' => $event['resource'],
+                'status' => 'success',
             ], 200);
     }
 
@@ -253,6 +252,10 @@ class PaymentExecutionController extends Controller
                     )
                 );
             }
+
+            $this->accountService->topUpFromCashInTransaction(
+                $transaction
+            );
 
             return view('paypal.success');
         } catch (PaymentExecutionException $e) {
