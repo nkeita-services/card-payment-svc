@@ -87,6 +87,13 @@ paths:
             type: string
             description: Account to top up
             example: 5e6e9889f5aae9439c41757b
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Account owner
+            example: ui6e9889f5aae9439c41757f
       responses:
         '200':
           description: Successfully obtained card payment form
