@@ -64,4 +64,12 @@ interface CashInTransactionServiceInterface
         string $transactionId,
         string $status
     ): CashInTransactionEntityInterface;
+
+    /**
+     * @param string $transactionType
+     * @return array
+     */
+    public function fetchPendingTransactionFor(
+        string $transactionType
+    ):array;
 }

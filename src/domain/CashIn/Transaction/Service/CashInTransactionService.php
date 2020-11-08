@@ -113,4 +113,17 @@ class CashInTransactionService implements CashInTransactionServiceInterface
                 $status
             );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchPendingTransactionFor(string $transactionType): array
+    {
+        return $this
+            ->cashInTransactionRepository
+            ->fetchAllWithTransactionTypeAndStatus(
+                $transactionType,
+                'pending'
+            );
+    }
 }

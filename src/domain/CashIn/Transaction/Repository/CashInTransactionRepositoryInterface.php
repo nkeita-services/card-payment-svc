@@ -36,6 +36,16 @@ interface CashInTransactionRepositoryInterface
     ): CashInTransactionEntityInterface;
 
     /**
+     * @param string $transactionType
+     * @param string $transactionStatus
+     * @return array
+     */
+    public function fetchAllWithTransactionTypeAndStatus(
+        string $transactionType,
+        string $transactionStatus
+    ):array ;
+
+    /**
      * @param string $transactionId
      * @param string $eventType
      * @param array $event

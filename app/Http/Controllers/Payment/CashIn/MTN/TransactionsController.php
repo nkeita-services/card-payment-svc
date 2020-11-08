@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Payment\CashIn\MTN;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Payment\Account\Service\AccountServiceInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionService;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\MTN\Collection\Service\CollectionService;
@@ -24,16 +25,26 @@ class TransactionsController extends Controller
     private $cashInTransactionService;
 
     /**
-     * IndexController constructor.
+     *
+     * @var AccountServiceInterface
+     */
+    private $accountService;
+
+
+    /**
+     * TransactionsController constructor.
      * @param CollectionService $collectionService
      * @param CashInTransactionService $cashInTransactionService
+     * @param AccountServiceInterface $accountService
      */
     public function __construct(
         CollectionService $collectionService,
-        CashInTransactionService $cashInTransactionService
+        CashInTransactionService $cashInTransactionService,
+        AccountServiceInterface $accountService
     ){
         $this->collectionService = $collectionService;
         $this->cashInTransactionService = $cashInTransactionService;
+        $this->accountService = $accountService;
     }
 
 
@@ -60,6 +71,28 @@ class TransactionsController extends Controller
                 ]
             ]
         ]);
+    }
+
+    public function updateWalletAccounts()
+    {
+        $transactions = $this->cashInTransactionService
+            ->fetchPendingTransactionFor(
+                'MTN'
+            );
+
+        foreach ($transactions as $transaction){
+            $cashInTransactionEntity = $this->collectionService->requestToPayStatus(
+                $transaction->__id
+            );
+
+            if($cashInTransactionEntity->isSuccessful()){
+                $this
+                    ->accountService
+                    ->topUpFromCashInTransaction(
+                        $cashInTransactionEntity
+                    );
+            }
+        }
     }
 
     public function callback(

@@ -8,6 +8,7 @@ use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use MongoDB\Collection;
 use MongoDB\BSON\ObjectId;
+use Wallet\Wallet\Account\Entity\AccountEntity;
 
 class CashInTransactionRepository implements
     CashInTransactionRepositoryInterface
@@ -84,8 +85,8 @@ class CashInTransactionRepository implements
         );
 
         return $this->createCashInTransactionEntityFromDocument(
-        $transaction
-    );
+            $transaction
+        );
     }
 
     /**
@@ -134,7 +135,8 @@ class CashInTransactionRepository implements
      */
     private function createCashInTransactionEntityFromDocument(
         $transaction
-    ){
+    )
+    {
         return new CashInTransactionEntity(
             $transaction->type,
             $transaction->_id->__toString(),
@@ -169,5 +171,32 @@ class CashInTransactionRepository implements
         return $this->fetchWithTransactionId(
             $transactionId
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchAllWithTransactionTypeAndStatus(
+        string $transactionType,
+        string $transactionStatus
+    ): array
+    {
+        $transactions = $this->cashInTransactionCollection->find(
+            [
+                'type' => '$transactionType',
+                'status' => 'pending'
+            ],
+            [
+                'limit' => 10
+            ]
+        );
+
+        return
+            array_map(function (array $transaction) {
+                return $this->createCashInTransactionEntityFromDocument(
+                    $transaction
+                );
+            }, $transactions->toArray());
+
     }
 }
