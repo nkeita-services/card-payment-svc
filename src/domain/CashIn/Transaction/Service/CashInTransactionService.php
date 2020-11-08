@@ -96,4 +96,21 @@ class CashInTransactionService implements CashInTransactionServiceInterface
                 $criteria
             );
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function updateTransactionStatus(
+        string $transactionId,
+        string $status
+    ): CashInTransactionEntityInterface
+    {
+        return $this
+            ->cashInTransactionRepository
+            ->updateTransactionStatus(
+                $transactionId,
+                $status
+            );
+    }
 }

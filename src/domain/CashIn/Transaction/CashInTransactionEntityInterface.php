@@ -75,5 +75,10 @@ interface CashInTransactionEntityInterface
      */
     public function getType(): string;
 
+    /**
+     * @return bool
+     */
+    public function isSuccessful():bool;
+
 
 }

@@ -54,4 +54,14 @@ interface CashInTransactionServiceInterface
     public function lookUpExtraInformationFor(
         array $criteria
     ):CashInTransactionEntityInterface;
+
+    /**
+     * @param string $transactionId
+     * @param string $status
+     * @return CashInTransactionEntityInterface
+     */
+    public function updateTransactionStatus(
+        string $transactionId,
+        string $status
+    ): CashInTransactionEntityInterface;
 }

@@ -113,4 +113,31 @@ class CollectionService implements CollectionServiceInterface
 
         return $cashInTransactionEntity;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function requestToPayStatus(
+        string $transactionId
+    ): CashInTransactionEntityInterface
+    {
+
+        $transaction = $this
+            ->cashInTransactionService
+            ->fetchWithTransactionId(
+                $transactionId
+            );
+
+        $status = $this->collectionRepository
+            ->requestToPayStatus(
+                $transaction->getExtras()['referenceId']
+            );
+
+        return $this->cashInTransactionService
+            ->updateTransactionStatus(
+                $transaction->getTransactionId(),
+                $status
+            );
+
+    }
 }

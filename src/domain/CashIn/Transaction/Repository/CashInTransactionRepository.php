@@ -148,4 +148,26 @@ class CashInTransactionRepository implements
             $transaction->extras->getArrayCopy()
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateTransactionStatus(
+        string $transactionId,
+        string $status
+    ): CashInTransactionEntityInterface
+    {
+        $this
+            ->cashInTransactionCollection
+            ->updateOne(
+                ['_id' => new ObjectId($transactionId)],
+                ['$set' => [
+                    'status' => strtolower($status)
+                ]]
+            );
+
+        return $this->fetchWithTransactionId(
+            $transactionId
+        );
+    }
 }

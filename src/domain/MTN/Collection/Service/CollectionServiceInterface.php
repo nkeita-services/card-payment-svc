@@ -24,4 +24,13 @@ interface CollectionServiceInterface
         string $message = null,
         string $note = null
     ): CashInTransactionEntityInterface;
+
+
+    /**
+     * @param string $transactionId
+     * @return CashInTransactionEntityInterface
+     */
+    public function requestToPayStatus(
+        string $transactionId
+    ):CashInTransactionEntityInterface;
 }

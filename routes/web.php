@@ -32,8 +32,19 @@ $router->post('/v1/payments/accounts/{accountId}/cash-in/mtn', [
     'as'=>'payment-gateway/MTNCashIn'
 ]);
 
+$router->get('/v1/mtn/payments/transactions/{transactionId}', [
+    'uses' => 'Payment\CashIn\MTN\TransactionsController@fetch',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/MTNRequestToPayGetStatus'
+]);
+
+$router->put('/v1/mtn/payments/callback', [
+    'uses' => 'Payment\CashIn\MTN\IndexController@callback',
+]);
+
 
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Stripe\PaymentIntentController@form');
 $router->get('/v1/mtn/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\CashIn\MTN\IndexController@form');
+
 
 

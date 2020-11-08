@@ -14,4 +14,12 @@ interface CollectionApiClientInterface
      * @return RequestToPayResponseInterface
      */
     public function createRequestToPay(array $requestToPayPayload): RequestToPayResponseInterface;
+
+    /**
+     * @param string $referenceId
+     * @return RequestToPayResponseInterface
+     */
+    public function requestToPayStatus(
+        string $referenceId
+    ):RequestToPayResponseInterface;
 }

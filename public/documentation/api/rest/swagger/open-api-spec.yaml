@@ -192,6 +192,47 @@ paths:
                 properties:
                   status:
                     $ref: '#/components/schemas/ResponseStatus'
+  /v1/mtn/payments/transactions/{transactionId}:
+    get:
+      summary: Return a request to pay status
+      tags:
+        - MTN Integration
+      security:
+        - oAuth2:
+            - MTNRequestToPayGetStatus
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Transaction ID
+            example: ui6e9889f5aae9439c41757f
+      responses:
+        '200':
+          description: Successfully fetched request to pay status
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        type: object
+                        properties:
+                          transactionId:
+                            type: string
+                            example: 5e95b31b3a480d75ac0aa204
+                          status:
+                            type: string
+                            enum:
+                              - pending
+                              - successful
+                              - error
   /v1/payments/accounts/{accountId}/cash-in/mtn:
     post:
       summary: Create a MTN cash in transaction

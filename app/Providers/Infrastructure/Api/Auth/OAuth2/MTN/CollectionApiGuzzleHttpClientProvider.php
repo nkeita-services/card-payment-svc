@@ -26,7 +26,8 @@ class CollectionApiGuzzleHttpClientProvider extends ServiceProvider
                 'Accept' => 'application/json',
                 'X-Target-Environment'=>$app->make(SecretManagerInterface::class)->get('MTN_TARGET_ENVIRONMENT'),
                 'Ocp-Apim-Subscription-Key'=> $app->make(SecretManagerInterface::class)->get('MTN_COLLECTION_OCP_APIM_SUBSCRIPTION_KEY'),
-                'Content-Type'=>'application/json'
+                'Content-Type'=>'application/json',
+                //'X-Callback-Url'=>'https://wallet-payment-svc-x6fr3lwlgq-nw.a.run.app/v1/mtn/payments/callback'
             ];
             return new Client([
                 'base_uri' => $app->make(SecretManagerInterface::class)->get('MTN_MOMO_API_URI'),

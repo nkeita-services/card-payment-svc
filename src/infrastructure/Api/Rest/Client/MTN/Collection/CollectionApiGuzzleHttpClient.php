@@ -67,4 +67,24 @@ class CollectionApiGuzzleHttpClient implements CollectionApiClientInterface
             $referenceId
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function requestToPayStatus(string $referenceId): RequestToPayResponseInterface
+    {
+        try {
+            $response = $this->guzzleClient->get(
+                sprintf('/collection/v1_0/requesttopay/%s',$referenceId));
+
+            return $this->requestToPayMapper->createRequestToPayResponseFromApiResponseAndReferenceId(
+                $response,
+                $referenceId
+            );
+
+        } catch (ClientException $exception) {
+
+            throw $exception;
+        }
+    }
 }
