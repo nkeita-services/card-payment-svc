@@ -12,7 +12,6 @@ use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryInterface;
 use Payment\Stripe\PaymentIntent\Service\Exception\PaymentIntentException;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
-use Payment\Stripe\PaymentIntent\Entity\PaymentIntent as Intent;
 
 class PaymentIntentService implements PaymentIntentServiceInterface
 {
