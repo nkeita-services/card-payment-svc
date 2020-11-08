@@ -78,7 +78,7 @@ class IndexController extends Controller
                 $request->json('originator')
             );
 
-            $cashInTransactionEntity = $this->collectionService->requestToPayStatus(
+            /*$cashInTransactionEntity = $this->collectionService->requestToPayStatus(
                 $cashInTransactionEntity->getTransactionId()
             );
 
@@ -88,7 +88,7 @@ class IndexController extends Controller
                     ->topUpFromCashInTransaction(
                         $cashInTransactionEntity
                     );
-            }
+            }*/
 
         } catch (RequestToPayException $exception) {
             return response()->json([

@@ -38,6 +38,10 @@ $router->get('/v1/mtn/payments/transactions/{transactionId}', [
     'as'=>'payment-gateway/MTNRequestToPayGetStatus'
 ]);
 
+$router->get('/v1/mtn/payments/update-wallet-accounts', [
+    'uses' => 'Payment\CashIn\MTN\TransactionsController@updateWalletAccounts',
+]);
+
 $router->put('/v1/mtn/payments/callback', [
     'uses' => 'Payment\CashIn\MTN\IndexController@callback',
 ]);

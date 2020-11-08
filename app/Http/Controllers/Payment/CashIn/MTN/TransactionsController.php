@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Payment\CashIn\MTN;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Payment\Account\Collection\AccountCollection;
 use Payment\Account\Service\AccountServiceInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionService;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
@@ -80,9 +81,11 @@ class TransactionsController extends Controller
                 'MTN'
             );
 
+
+        $accounts = [];
         foreach ($transactions as $transaction){
             $cashInTransactionEntity = $this->collectionService->requestToPayStatus(
-                $transaction->__id
+                $transaction->getTransactionId()
             );
 
             if($cashInTransactionEntity->isSuccessful()){
@@ -91,8 +94,25 @@ class TransactionsController extends Controller
                     ->topUpFromCashInTransaction(
                         $cashInTransactionEntity
                     );
+
+                $accounts[] = $this->accountService
+                    ->fetchWithUserIdAndAccountId(
+                        $cashInTransactionEntity->getOriginatorId(),
+                        $cashInTransactionEntity->getAccountId()
+                    )->toArray();
             }
         }
+
+        $accountCollection = AccountCollection::fromArray(
+            $accounts
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'WalletAccounts' => $accountCollection->toArray()
+            ]
+        ]);
     }
 
     public function callback(

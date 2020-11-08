@@ -192,6 +192,32 @@ paths:
                 properties:
                   status:
                     $ref: '#/components/schemas/ResponseStatus'
+  /v1/mtn/payments/update-wallet-accounts:
+    get:
+      summary: Top Up Wallet accounts
+      tags:
+        - MTN Integration
+      responses:
+        '200':
+          description: Successfully update wallet accounts
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      WalletAccounts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            accountId:
+                              type: string
+                              example: 5e95b31b3a480d75ac0aa204
   /v1/mtn/payments/transactions/{transactionId}:
     get:
       summary: Return a request to pay status

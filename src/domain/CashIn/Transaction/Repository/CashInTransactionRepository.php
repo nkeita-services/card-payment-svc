@@ -183,8 +183,8 @@ class CashInTransactionRepository implements
     {
         $transactions = $this->cashInTransactionCollection->find(
             [
-                'type' => '$transactionType',
-                'status' => 'pending'
+                'type' => $transactionType,
+                'status' => $transactionStatus
             ],
             [
                 'limit' => 10
@@ -192,7 +192,7 @@ class CashInTransactionRepository implements
         );
 
         return
-            array_map(function (array $transaction) {
+            array_map(function ($transaction) {
                 return $this->createCashInTransactionEntityFromDocument(
                     $transaction
                 );
