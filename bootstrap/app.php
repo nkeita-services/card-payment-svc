@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use App\Providers\Validation\Rules\CashIn\CashInOriginatorAccountRuleServiceProvider;
+
 use Jenssegers\Mongodb\MongodbServiceProvider;
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -35,9 +35,10 @@ use App\Providers\Infrastructure\CloudRun\Metadata\OAuth\IDToken\OAuthIDTokenSer
 use App\Providers\Infrastructure\CloudRun\Metadata\ProjectID\CloudRunProjectIDServiceProvider;
 use App\Providers\Infrastructure\CloudRun\Metadata\CloudRunMetadataGuzzleClientProvider;
 use App\Providers\Infrastructure\Secrets\SecretManagerServiceProvider;
-use App\Providers\Validation\Rules\Wallet\WalletUserIdRuleServiceProvider;
-use App\Providers\Validation\Rules\Wallet\WalletPlanIdRuleServiceProvider;
 use App\Providers\Validation\Rules\CashIn\CashInOriginatorRuleServiceProvider;
+use App\Providers\Infrastructure\Api\Rest\Client\MTN\Collection\RemittanceApiServiceProvider;
+use App\Providers\Validation\Rules\CashIn\CashInOriginatorAccountRuleServiceProvider;
+use App\Providers\Domain\MTN\Collection\Repository\MTNRemittanceRepositoryServiceProvider;
 
 
 /*
@@ -143,6 +144,9 @@ $app->singleton(
 
  $app->register(CashInOriginatorRuleServiceProvider::class);
  $app->register(CashInOriginatorAccountRuleServiceProvider::class);
+
+ $app->register(RemittanceApiServiceProvider::class);
+ $app->register(MTNRemittanceRepositoryServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

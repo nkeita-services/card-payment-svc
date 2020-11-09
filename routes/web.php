@@ -26,8 +26,14 @@ $router->post('/v1/stripe/payments/intents/{accountId}', [
     'as'=>'payment-gateway/StripeCreatePaymentIntent'
 ]);
 
-$router->post('/v1/payments/accounts/{accountId}/cash-in/mtn', [
-    'uses' => 'Payment\CashIn\MTN\IndexController@create',
+$router->post('/v1/mtn/payments/accounts/{accountId}/cash-in', [
+    'uses' => 'Payment\CashIn\MTN\CashInController@create',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/MTNCashIn'
+]);
+
+$router->post('/v1/mtn/payments/accounts/{accountId}/cash-out', [
+    'uses' => 'Payment\CashIn\MTN\CashOutController@create',
     'middleware' => 'auth',
     'as'=>'payment-gateway/MTNCashIn'
 ]);

@@ -13,9 +13,8 @@ use Payment\MTN\Collection\Service\CollectionService;
 use Payment\MTN\Collection\Service\CollectionServiceInterface;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException;
 
-class IndexController extends Controller
+class CashOutController extends Controller
 {
-
     /**
      * @var CollectionServiceInterface
      */
@@ -46,26 +45,6 @@ class IndexController extends Controller
         $this->collectionService = $collectionService;
         $this->cashInTransactionService = $cashInTransactionService;
         $this->accountService = $accountService;
-    }
-
-
-
-    public function form(
-        float $amount,
-        string $currency,
-        string $accountId,
-        string $userId
-    )
-    {
-
-        return view(
-            'mtn/collection_widget',
-            [
-                'amount' => $amount,
-                'currency' => $currency,
-                'accountId' => $accountId,
-                'userId' => $userId
-            ]);
     }
 
     public function create(string $accountId, Request $request)
@@ -107,17 +86,5 @@ class IndexController extends Controller
                 ]
             ]
         ]);
-    }
-
-    public function callback(
-        Request $request
-    ){
-        $this->cashInTransactionService
-            ->addTransactionEvent(
-                '5fa7d7eecd12e8702c35ce13',
-                'requestToPay.approved',
-                $request->all()
-            );
-
     }
 }

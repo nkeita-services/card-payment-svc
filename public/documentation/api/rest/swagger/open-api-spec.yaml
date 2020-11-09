@@ -159,7 +159,7 @@ paths:
                 status: fail
                 statusCode: 4010
                 statusDescription: Error when creating payment intent
-  /v1/payments/accounts/{accountId}/cash-out/mtn:
+  /v1/mtn/payments/accounts/{accountId}/cash-out:
     post:
       summary: Create a cash out transaction
       tags:
@@ -259,7 +259,7 @@ paths:
                               - pending
                               - successful
                               - error
-  /v1/payments/accounts/{accountId}/cash-in/mtn:
+  /v1/mtn/payments/accounts/{accountId}/cash-in:
     post:
       summary: Create a MTN cash in transaction
       tags:

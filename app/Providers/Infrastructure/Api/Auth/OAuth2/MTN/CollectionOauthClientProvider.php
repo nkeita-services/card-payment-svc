@@ -6,7 +6,6 @@ namespace App\Providers\Infrastructure\Api\Auth\OAuth2\MTN;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
-use Infrastructure\Api\Auth\OAuth2\Client as OAuth2Client;
 use Infrastructure\Secrets\SecretManagerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 
