@@ -79,4 +79,12 @@ interface CashOutTransactionEntityInterface
      * @return bool
      */
     public function isSuccessful():bool;
+
+    /**
+     * @param string $currency
+     * @return CashOutTransactionEntityInterface
+     */
+    public function setCurrency(
+        string $currency
+    ): CashOutTransactionEntityInterface;
 }

@@ -24,7 +24,7 @@ class CashOutTransactionMapper implements CashOutTransactionMapperInterface
             null,
             $request->json('amount'),
             null,
-            $request->json('description'),
+            $request->json('description', CashOutTransactionEntityInterface::DESCRIPTION_DEFAULT),
             $accountId,
             $request->json('originator'),
             CashOutTransactionEntityInterface::STATUS_PENDING,

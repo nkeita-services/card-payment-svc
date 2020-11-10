@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Providers\Domain\MTN\Collection\Repository;
+namespace App\Providers\Domain\MTN\Remittance\Repository;
 
 
 use Illuminate\Support\ServiceProvider;

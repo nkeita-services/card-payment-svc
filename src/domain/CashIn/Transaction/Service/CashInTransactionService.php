@@ -7,7 +7,7 @@ namespace Payment\CashIn\Transaction\Service;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashIn\Transaction\Repository\CashInTransactionRepositoryInterface;
 
-class CashInTransactionService implements CashOutTransactionServiceInterface
+class CashInTransactionService implements CashInTransactionServiceInterface
 {
 
     /**

@@ -36,11 +36,12 @@ use App\Providers\Infrastructure\CloudRun\Metadata\ProjectID\CloudRunProjectIDSe
 use App\Providers\Infrastructure\CloudRun\Metadata\CloudRunMetadataGuzzleClientProvider;
 use App\Providers\Infrastructure\Secrets\SecretManagerServiceProvider;
 use App\Providers\Validation\Rules\CashIn\CashInOriginatorRuleServiceProvider;
-use App\Providers\Infrastructure\Api\Rest\Client\MTN\Collection\RemittanceApiServiceProvider;
+use App\Providers\Infrastructure\Api\Rest\Client\MTN\Remittance\RemittanceApiServiceProvider;
 use App\Providers\Validation\Rules\CashIn\CashInOriginatorAccountRuleServiceProvider;
-use App\Providers\Domain\MTN\Collection\Repository\MTNRemittanceRepositoryServiceProvider;
+use App\Providers\Domain\MTN\Remittance\Repository\MTNRemittanceRepositoryServiceProvider;
 use App\Providers\Domain\CashOut\Transaction\Repository\CashOutTransactionRepositoryServiceProvider;
 use App\Providers\Domain\CashOut\Transaction\Service\CashOutTransactionServiceProvider;
+use App\Providers\Domain\MTN\Remittance\Service\MTNRemittanceServiceProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -148,6 +149,7 @@ $app->singleton(
 
  $app->register(RemittanceApiServiceProvider::class);
  $app->register(MTNRemittanceRepositoryServiceProvider::class);
+ $app->register(MTNRemittanceServiceProvider::class);
 
  $app->register(CashOutTransactionRepositoryServiceProvider::class);
  $app->register(CashOutTransactionServiceProvider::class);

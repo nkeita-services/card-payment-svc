@@ -54,6 +54,13 @@ class MTNRemittanceService implements MTNRemittanceServiceInterface
         CashOutTransactionEntityInterface $entity
     ): CashOutTransactionEntityInterface{
 
+        $entity->setCurrency(
+            $this->walletGatewayService->accountCurrencyFromUserIdAndAccountId(
+                $entity->getOriginatorId(),
+                $entity->getAccountId()
+            )
+        );
+
         $entity = $this->cashOutTransactionService
             ->store(
                 $entity
@@ -64,10 +71,7 @@ class MTNRemittanceService implements MTNRemittanceServiceInterface
             ->transfer(
                 new MTNTransferEntity(
                     $entity->getAmount(),
-                    $this->walletGatewayService->accountCurrencyFromUserIdAndAccountId(
-                        $entity->getOriginatorId(),
-                        $entity->getAccountId()
-                    ),
+                    $entity->getCurrency(),
                     RequestToPayEntityInterface::PARTY_ID_TYPE_MSISDN,
                     $this->walletGatewayService->mobileNumberFromUserId(
                         $entity->getOriginatorId()

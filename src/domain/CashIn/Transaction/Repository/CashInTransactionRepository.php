@@ -8,7 +8,6 @@ use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use MongoDB\Collection;
 use MongoDB\BSON\ObjectId;
-use Wallet\Wallet\Account\Entity\AccountEntity;
 
 class CashInTransactionRepository implements
     CashInTransactionRepositoryInterface

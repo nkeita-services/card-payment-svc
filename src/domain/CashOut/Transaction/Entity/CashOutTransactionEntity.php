@@ -202,4 +202,16 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
     {
         return $this->status == 'successful';
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setCurrency(
+        string $currency
+    ): CashOutTransactionEntityInterface
+    {
+        $this->currency = $currency;
+        return $this;
+    }
 }
