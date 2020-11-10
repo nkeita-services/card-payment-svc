@@ -4,24 +4,30 @@
 namespace App\Http\Controllers\Payment\CashIn\MTN;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Payment\CashIn\MTN\Mapper\CashOutTransactionMapper;
+use App\Http\Controllers\Payment\CashIn\MTN\Mapper\CashOutTransactionMapperInterface;
 use Illuminate\Http\Request;
 use Payment\Account\Service\AccountService;
 use Payment\Account\Service\AccountServiceInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionService;
-use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
+use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
+use Payment\CashOut\Transaction\Service\CashOutTransactionService;
+use Payment\CashOut\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\MTN\Collection\Service\CollectionService;
 use Payment\MTN\Collection\Service\CollectionServiceInterface;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException;
+use Payment\MTN\Remittance\Service\MTNRemittanceService;
+use Payment\MTN\Remittance\Service\MTNRemittanceServiceInterface;
 
 class CashOutController extends Controller
 {
     /**
-     * @var CollectionServiceInterface
+     * @var MTNRemittanceServiceInterface
      */
-    private $collectionService;
+    private $remittanceService;
 
     /**
-     * @var CashInTransactionServiceInterface
+     * @var CashOutTransactionServiceInterface
      */
     private $cashInTransactionService;
 
@@ -32,42 +38,36 @@ class CashOutController extends Controller
     private $accountService;
 
     /**
-     * IndexController constructor.
-     * @param CollectionService $collectionService
-     * @param CashInTransactionService $cashInTransactionService
+     * CashOutController constructor.
+     * @param MTNRemittanceService $remittanceService
+     * @param CashOutTransactionService $cashInTransactionService
      * @param AccountService $accountService
      */
     public function __construct(
-        CollectionService $collectionService,
-        CashInTransactionService $cashInTransactionService,
+        MTNRemittanceService $remittanceService,
+        CashOutTransactionService $cashInTransactionService,
         AccountService $accountService
-    ){
-        $this->collectionService = $collectionService;
+    )
+    {
+        $this->remittanceService = $remittanceService;
         $this->cashInTransactionService = $cashInTransactionService;
         $this->accountService = $accountService;
     }
+
 
     public function create(string $accountId, Request $request)
     {
 
         try {
-            $cashInTransactionEntity = $this->collectionService->requestToPay(
-                $accountId,
-                $request->json('amount'),
-                $request->json('originator')
-            );
+            $cashInTransactionEntity = $this
+                ->remittanceService
+                ->transferFromCashOutRequest(
+                    CashOutTransactionMapper::createCashOutTransactionFromHttpRequest(
+                        $accountId,
+                        $request
+                    )
+                );
 
-            $cashInTransactionEntity = $this->collectionService->requestToPayStatus(
-                $cashInTransactionEntity->getTransactionId()
-            );
-
-            if($cashInTransactionEntity->isSuccessful()){
-                $this
-                    ->accountService
-                    ->topUpFromCashInTransaction(
-                        $cashInTransactionEntity
-                    );
-            }
 
         } catch (RequestToPayException $exception) {
             return response()->json([

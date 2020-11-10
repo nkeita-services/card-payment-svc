@@ -26,7 +26,7 @@ use App\Providers\Domain\Wallet\User\Repository\UserRepositoryServiceProvider;
 use App\Providers\Domain\Wallet\User\Service\UserServiceProvider;
 use App\Providers\Infrastructure\Storage\Database\MongoDB\MongoDBClientServiceProvider;
 use App\Providers\Domain\CashIn\Transaction\Repository\CashInTransactionRepositoryServiceProvider;
-use App\Providers\Domain\CashIn\Transaction\Service\CashInTransactionServiceProvider;
+use App\Providers\Domain\CashIn\Transaction\Service\CashinTransactionServiceProvider;
 use App\Providers\Domain\Wallet\Plan\Repository\WalletPlanRepositoryServiceProvider;
 use App\Providers\Domain\Wallet\Plan\Service\WalletPlanServiceProvider;
 use App\Providers\Infrastructure\Api\Rest\Client\WalletGateway\Plan\WalletPlanApiClientProvider;
@@ -39,7 +39,8 @@ use App\Providers\Validation\Rules\CashIn\CashInOriginatorRuleServiceProvider;
 use App\Providers\Infrastructure\Api\Rest\Client\MTN\Collection\RemittanceApiServiceProvider;
 use App\Providers\Validation\Rules\CashIn\CashInOriginatorAccountRuleServiceProvider;
 use App\Providers\Domain\MTN\Collection\Repository\MTNRemittanceRepositoryServiceProvider;
-
+use App\Providers\Domain\CashOut\Transaction\Repository\CashOutTransactionRepositoryServiceProvider;
+use App\Providers\Domain\CashOut\Transaction\Service\CashOutTransactionServiceProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,6 +148,9 @@ $app->singleton(
 
  $app->register(RemittanceApiServiceProvider::class);
  $app->register(MTNRemittanceRepositoryServiceProvider::class);
+
+ $app->register(CashOutTransactionRepositoryServiceProvider::class);
+ $app->register(CashOutTransactionServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

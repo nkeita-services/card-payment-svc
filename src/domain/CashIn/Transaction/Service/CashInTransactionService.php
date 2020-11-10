@@ -7,7 +7,7 @@ namespace Payment\CashIn\Transaction\Service;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashIn\Transaction\Repository\CashInTransactionRepositoryInterface;
 
-class CashInTransactionService implements CashInTransactionServiceInterface
+class CashInTransactionService implements CashOutTransactionServiceInterface
 {
 
     /**
@@ -16,7 +16,7 @@ class CashInTransactionService implements CashInTransactionServiceInterface
     private $cashInTransactionRepository;
 
     /**
-     * CashInTransactionService constructor.
+     * CashOutTransactionService constructor.
      * @param CashInTransactionRepositoryInterface $cashInTransactionRepository
      */
     public function __construct(

@@ -4,12 +4,16 @@
 namespace Payment\MTN\Remittance\Service;
 
 
-use Payment\MTN\Remittance\Entity\MTNTransferEntityInterface;
+use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
 
 interface MTNRemittanceServiceInterface
 {
 
-    public function transfer(
-        MTNTransferEntityInterface $MTNTransferEntity
-    );
+    /**
+     * @param CashOutTransactionEntityInterface $entity
+     * @return CashOutTransactionEntityInterface
+     */
+    public function transferFromCashOutRequest(
+        CashOutTransactionEntityInterface $entity
+    ): CashOutTransactionEntityInterface;
 }

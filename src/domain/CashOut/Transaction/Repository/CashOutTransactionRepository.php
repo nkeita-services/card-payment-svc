@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Payment\CashIn\Transaction\Repository;
+namespace Payment\CashOut\Transaction\Repository;
 
 
 use MongoDB\Collection;

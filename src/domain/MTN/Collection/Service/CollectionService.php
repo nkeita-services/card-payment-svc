@@ -105,13 +105,15 @@ class CollectionService implements CollectionServiceInterface
                     ]
                 );
 
+            return $cashInTransactionEntity;
+
         }catch (RequestToPayException $exception){
             throw new RequestToPayServiceException(
                 'Unable to fulfill cash-in request'
             );
         }
 
-        return $cashInTransactionEntity;
+
     }
 
     /**

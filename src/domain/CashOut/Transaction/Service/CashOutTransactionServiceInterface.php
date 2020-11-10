@@ -1,21 +1,22 @@
 <?php
 
 
-namespace Payment\CashIn\Transaction\Service;
+namespace Payment\CashOut\Transaction\Service;
 
 
-use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 
-interface CashInTransactionServiceInterface
+use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
+
+interface CashOutTransactionServiceInterface
 {
 
     /**
-     * @param CashInTransactionEntityInterface $transactionEntity
-     * @return CashInTransactionEntityInterface
+     * @param CashOutTransactionEntityInterface $transactionEntity
+     * @return CashOutTransactionEntityInterface
      */
     public function store(
-        CashInTransactionEntityInterface $transactionEntity
-    ): CashInTransactionEntityInterface;
+        CashOutTransactionEntityInterface $transactionEntity
+    ): CashOutTransactionEntityInterface;
 
     /**
      * @param string $transactionId
@@ -28,42 +29,42 @@ interface CashInTransactionServiceInterface
 
     /**
      * @param string $transactionId
-     * @return CashInTransactionEntityInterface
+     * @return CashOutTransactionEntityInterface
      */
     public function fetchWithTransactionId(
         string $transactionId
-    ): CashInTransactionEntityInterface;
+    ): CashOutTransactionEntityInterface;
 
     /**
      * @param string $transactionId
      * @param string $eventType
      * @param array $event
-     * @return CashInTransactionEntityInterface
+     * @return CashOutTransactionEntityInterface
      */
     public function addTransactionEvent(
         string $transactionId,
         string $eventType,
         array $event
-    ):CashInTransactionEntityInterface;
+    ):CashOutTransactionEntityInterface;
 
 
     /**
      * @param array $criteria
-     * @return CashInTransactionEntityInterface
+     * @return CashOutTransactionEntityInterface
      */
     public function lookUpExtraInformationFor(
         array $criteria
-    ):CashInTransactionEntityInterface;
+    ):CashOutTransactionEntityInterface;
 
     /**
      * @param string $transactionId
      * @param string $status
-     * @return CashInTransactionEntityInterface
+     * @return CashOutTransactionEntityInterface
      */
     public function updateTransactionStatus(
         string $transactionId,
         string $status
-    ): CashInTransactionEntityInterface;
+    ): CashOutTransactionEntityInterface;
 
     /**
      * @param string $transactionType

@@ -4,6 +4,8 @@
 namespace Payment\MTN\Remittance\Entity;
 
 
+use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
+
 interface MTNTransferEntityInterface
 {
     const PARTY_ID_TYPE_MSISDN = 'MSISDN';
@@ -41,4 +43,5 @@ interface MTNTransferEntityInterface
      * @return string
      */
     public function getExternalId(): string;
+
 }

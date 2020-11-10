@@ -1,28 +1,29 @@
 <?php
 
 
-namespace Payment\CashIn\Transaction\Service;
+namespace Payment\CashOut\Transaction\Service;
 
 
-use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
-use Payment\CashIn\Transaction\Repository\CashOutTransactionRepositoryInterface;
 
-class CashInTransactionService implements CashInTransactionServiceInterface
+use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
+use Payment\CashOut\Transaction\Repository\CashOutTransactionRepositoryInterface;
+
+class CashOutTransactionService implements CashOutTransactionServiceInterface
 {
 
     /**
      * @var CashOutTransactionRepositoryInterface
      */
-    private $cashInTransactionRepository;
+    private $CashOutTransactionRepository;
 
     /**
-     * CashInTransactionService constructor.
-     * @param CashOutTransactionRepositoryInterface $cashInTransactionRepository
+     * CashOutTransactionService constructor.
+     * @param CashOutTransactionRepositoryInterface $CashOutTransactionRepository
      */
     public function __construct(
-        CashOutTransactionRepositoryInterface $cashInTransactionRepository
+        CashOutTransactionRepositoryInterface $CashOutTransactionRepository
     ){
-        $this->cashInTransactionRepository = $cashInTransactionRepository;
+        $this->CashOutTransactionRepository = $CashOutTransactionRepository;
     }
 
 
@@ -30,10 +31,10 @@ class CashInTransactionService implements CashInTransactionServiceInterface
      * @inheritDoc
      */
     public function store(
-        CashInTransactionEntityInterface $transactionEntity
-    ): CashInTransactionEntityInterface{
+        CashOutTransactionEntityInterface $transactionEntity
+    ): CashOutTransactionEntityInterface{
         return $this
-            ->cashInTransactionRepository
+            ->CashOutTransactionRepository
             ->store(
                 $transactionEntity
             );
@@ -47,7 +48,7 @@ class CashInTransactionService implements CashInTransactionServiceInterface
         array $additionalInfo
     ): void{
          $this
-            ->cashInTransactionRepository
+            ->CashOutTransactionRepository
             ->addExtras(
                 $transactionId,
                 $additionalInfo
@@ -59,9 +60,9 @@ class CashInTransactionService implements CashInTransactionServiceInterface
      */
     public function fetchWithTransactionId(
         string $transactionId
-    ): CashInTransactionEntityInterface{
+    ): CashOutTransactionEntityInterface{
         return $this
-            ->cashInTransactionRepository
+            ->CashOutTransactionRepository
             ->fetchWithTransactionId(
                 $transactionId
             );
@@ -74,9 +75,9 @@ class CashInTransactionService implements CashInTransactionServiceInterface
         string $transactionId,
         string $eventType,
         array $event
-    ): CashInTransactionEntityInterface{
+    ): CashOutTransactionEntityInterface{
         return $this
-            ->cashInTransactionRepository
+            ->CashOutTransactionRepository
             ->addTransactionEvent(
                 $transactionId,
                 $eventType,
@@ -89,9 +90,9 @@ class CashInTransactionService implements CashInTransactionServiceInterface
      */
     public function lookUpExtraInformationFor(
         array $criteria
-    ): CashInTransactionEntityInterface{
+    ): CashOutTransactionEntityInterface{
         return $this
-            ->cashInTransactionRepository
+            ->CashOutTransactionRepository
             ->lookUpExtraInformationFor(
                 $criteria
             );
@@ -104,10 +105,10 @@ class CashInTransactionService implements CashInTransactionServiceInterface
     public function updateTransactionStatus(
         string $transactionId,
         string $status
-    ): CashInTransactionEntityInterface
+    ): CashOutTransactionEntityInterface
     {
         return $this
-            ->cashInTransactionRepository
+            ->CashOutTransactionRepository
             ->updateTransactionStatus(
                 $transactionId,
                 $status
@@ -120,7 +121,7 @@ class CashInTransactionService implements CashInTransactionServiceInterface
     public function fetchPendingTransactionFor(string $transactionType): array
     {
         return $this
-            ->cashInTransactionRepository
+            ->CashOutTransactionRepository
             ->fetchAllWithTransactionTypeAndStatus(
                 $transactionType,
                 'pending'

@@ -6,7 +6,7 @@ namespace Payment\Stripe\PaymentIntent\Service;
 
 use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
-use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
+use Payment\CashIn\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryInterface;
 use Payment\Stripe\PaymentIntent\Service\Exception\PaymentIntentException;
@@ -27,18 +27,18 @@ class PaymentIntentService implements PaymentIntentServiceInterface
     private $publishableKey;
 
     /**
-     * @var CashInTransactionServiceInterface
+     * @var CashOutTransactionServiceInterface
      */
     private $cashInTransactionService;
 
     /**
      * PaymentIntentService constructor.
      * @param string $publishableKey
-     * @param CashInTransactionServiceInterface $cashInTransactionService
+     * @param CashOutTransactionServiceInterface $cashInTransactionService
      */
     public function __construct(
         string $publishableKey,
-        CashInTransactionServiceInterface $cashInTransactionService
+        CashOutTransactionServiceInterface $cashInTransactionService
     )
     {
         $this->publishableKey = $publishableKey;

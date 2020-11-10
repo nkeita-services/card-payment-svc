@@ -4,6 +4,8 @@
 namespace Payment\MTN\Remittance\Entity;
 
 
+use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
+
 class MTNTransferEntity implements MTNTransferEntityInterface
 {
 
@@ -68,6 +70,7 @@ class MTNTransferEntity implements MTNTransferEntityInterface
         $this->payeeNote = $payeeNote;
         $this->externalId = $externalId;
     }
+
 
     /**
      * @return float

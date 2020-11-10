@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Payment\Account\Service\AccountService;
 use Payment\Account\Service\AccountServiceInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionService;
-use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
+use Payment\CashIn\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\MTN\Collection\Service\CollectionService;
 use Payment\MTN\Collection\Service\CollectionServiceInterface;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException;
@@ -22,7 +22,7 @@ class CashInController extends Controller
     private $collectionService;
 
     /**
-     * @var CashInTransactionServiceInterface
+     * @var CashOutTransactionServiceInterface
      */
     private $cashInTransactionService;
 
