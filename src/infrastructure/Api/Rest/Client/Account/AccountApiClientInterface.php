@@ -30,4 +30,20 @@ interface AccountApiClientInterface
         string $amount,
         string $description
     ):AccountEntityInterface;
+
+    /**
+     * @param string $userId
+     * @param string $accountId
+     * @param string $amount
+     * @param string $description
+     * @return AccountEntityInterface
+     */
+    public function debitWithUserIdAndAccountId(
+        string $userId,
+        string $accountId,
+        string $amount,
+        string $description
+    ):AccountEntityInterface;
+
+
 }

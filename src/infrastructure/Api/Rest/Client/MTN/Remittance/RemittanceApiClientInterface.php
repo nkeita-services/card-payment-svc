@@ -17,4 +17,12 @@ interface RemittanceApiClientInterface
     public function transfer(
         array $transferPayload
     ):TransferResponseInterface;
+
+    /**
+     * @param string $referenceId
+     * @return TransferResponseInterface
+     */
+    public function transferStatus(
+        string $referenceId
+    ): TransferResponseInterface;
 }

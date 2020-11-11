@@ -64,4 +64,27 @@ class RemittanceApiGuzzleHttpClient implements RemittanceApiClientInterface
             $referenceId
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function transferStatus(
+        string $referenceId
+    ): TransferResponseInterface{
+        try {
+            $response = $this->guzzleClient->get(
+                sprintf('/remittance/v1_0/transfer/%s',$referenceId));
+
+            return $this
+                ->transferMapper
+                ->createTransferResponseFromApiResponseAndReferenceId(
+                    $response,
+                    $referenceId
+                );
+
+        } catch (ClientException $exception) {
+
+            throw $exception;
+        }
+    }
 }

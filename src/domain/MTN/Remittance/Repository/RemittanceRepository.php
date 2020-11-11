@@ -44,4 +44,18 @@ class RemittanceRepository implements RemittanceRepositoryInterface
             );
         return $response->getReferenceId();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function transferStatus(string $referenceId): string
+    {
+        $response = $this
+            ->remittanceApiClient
+            ->transferStatus(
+                $referenceId
+            );
+
+        return $response->getData()['status'];
+    }
 }

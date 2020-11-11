@@ -33,4 +33,18 @@ interface AccountRepositoryInterface
         string $description
     ): AccountEntityInterface;
 
+    /**
+     * @param string $userId
+     * @param string $accountId
+     * @param float $amount
+     * @param string $description
+     * @return AccountEntityInterface
+     */
+    public function debitWithUserIdAndAccountId(
+        string $userId,
+        string $accountId,
+        float $amount,
+        string $description
+    ): AccountEntityInterface;
+
 }

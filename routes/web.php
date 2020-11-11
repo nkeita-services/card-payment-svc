@@ -32,19 +32,13 @@ $router->post('/v1/mtn/payments/accounts/{accountId}/cash-in', [
     'as'=>'payment-gateway/MTNCashIn'
 ]);
 
-$router->post('/v1/mtn/payments/accounts/{accountId}/cash-out', [
-    'uses' => 'Payment\CashIn\MTN\CashOutController@create',
-    'middleware' => 'auth',
-    'as'=>'payment-gateway/MTNCashIn'
-]);
-
-$router->get('/v1/mtn/payments/transactions/{transactionId}', [
+$router->get('/v1/mtn/payments/transactions/{transactionId}/cash-in', [
     'uses' => 'Payment\CashIn\MTN\TransactionsController@fetch',
     'middleware' => 'auth',
     'as'=>'payment-gateway/MTNRequestToPayGetStatus'
 ]);
 
-$router->get('/v1/mtn/payments/update-wallet-accounts', [
+$router->get('/v1/mtn/payments/update-wallet-accounts/cash-in', [
     'uses' => 'Payment\CashIn\MTN\TransactionsController@updateWalletAccounts',
 ]);
 
@@ -55,6 +49,22 @@ $router->put('/v1/mtn/payments/callback', [
 
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Stripe\PaymentIntentController@form');
 $router->get('/v1/mtn/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\CashIn\MTN\IndexController@form');
+
+$router->post('/v1/mtn/payments/accounts/{accountId}/cash-out', [
+    'uses' => 'Payment\CashOut\MTN\CashOutController@create',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/MTNCashOut'
+]);
+
+$router->get('/v1/mtn/payments/transactions/{transactionId}/cash-out', [
+    'uses' => 'Payment\CashOut\MTN\TransactionsController@fetch',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/MTNTransferGetStatus'
+]);
+
+$router->get('/v1/mtn/payments/update-wallet-accounts/cash-out', [
+    'uses' => 'Payment\CashOut\MTN\TransactionsController@updateWalletAccounts',
+]);
 
 
 

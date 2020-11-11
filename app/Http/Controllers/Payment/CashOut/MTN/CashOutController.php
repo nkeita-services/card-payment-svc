@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Http\Controllers\Payment\CashIn\MTN;
+namespace App\Http\Controllers\Payment\CashOut\MTN;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Payment\CashIn\MTN\Mapper\CashOutTransactionMapper;
-use App\Http\Controllers\Payment\CashIn\MTN\Mapper\CashOutTransactionMapperInterface;
+use App\Http\Controllers\Payment\CashOut\MTN\Mapper\CashOutTransactionMapper;
+use App\Http\Controllers\Payment\CashOut\MTN\Mapper\CashOutTransactionMapperInterface;
 use Illuminate\Http\Request;
 use Payment\Account\Service\AccountService;
 use Payment\Account\Service\AccountServiceInterface;
@@ -29,7 +29,7 @@ class CashOutController extends Controller
     /**
      * @var CashOutTransactionServiceInterface
      */
-    private $cashInTransactionService;
+    private $cashOutTransactionService;
 
     /**
      *
@@ -40,17 +40,17 @@ class CashOutController extends Controller
     /**
      * CashOutController constructor.
      * @param MTNRemittanceService $remittanceService
-     * @param CashOutTransactionService $cashInTransactionService
+     * @param CashOutTransactionService $cashOutTransactionService
      * @param AccountService $accountService
      */
     public function __construct(
         MTNRemittanceService $remittanceService,
-        CashOutTransactionService $cashInTransactionService,
+        CashOutTransactionService $cashOutTransactionService,
         AccountService $accountService
     )
     {
         $this->remittanceService = $remittanceService;
-        $this->cashInTransactionService = $cashInTransactionService;
+        $this->cashOutTransactionService = $cashOutTransactionService;
         $this->accountService = $accountService;
     }
 
@@ -59,7 +59,7 @@ class CashOutController extends Controller
     {
 
         try {
-            $cashInTransactionEntity = $this
+            $cashOutTransactionEntity = $this
                 ->remittanceService
                 ->transferFromCashOutRequest(
                     CashOutTransactionMapper::createCashOutTransactionFromHttpRequest(
@@ -68,6 +68,17 @@ class CashOutController extends Controller
                     )
                 );
 
+            $cashOutTransactionEntity = $this->remittanceService->transferStatus(
+                $cashOutTransactionEntity->getTransactionId()
+            );
+
+            if($cashOutTransactionEntity->isSuccessful()){
+                $this
+                    ->accountService
+                    ->debitFromCashOutTransaction(
+                        $cashOutTransactionEntity
+                    );
+            }
 
         } catch (RequestToPayException $exception) {
             return response()->json([
@@ -81,10 +92,11 @@ class CashOutController extends Controller
             'status' => 'success',
             'data' => [
                 'CashIn' => [
-                    'transactionId' => $cashInTransactionEntity->getTransactionId(),
-                    'status'=> $cashInTransactionEntity->getStatus()
+                    'transactionId' => $cashOutTransactionEntity->getTransactionId(),
+                    'status'=> $cashOutTransactionEntity->getStatus()
                 ]
             ]
         ]);
     }
+
 }

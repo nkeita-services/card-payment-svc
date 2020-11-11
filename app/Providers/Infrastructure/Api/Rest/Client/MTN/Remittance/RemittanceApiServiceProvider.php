@@ -15,7 +15,7 @@ class RemittanceApiServiceProvider extends ServiceProvider
     {
         $this->app->singleton(RemittanceApiClientInterface::class, function ($app) {
             return new RemittanceApiGuzzleHttpClient(
-                $app->make('CollectionApiGuzzleHttpClient'),
+                $app->make('MTNRemittanceApiGuzzleHttpClient'),
                 new TransferMapper()
             );
         });

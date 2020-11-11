@@ -55,4 +55,23 @@ class AccountRepository implements AccountRepositoryInterface
                 $description
             );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function debitWithUserIdAndAccountId(
+        string $userId,
+        string $accountId,
+        float $amount,
+        string $description
+    ): AccountEntityInterface{
+        return $this
+            ->accountApiClient
+            ->debitWithUserIdAndAccountId(
+                $userId,
+                $accountId,
+                $amount,
+                $description
+            );
+    }
 }

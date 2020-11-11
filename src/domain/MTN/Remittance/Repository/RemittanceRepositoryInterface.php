@@ -16,4 +16,12 @@ interface RemittanceRepositoryInterface
     public function transfer(
         MTNTransferEntityInterface $MTNTransferEntity
     ):string;
+
+    /**
+     * @param string $referenceId
+     * @return string
+     */
+    public function transferStatus(
+        string $referenceId
+    ):string;
 }

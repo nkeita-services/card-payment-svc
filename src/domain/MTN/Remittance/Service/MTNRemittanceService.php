@@ -4,6 +4,7 @@
 namespace Payment\MTN\Remittance\Service;
 
 
+use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
 use Payment\CashOut\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\MTN\Collection\Entity\RequestToPayEntityInterface;
@@ -92,5 +93,33 @@ class MTNRemittanceService implements MTNRemittanceServiceInterface
             );
 
         return $entity;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function transferStatus(
+        string $transactionId
+    ): CashOutTransactionEntityInterface
+    {
+
+        $transaction = $this
+            ->cashOutTransactionService
+            ->fetchWithTransactionId(
+                $transactionId
+            );
+
+        $status = $this
+            ->mtnRemittanceRepository
+            ->transferStatus(
+                $transaction->getExtras()['referenceId']
+            );
+
+        return $this->cashOutTransactionService
+            ->updateTransactionStatus(
+                $transaction->getTransactionId(),
+                $status
+            );
+
     }
 }

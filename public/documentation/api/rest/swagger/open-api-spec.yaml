@@ -192,14 +192,55 @@ paths:
                 properties:
                   status:
                     $ref: '#/components/schemas/ResponseStatus'
-  /v1/mtn/payments/update-wallet-accounts:
+  /v1/mtn/payments/transactions/{transactionId}/cash-out:
     get:
-      summary: Top Up Wallet accounts
+      summary: Return transfer status
+      tags:
+        - MTN Integration
+      security:
+        - oAuth2:
+            - MTNTransferGetStatus
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Transaction ID
+            example: ui6e9889f5aae9439c41757f
+      responses:
+        '200':
+          description: Successfully fetched transfer status
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashOut:
+                        type: object
+                        properties:
+                          transactionId:
+                            type: string
+                            example: 5e95b31b3a480d75ac0aa204
+                          status:
+                            type: string
+                            enum:
+                              - pending
+                              - successful
+                              - error
+  /v1/mtn/payments/update-wallet-accounts/cash-out:
+    get:
+      summary: Settle Cash Out Operations
       tags:
         - MTN Integration
       responses:
         '200':
-          description: Successfully update wallet accounts
+          description: Successfully updated wallet accounts
           content:
             text/html:
               schema:
@@ -218,7 +259,33 @@ paths:
                             accountId:
                               type: string
                               example: 5e95b31b3a480d75ac0aa204
-  /v1/mtn/payments/transactions/{transactionId}:
+  /v1/mtn/payments/update-wallet-accounts/cash-in:
+    get:
+      summary: Settle Cash In Operations
+      tags:
+        - MTN Integration
+      responses:
+        '200':
+          description: Successfully updated wallet accounts
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      WalletAccounts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            accountId:
+                              type: string
+                              example: 5e95b31b3a480d75ac0aa204
+  /v1/mtn/payments/transactions/{transactionId}/cash-in:
     get:
       summary: Return a request to pay status
       tags:
@@ -318,7 +385,7 @@ components:
           scopes:
             StripeCreatePaymentIntent: Create a Stripe Payment Intent
             MTNCashIn: MTN Cash In
-            MTNCashOut: MTN Cash In
+            MTNCashOut: MTN Cash out
   schemas:
     ResponseStatus:
       type: string

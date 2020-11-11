@@ -42,6 +42,8 @@ use App\Providers\Domain\MTN\Remittance\Repository\MTNRemittanceRepositoryServic
 use App\Providers\Domain\CashOut\Transaction\Repository\CashOutTransactionRepositoryServiceProvider;
 use App\Providers\Domain\CashOut\Transaction\Service\CashOutTransactionServiceProvider;
 use App\Providers\Domain\MTN\Remittance\Service\MTNRemittanceServiceProvider;
+use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\Remittance\MTNRemittanceApiGuzzleHttpClientProvider;
+use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\Remittance\MTNRemittanceOauthClientProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -153,6 +155,8 @@ $app->singleton(
 
  $app->register(CashOutTransactionRepositoryServiceProvider::class);
  $app->register(CashOutTransactionServiceProvider::class);
+ $app->register(MTNRemittanceApiGuzzleHttpClientProvider::class);
+ $app->register(MTNRemittanceOauthClientProvider::class);
 
 /*
 |--------------------------------------------------------------------------

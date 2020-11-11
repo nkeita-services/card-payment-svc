@@ -16,4 +16,13 @@ interface MTNRemittanceServiceInterface
     public function transferFromCashOutRequest(
         CashOutTransactionEntityInterface $entity
     ): CashOutTransactionEntityInterface;
+
+    /**
+     * @param string $transactionId
+     * @return CashOutTransactionEntityInterface
+     */
+    public function transferStatus(
+        string $transactionId
+    ): CashOutTransactionEntityInterface;
+
 }
