@@ -47,7 +47,7 @@ info:
     backgroundColor: '#FFFFFF'
     altText: NBK Logo
 servers:
-  - url: 'https://wallet-payment-svc-fjhmnd5asa-ew.a.run.app'
+  - url: 'https://wallet-payment-svc-x6fr3lwlgq-nw.a.run.app/'
     description: Testing Server
   - url: 'http://localhost:8099'
     description: Local Server
