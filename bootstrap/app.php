@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use App\Providers\Validation\Rules\CashIn\CashInOriginatorAccountRuleServiceProvider;
+
 use Jenssegers\Mongodb\MongodbServiceProvider;
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -35,14 +35,17 @@ use App\Providers\Infrastructure\CloudRun\Metadata\OAuth\IDToken\OAuthIDTokenSer
 use App\Providers\Infrastructure\CloudRun\Metadata\ProjectID\CloudRunProjectIDServiceProvider;
 use App\Providers\Infrastructure\CloudRun\Metadata\CloudRunMetadataGuzzleClientProvider;
 use App\Providers\Infrastructure\Secrets\SecretManagerServiceProvider;
-use App\Providers\Validation\Rules\Wallet\WalletUserIdRuleServiceProvider;
-use App\Providers\Validation\Rules\Wallet\WalletPlanIdRuleServiceProvider;
 use App\Providers\Validation\Rules\CashIn\CashInOriginatorRuleServiceProvider;
 use App\Providers\Domain\Paypal\PaymentExecution\Service\PaymentExecutionServiceProvider;
 use App\Providers\Domain\Paypal\PaymentExecution\Repository\PaymentExecutionRepositoryServiceProvider;
-use App\Providers\Domain\Payment\PaymentCommon\Service\PaymentServiceProvider;
-use App\Http\Middleware\VerifyCsrfToken;
-
+use App\Providers\Infrastructure\Api\Rest\Client\MTN\Remittance\RemittanceApiServiceProvider;
+use App\Providers\Validation\Rules\CashIn\CashInOriginatorAccountRuleServiceProvider;
+use App\Providers\Domain\MTN\Remittance\Repository\MTNRemittanceRepositoryServiceProvider;
+use App\Providers\Domain\CashOut\Transaction\Repository\CashOutTransactionRepositoryServiceProvider;
+use App\Providers\Domain\CashOut\Transaction\Service\CashOutTransactionServiceProvider;
+use App\Providers\Domain\MTN\Remittance\Service\MTNRemittanceServiceProvider;
+use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\Remittance\MTNRemittanceApiGuzzleHttpClientProvider;
+use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\Remittance\MTNRemittanceOauthClientProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,12 +125,8 @@ $app->singleton(
  $app->register(AccountRepositoryProvider::class);
  $app->register(PaymentIntentServiceProvider::class);
  $app->register(PaymentIntentRepositoryServiceProvider::class);
-
  $app->register(PaymentExecutionServiceProvider::class);
  $app->register(PaymentExecutionRepositoryServiceProvider::class);
-
-
-
  $app->register(WalletGatewayGuzzleHttpClientProvider::class);
  $app->register(WalletGatewayOauthClientProvider::class);
  $app->register(CollectionApiServiceProvider::class);
@@ -145,14 +144,19 @@ $app->singleton(
  $app->register(WalletPlanServiceProvider::class);
  $app->register(WalletPlanApiClientProvider::class);
  $app->register(WalletGatewayServiceProvider::class);
-
  $app->register(OAuthIDTokenServiceProvider::class);
  $app->register(CloudRunProjectIDServiceProvider::class);
  $app->register(CloudRunMetadataGuzzleClientProvider::class);
  $app->register(SecretManagerServiceProvider::class);
-
  $app->register(CashInOriginatorRuleServiceProvider::class);
  $app->register(CashInOriginatorAccountRuleServiceProvider::class);
+ $app->register(RemittanceApiServiceProvider::class);
+ $app->register(MTNRemittanceRepositoryServiceProvider::class);
+ $app->register(MTNRemittanceServiceProvider::class);
+ $app->register(CashOutTransactionRepositoryServiceProvider::class);
+ $app->register(CashOutTransactionServiceProvider::class);
+ $app->register(MTNRemittanceApiGuzzleHttpClientProvider::class);
+ $app->register(MTNRemittanceOauthClientProvider::class);
 
 /*
 |--------------------------------------------------------------------------

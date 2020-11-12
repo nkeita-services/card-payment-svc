@@ -10,4 +10,9 @@ interface RequestToPayResponseInterface
      * @return string
      */
     public function getReferenceId(): string;
+
+    /**
+     * @return array
+     */
+    public function getData():array;
 }

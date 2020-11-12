@@ -30,10 +30,24 @@ $router->post('/v1/stripe/payments/intents/{accountId}', [
     'as'=>'payment-gateway/StripeCreatePaymentIntent'
 ]);
 
-$router->post('/v1/payments/accounts/{accountId}/cash-in/mtn', [
-    'uses' => 'Payment\CashIn\MTN\IndexController@create',
+$router->post('/v1/mtn/payments/accounts/{accountId}/cash-in', [
+    'uses' => 'Payment\CashIn\MTN\CashInController@create',
     'middleware' => 'auth',
     'as'=>'payment-gateway/MTNCashIn'
+]);
+
+$router->get('/v1/mtn/payments/transactions/{transactionId}/cash-in', [
+    'uses' => 'Payment\CashIn\MTN\TransactionsController@fetch',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/MTNRequestToPayGetStatus'
+]);
+
+$router->get('/v1/mtn/payments/update-wallet-accounts/cash-in', [
+    'uses' => 'Payment\CashIn\MTN\TransactionsController@updateWalletAccounts',
+]);
+
+$router->put('/v1/mtn/payments/callback', [
+    'uses' => 'Payment\CashIn\MTN\IndexController@callback',
 ]);
 
 
@@ -51,6 +65,23 @@ $router->post('/paypal/payments/paypalwebhook', [
 
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Stripe\PaymentIntentController@form');
 $router->get('/v1/mtn/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\CashIn\MTN\IndexController@form');
+
+$router->post('/v1/mtn/payments/accounts/{accountId}/cash-out', [
+    'uses' => 'Payment\CashOut\MTN\CashOutController@create',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/MTNCashOut'
+]);
+
+$router->get('/v1/mtn/payments/transactions/{transactionId}/cash-out', [
+    'uses' => 'Payment\CashOut\MTN\TransactionsController@fetch',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/MTNTransferGetStatus'
+]);
+
+$router->get('/v1/mtn/payments/update-wallet-accounts/cash-out', [
+    'uses' => 'Payment\CashOut\MTN\TransactionsController@updateWalletAccounts',
+]);
+
 
 
 $router->get('/v1/paypal/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Paypal\PaymentExecutionController@form');

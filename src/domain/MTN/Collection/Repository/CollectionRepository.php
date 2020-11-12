@@ -59,4 +59,18 @@ class CollectionRepository implements CollectionRepositoryInterface
 
         return $response->getReferenceId();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function requestToPayStatus(string $referenceId): string
+    {
+        $response = $this
+            ->collectionApiClient
+            ->requestToPayStatus(
+                $referenceId
+            );
+
+        return $response->getData()['status'];
+    }
 }

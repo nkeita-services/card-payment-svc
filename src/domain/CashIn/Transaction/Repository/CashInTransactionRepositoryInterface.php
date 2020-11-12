@@ -36,6 +36,16 @@ interface CashInTransactionRepositoryInterface
     ): CashInTransactionEntityInterface;
 
     /**
+     * @param string $transactionType
+     * @param string $transactionStatus
+     * @return array
+     */
+    public function fetchAllWithTransactionTypeAndStatus(
+        string $transactionType,
+        string $transactionStatus
+    ):array ;
+
+    /**
      * @param string $transactionId
      * @param string $eventType
      * @param array $event
@@ -55,4 +65,14 @@ interface CashInTransactionRepositoryInterface
     public function lookUpExtraInformationFor(
         array $criteria
     ):CashInTransactionEntityInterface;
+
+    /**
+     * @param string $transactionId
+     * @param string $status
+     * @return CashInTransactionEntityInterface
+     */
+    public function updateTransactionStatus(
+        string $transactionId,
+        string $status
+    ): CashInTransactionEntityInterface;
 }
