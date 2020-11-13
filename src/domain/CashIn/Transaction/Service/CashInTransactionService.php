@@ -16,7 +16,7 @@ class CashInTransactionService implements CashInTransactionServiceInterface
     private $cashInTransactionRepository;
 
     /**
-     * CashInTransactionService constructor.
+     * CashOutTransactionService constructor.
      * @param CashInTransactionRepositoryInterface $cashInTransactionRepository
      */
     public function __construct(
@@ -94,6 +94,36 @@ class CashInTransactionService implements CashInTransactionServiceInterface
             ->cashInTransactionRepository
             ->lookUpExtraInformationFor(
                 $criteria
+            );
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function updateTransactionStatus(
+        string $transactionId,
+        string $status
+    ): CashInTransactionEntityInterface
+    {
+        return $this
+            ->cashInTransactionRepository
+            ->updateTransactionStatus(
+                $transactionId,
+                $status
+            );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchPendingTransactionFor(string $transactionType): array
+    {
+        return $this
+            ->cashInTransactionRepository
+            ->fetchAllWithTransactionTypeAndStatus(
+                $transactionType,
+                'pending'
             );
     }
 }

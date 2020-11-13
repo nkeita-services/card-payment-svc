@@ -80,4 +80,33 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
     }
 
 
+    /**
+     * @inheritDoc
+     */
+    public function debitWithUserIdAndAccountId(
+        string $userId,
+        string $accountId,
+        string $amount,
+        string $description
+    ): AccountEntityInterface{
+        $response = $this
+            ->guzzleClient
+            ->patch(
+                sprintf(
+                    '/v1/wallets/users/%s/accounts/%s/balance/debit',
+                    $userId,
+                    $accountId
+                ),
+                [
+                    RequestOptions::JSON => [
+                        'amount'=>$amount,
+                        'description'=>$description
+                    ]
+                ]
+            );
+
+        return $this->accountMapper->createAccountFromApiResponse(
+            $response
+        );
+    }
 }

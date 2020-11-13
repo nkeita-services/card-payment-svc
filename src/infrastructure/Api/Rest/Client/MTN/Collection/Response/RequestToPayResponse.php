@@ -13,12 +13,21 @@ class RequestToPayResponse implements RequestToPayResponseInterface
     private $referenceId;
 
     /**
+     * @var array
+     */
+    private $data;
+
+    /**
      * RequestToPayResponse constructor.
      * @param string $referenceId
+     * @param array|null $data
      */
-    public function __construct(string $referenceId)
-    {
+    public function __construct(
+        string $referenceId,
+        ?array $data = []
+    ){
         $this->referenceId = $referenceId;
+        $this->data = $data;
     }
 
     /**
@@ -27,5 +36,13 @@ class RequestToPayResponse implements RequestToPayResponseInterface
     public function getReferenceId(): string
     {
         return $this->referenceId;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getData(): array
+    {
+        return $this->data;
     }
 }

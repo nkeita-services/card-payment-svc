@@ -7,6 +7,7 @@ namespace Payment\Account\Service;
 use Payment\Account\Entity\AccountEntityInterface;
 use Payment\Account\Collection\AccountCollectionInterface;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
+use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 
 interface AccountServiceInterface
@@ -29,4 +30,12 @@ interface AccountServiceInterface
     public function topUpFromCashInTransaction(
         CashInTransactionEntityInterface $transactionEntity
     ): CashInTransactionEntityInterface;
+
+    /**
+     * @param CashOutTransactionEntityInterface $transactionEntity
+     * @return CashOutTransactionEntityInterface
+     */
+    public function debitFromCashOutTransaction(
+        CashOutTransactionEntityInterface $transactionEntity
+    ): CashOutTransactionEntityInterface;
 }

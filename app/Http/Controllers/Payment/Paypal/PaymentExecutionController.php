@@ -201,9 +201,9 @@ class PaymentExecutionController extends Controller
                     $event['resource']
                 );
 
-            $this->accountService->topUpFromCashInTransaction(
+           /* $this->accountService->topUpFromCashInTransaction(
                 $transaction
-            );
+            );*/
         }
 
         return response()->json(
@@ -252,6 +252,10 @@ class PaymentExecutionController extends Controller
                     )
                 );
             }
+
+            $this->accountService->topUpFromCashInTransaction(
+                $transaction
+            );
 
             return view('paypal.success');
         } catch (PaymentExecutionException $e) {

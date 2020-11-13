@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Payment\CashIn\MTN;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Payment\Account\Service\AccountService;
+use Payment\Account\Service\AccountServiceInterface;
+use Payment\CashIn\Transaction\Service\CashInTransactionService;
+use Payment\CashIn\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\MTN\Collection\Service\CollectionService;
 use Payment\MTN\Collection\Service\CollectionServiceInterface;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException;
 
-class IndexController extends Controller
+class CashInController extends Controller
 {
 
     /**
@@ -18,12 +22,30 @@ class IndexController extends Controller
     private $collectionService;
 
     /**
-     * IndexController constructor.
-     * @param CollectionServiceInterface $collectionService
+     * @var CashOutTransactionServiceInterface
      */
-    public function __construct(CollectionService $collectionService)
-    {
+    private $cashInTransactionService;
+
+    /**
+     *
+     * @var AccountServiceInterface
+     */
+    private $accountService;
+
+    /**
+     * IndexController constructor.
+     * @param CollectionService $collectionService
+     * @param CashInTransactionService $cashInTransactionService
+     * @param AccountService $accountService
+     */
+    public function __construct(
+        CollectionService $collectionService,
+        CashInTransactionService $cashInTransactionService,
+        AccountService $accountService
+    ){
         $this->collectionService = $collectionService;
+        $this->cashInTransactionService = $cashInTransactionService;
+        $this->accountService = $accountService;
     }
 
 
@@ -55,6 +77,19 @@ class IndexController extends Controller
                 $request->json('amount'),
                 $request->json('originator')
             );
+
+            $cashInTransactionEntity = $this->collectionService->requestToPayStatus(
+                $cashInTransactionEntity->getTransactionId()
+            );
+
+            if($cashInTransactionEntity->isSuccessful()){
+                $this
+                    ->accountService
+                    ->topUpFromCashInTransaction(
+                        $cashInTransactionEntity
+                    );
+            }
+
         } catch (RequestToPayException $exception) {
             return response()->json([
                 'status' => 'failure',
@@ -72,5 +107,17 @@ class IndexController extends Controller
                 ]
             ]
         ]);
+    }
+
+    public function callback(
+        Request $request
+    ){
+        $this->cashInTransactionService
+            ->addTransactionEvent(
+                '5fa7d7eecd12e8702c35ce13',
+                'requestToPay.approved',
+                $request->all()
+            );
+
     }
 }

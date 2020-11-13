@@ -136,7 +136,8 @@ class CashInTransactionRepository implements
      */
     private function createCashInTransactionEntityFromDocument(
         $transaction
-    ){
+    )
+    {
         return new CashInTransactionEntity(
             $transaction->type,
             $transaction->_id->__toString(),
@@ -149,5 +150,54 @@ class CashInTransactionRepository implements
             $transaction->timestamp,
             $transaction->extras->getArrayCopy()
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateTransactionStatus(
+        string $transactionId,
+        string $status
+    ): CashInTransactionEntityInterface
+    {
+        $this
+            ->cashInTransactionCollection
+            ->updateOne(
+                ['_id' => new ObjectId($transactionId)],
+                ['$set' => [
+                    'status' => strtolower($status)
+                ]]
+            );
+
+        return $this->fetchWithTransactionId(
+            $transactionId
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchAllWithTransactionTypeAndStatus(
+        string $transactionType,
+        string $transactionStatus
+    ): array
+    {
+        $transactions = $this->cashInTransactionCollection->find(
+            [
+                'type' => $transactionType,
+                'status' => $transactionStatus
+            ],
+            [
+                'limit' => 10
+            ]
+        );
+
+        return
+            array_map(function ($transaction) {
+                return $this->createCashInTransactionEntityFromDocument(
+                    $transaction
+                );
+            }, $transactions->toArray());
+
     }
 }

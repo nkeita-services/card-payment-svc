@@ -47,7 +47,7 @@ info:
     backgroundColor: '#FFFFFF'
     altText: NBK Logo
 servers:
-  - url: 'https://wallet-payment-svc-fjhmnd5asa-ew.a.run.app'
+  - url: 'https://wallet-payment-svc-x6fr3lwlgq-nw.a.run.app/'
     description: Testing Server
   - url: 'http://localhost:8099'
     description: Local Server
@@ -89,6 +89,13 @@ paths:
             type: string
             description: Account to top up
             example: 5e6e9889f5aae9439c41757b
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Account owner
+            example: ui6e9889f5aae9439c41757f
       responses:
         '200':
           description: Successfully obtained card payment form
@@ -154,7 +161,7 @@ paths:
                 status: fail
                 statusCode: 4010
                 statusDescription: Error when creating payment intent
-  /v1/payments/accounts/{accountId}/cash-out/mtn:
+  /v1/mtn/payments/accounts/{accountId}/cash-out:
     post:
       summary: Create a cash out transaction
       tags:
@@ -187,7 +194,141 @@ paths:
                 properties:
                   status:
                     $ref: '#/components/schemas/ResponseStatus'
-  /v1/payments/accounts/{accountId}/cash-in/mtn:
+  /v1/mtn/payments/transactions/{transactionId}/cash-out:
+    get:
+      summary: Return transfer status
+      tags:
+        - MTN Integration
+      security:
+        - oAuth2:
+            - MTNTransferGetStatus
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Transaction ID
+            example: ui6e9889f5aae9439c41757f
+      responses:
+        '200':
+          description: Successfully fetched transfer status
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashOut:
+                        type: object
+                        properties:
+                          transactionId:
+                            type: string
+                            example: 5e95b31b3a480d75ac0aa204
+                          status:
+                            type: string
+                            enum:
+                              - pending
+                              - successful
+                              - error
+  /v1/mtn/payments/update-wallet-accounts/cash-out:
+    get:
+      summary: Settle Cash Out Operations
+      tags:
+        - MTN Integration
+      responses:
+        '200':
+          description: Successfully updated wallet accounts
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      WalletAccounts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            accountId:
+                              type: string
+                              example: 5e95b31b3a480d75ac0aa204
+  /v1/mtn/payments/update-wallet-accounts/cash-in:
+    get:
+      summary: Settle Cash In Operations
+      tags:
+        - MTN Integration
+      responses:
+        '200':
+          description: Successfully updated wallet accounts
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      WalletAccounts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            accountId:
+                              type: string
+                              example: 5e95b31b3a480d75ac0aa204
+  /v1/mtn/payments/transactions/{transactionId}/cash-in:
+    get:
+      summary: Return a request to pay status
+      tags:
+        - MTN Integration
+      security:
+        - oAuth2:
+            - MTNRequestToPayGetStatus
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Transaction ID
+            example: ui6e9889f5aae9439c41757f
+      responses:
+        '200':
+          description: Successfully fetched request to pay status
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        type: object
+                        properties:
+                          transactionId:
+                            type: string
+                            example: 5e95b31b3a480d75ac0aa204
+                          status:
+                            type: string
+                            enum:
+                              - pending
+                              - successful
+                              - error
+  /v1/mtn/payments/accounts/{accountId}/cash-in:
     post:
       summary: Create a MTN cash in transaction
       tags:
@@ -349,7 +490,7 @@ components:
             PaypalCreateOrderPayment: Create a Paypal order fo payment
             StripeCreatePaymentIntent: Create a Stripe Payment Intent
             MTNCashIn: MTN Cash In
-            MTNCashOut: MTN Cash In
+            MTNCashOut: MTN Cash out
   schemas:
     ResponseStatus:
       type: string

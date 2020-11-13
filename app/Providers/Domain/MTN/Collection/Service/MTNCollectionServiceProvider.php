@@ -5,12 +5,10 @@ namespace App\Providers\Domain\MTN\Collection\Service;
 
 
 use Illuminate\Support\ServiceProvider;
-use Payment\Account\Service\AccountServiceInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\MTN\Collection\Repository\CollectionRepositoryInterface;
 use Payment\MTN\Collection\Service\CollectionService;
 use Payment\MTN\Collection\Service\CollectionServiceInterface;
-use Payment\Wallet\User\Service\UserServiceInterface;
 use Payment\Wallet\WalletGateway\WalletGatewayServiceInterface;
 
 class MTNCollectionServiceProvider extends ServiceProvider

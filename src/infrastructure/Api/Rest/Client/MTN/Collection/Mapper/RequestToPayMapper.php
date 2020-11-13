@@ -18,13 +18,15 @@ class RequestToPayMapper implements RequestToPayMapperInterface
         ResponseInterface $response,
         string $referenceId
     ): RequestToPayResponseInterface{
+
         $data = json_decode(
             $response->getBody()->getContents(),
             true
         );
 
         return new RequestToPayResponse(
-            $referenceId
+            $referenceId,
+            $data
         );
 
     }

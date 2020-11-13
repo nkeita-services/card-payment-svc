@@ -192,4 +192,12 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     {
         return $this->type;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isSuccessful(): bool
+    {
+        return $this->status == 'successful';
+    }
 }
