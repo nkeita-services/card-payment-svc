@@ -430,7 +430,7 @@ paths:
                 status: fail
                 statusCode: 4001
                 statusDescription: Error when obtaining creating an order payment payment form
-  /v1/paypal/payments/execution/{accountId}:
+  /v1/paypal/payments/execute/{accountId}:
     post:
       summary: Create an order payment
       tags:

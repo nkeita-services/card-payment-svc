@@ -126,7 +126,7 @@ class PaymentExecutionController extends Controller
             );
         }
 
-        /*return response()->json([
+        return response()->json([
             'status' => 'success',
             'data' => [
                 'CashIn' => [
@@ -136,12 +136,12 @@ class PaymentExecutionController extends Controller
                     'extras' => $transaction->getExtras()
                 ]
             ]
-        ]);*/
+        ]);
 
-        return redirect(
+/*        return redirect(
             $transaction->getExtras()
             ['approveUrl']
-        );
+        );*/
     }
 
 
