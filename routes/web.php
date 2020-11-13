@@ -29,7 +29,11 @@ $router->post('/v1/stripe/payments/intents/{accountId}', [
 $router->post('/v1/mtn/payments/accounts/{accountId}/cash-in', [
     'uses' => 'Payment\CashIn\MTN\CashInController@create',
     'middleware' => 'auth',
-    'as'=>'payment-gateway/MTNCashIn'
+    'as'=>'payment-gateway/MTNCashIn',
+    'groups'=> [
+        'root',
+        'admin'
+    ]
 ]);
 
 $router->get('/v1/mtn/payments/transactions/{transactionId}/cash-in', [
@@ -53,7 +57,11 @@ $router->get('/v1/mtn/payments/form/{amount}/{currency}/{accountId}/{userId}', '
 $router->post('/v1/mtn/payments/accounts/{accountId}/cash-out', [
     'uses' => 'Payment\CashOut\MTN\CashOutController@create',
     'middleware' => 'auth',
-    'as'=>'payment-gateway/MTNCashOut'
+    'as'=>'payment-gateway/MTNCashOut',
+    'groups'=> [
+        'root',
+        'admin'
+    ]
 ]);
 
 $router->get('/v1/mtn/payments/transactions/{transactionId}/cash-out', [

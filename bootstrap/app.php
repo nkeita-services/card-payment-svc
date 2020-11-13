@@ -7,7 +7,8 @@ use Jenssegers\Mongodb\MongodbServiceProvider;
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
 ))->bootstrap();
-
+use Nord\Lumen\Cors\CorsMiddleware;
+use Nord\Lumen\Cors\CorsServiceProvider;
 use App\Providers\Infrastructure\Api\Rest\Client\Account\AccountApiClientProvider;
 use App\Providers\Domain\Account\Service\AccountServiceProvider;
 use App\Providers\Domain\Account\Respository\AccountRepositoryProvider;
@@ -105,6 +106,9 @@ $app->singleton(
      'auth' => OAuth2ClientCredentials::class,
  ]);
 
+$app->middleware([
+    CorsMiddleware::class
+]);
 
 
 /*
@@ -117,7 +121,7 @@ $app->singleton(
 | totally optional, so you are not required to uncomment this line.
 |
 */
-
+ $app->register(CorsServiceProvider::class);
  $app->register(AccountApiClientProvider::class);
  $app->register(AccountServiceProvider::class);
  $app->register(AccountRepositoryProvider::class);

@@ -23,4 +23,15 @@ interface ClientInterface
      * @return array
      */
     public function getOrganizations(): array;
+
+    /**
+     * @return array
+     */
+    public function groups():  array;
+
+    /**
+     * @param array $groups
+     * @return true
+     */
+    public function memberOf(array $groups): bool;
 }

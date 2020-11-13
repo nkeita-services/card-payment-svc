@@ -61,17 +61,19 @@ class OAuth2ClientCredentials
                 $decodedAccessToken
             );
 
-            if (!$client->hasScope(
-                $request->route()[1]['as']
-            )) {
-                return response()->json(
-                    [
-                        'status' => 'failure',
-                        'statusCode' => 0,
-                        'statusDescription' => "You don't seem to have enough permissions to perform this action"
-                    ],
-                    401
-                );
+            if(!$client->memberOf($request->route()[1]['groups'])){
+                if (!$client->hasScope(
+                    $request->route()[1]['as']
+                )) {
+                    return response()->json(
+                        [
+                            'status' => 'failure',
+                            'statusCode' => 0,
+                            'statusDescription' => "You don't seem to have enough permissions to perform this action"
+                        ],
+                        401
+                    );
+                }
             }
 
             $request->merge(
