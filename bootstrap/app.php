@@ -37,6 +37,8 @@ use App\Providers\Infrastructure\CloudRun\Metadata\ProjectID\CloudRunProjectIDSe
 use App\Providers\Infrastructure\CloudRun\Metadata\CloudRunMetadataGuzzleClientProvider;
 use App\Providers\Infrastructure\Secrets\SecretManagerServiceProvider;
 use App\Providers\Validation\Rules\CashIn\CashInOriginatorRuleServiceProvider;
+use App\Providers\Domain\Paypal\PaymentExecution\Service\PaymentExecutionServiceProvider;
+use App\Providers\Domain\Paypal\PaymentExecution\Repository\PaymentExecutionRepositoryServiceProvider;
 use App\Providers\Infrastructure\Api\Rest\Client\MTN\Remittance\RemittanceApiServiceProvider;
 use App\Providers\Validation\Rules\CashIn\CashInOriginatorAccountRuleServiceProvider;
 use App\Providers\Domain\MTN\Remittance\Repository\MTNRemittanceRepositoryServiceProvider;
@@ -127,6 +129,8 @@ $app->middleware([
  $app->register(AccountRepositoryProvider::class);
  $app->register(PaymentIntentServiceProvider::class);
  $app->register(PaymentIntentRepositoryServiceProvider::class);
+ $app->register(PaymentExecutionServiceProvider::class);
+ $app->register(PaymentExecutionRepositoryServiceProvider::class);
  $app->register(WalletGatewayGuzzleHttpClientProvider::class);
  $app->register(WalletGatewayOauthClientProvider::class);
  $app->register(CollectionApiServiceProvider::class);
@@ -144,19 +148,15 @@ $app->middleware([
  $app->register(WalletPlanServiceProvider::class);
  $app->register(WalletPlanApiClientProvider::class);
  $app->register(WalletGatewayServiceProvider::class);
-
  $app->register(OAuthIDTokenServiceProvider::class);
  $app->register(CloudRunProjectIDServiceProvider::class);
  $app->register(CloudRunMetadataGuzzleClientProvider::class);
  $app->register(SecretManagerServiceProvider::class);
-
  $app->register(CashInOriginatorRuleServiceProvider::class);
  $app->register(CashInOriginatorAccountRuleServiceProvider::class);
-
  $app->register(RemittanceApiServiceProvider::class);
  $app->register(MTNRemittanceRepositoryServiceProvider::class);
  $app->register(MTNRemittanceServiceProvider::class);
-
  $app->register(CashOutTransactionRepositoryServiceProvider::class);
  $app->register(CashOutTransactionServiceProvider::class);
  $app->register(MTNRemittanceApiGuzzleHttpClientProvider::class);

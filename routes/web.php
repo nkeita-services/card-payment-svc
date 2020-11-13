@@ -15,6 +15,10 @@ $router->get('/', function () use ($router) {
     return redirect('/documentation/api/rest/swagger/redoc/index.html');
 });
 
+$router->get('/docs', function () use ($router) {
+    return redirect('/documentation/api/rest/swagger/index.html');
+});
+
 $router->post('/v1/stripe/payments/webhook', [
     'uses' => 'Payment\Stripe\PaymentIntentController@webhook',
     'as'=>'payment-gateway/StripeWebHook'
@@ -51,6 +55,18 @@ $router->put('/v1/mtn/payments/callback', [
 ]);
 
 
+
+$router->post('/v1/paypal/payments/execute/{accountId}', [
+    'uses' => 'Payment\Paypal\PaymentExecutionController@createOrder',
+    'as'=>'payment-gateway/PaypalPaymentExecutionCreateExecution'
+]);
+
+$router->post('/paypal/payments/paypalwebhook', [
+    'uses' => 'Payment\Paypal\PaymentExecutionController@webHook',
+    'as'=>'payment-gateway/paypalWebHook'
+]);
+
+
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Stripe\PaymentIntentController@form');
 $router->get('/v1/mtn/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\CashIn\MTN\IndexController@form');
 
@@ -74,5 +90,21 @@ $router->get('/v1/mtn/payments/update-wallet-accounts/cash-out', [
     'uses' => 'Payment\CashOut\MTN\TransactionsController@updateWalletAccounts',
 ]);
 
+
+
+$router->get('/v1/paypal/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Paypal\PaymentExecutionController@form');
+
+
+
+$router->get('/v1/paypal/payments/sucess', [
+    'uses' =>  'Payment\Paypal\PaymentExecutionController@success',
+    'as'=>'return'
+]);
+
+
+$router->get('/v1/paypal/payments/cancel', [
+    'uses' =>  'Payment\Paypal\PaymentExecutionController@cancel',
+    'as'=>'cancel'
+]);
 
 
