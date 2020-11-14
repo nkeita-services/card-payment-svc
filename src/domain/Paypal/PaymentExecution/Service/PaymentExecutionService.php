@@ -70,7 +70,7 @@ class PaymentExecutionService implements PaymentExecutionServiceInterface
             "purchase_units" => [[
                 "reference_id" => Uuid::uuid4()->toString(),
                 "amount" => [
-                    "value"         => $transactionEntity->getAmount(),
+                    "value"         => floatval($transactionEntity->getAmount()/100),
                     "currency_code" => $transactionEntity->getCurrency()
                 ]
             ]],
