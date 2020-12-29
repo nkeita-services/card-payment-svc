@@ -95,6 +95,7 @@ class PaymentIntentController extends Controller
                     $request->json()->get('currency'),
                     $request->json()->get('description'),
                     $accountId,
+                    $request->json()->get('regionId'),
                     $request->json()->get('originator'),
                     'pending',
                     time()

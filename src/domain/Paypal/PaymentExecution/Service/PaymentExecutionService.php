@@ -7,6 +7,7 @@ use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\Paypal\PaymentExecution\Entity\PaymentExecutionInterface;
+use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use Payment\Paypal\PaymentExecution\Service\Exception\PaymentExecutionException;
@@ -32,20 +33,28 @@ class PaymentExecutionService implements PaymentExecutionServiceInterface
     private $paymentExecutionRequest;
 
     /**
+     * @var QuoteFeeServiceInterface
+     */
+    private $quoteFeeService;
+
+    /**
      * PaymentIntentService constructor.
      * @param CashInTransactionServiceInterface $cashInTransactionService
      * @param PayPalHttpClient $httpClient
      * @param OrdersCreateRequest $paymentExecutionRequest
+     * @param QuoteFeeServiceInterface $quoteFeeService
      */
     public function __construct(
         CashInTransactionServiceInterface $cashInTransactionService,
         PayPalHttpClient $httpClient,
-        OrdersCreateRequest $paymentExecutionRequest
+        OrdersCreateRequest $paymentExecutionRequest,
+        QuoteFeeServiceInterface $quoteFeeService
     )
     {
         $this->cashInTransactionService = $cashInTransactionService;
         $this->httpClient = $httpClient;
         $this->paymentExecutionRequest = $paymentExecutionRequest;
+        $this->quoteFeeService = $quoteFeeService;
     }
 
     /**
@@ -61,6 +70,13 @@ class PaymentExecutionService implements PaymentExecutionServiceInterface
         $transaction = $this
             ->cashInTransactionService
             ->store($transactionEntity);
+
+        $fees = $this->quoteFeeService->getQuotes($transaction);
+        $this->cashInTransactionService
+            ->addTransactionFees(
+                $transaction->getTransactionId(),
+                $fees->toArray()
+            );
 
         $this->paymentExecutionRequest
             ->prefer('return=representation');

@@ -47,6 +47,9 @@ use App\Providers\Domain\CashOut\Transaction\Service\CashOutTransactionServicePr
 use App\Providers\Domain\MTN\Remittance\Service\MTNRemittanceServiceProvider;
 use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\Remittance\MTNRemittanceApiGuzzleHttpClientProvider;
 use App\Providers\Infrastructure\Api\Auth\OAuth2\MTN\Remittance\MTNRemittanceOauthClientProvider;
+use App\Providers\Infrastructure\Api\Rest\Client\Fee\Quote\QuoteFeeApiClientProvider;
+use App\Providers\Domain\Wallet\Fee\Quote\Repository\QuoteFeeRepositoryServiceProvider;
+use App\Providers\Domain\Wallet\Fee\Quote\Service\QuoteFeeServiceProvider;
 
 /*
 |--------------------------------------------------------------------------
@@ -161,6 +164,9 @@ $app->middleware([
  $app->register(CashOutTransactionServiceProvider::class);
  $app->register(MTNRemittanceApiGuzzleHttpClientProvider::class);
  $app->register(MTNRemittanceOauthClientProvider::class);
+ $app->register(QuoteFeeApiClientProvider::class);
+ $app->register(QuoteFeeRepositoryServiceProvider::class);
+ $app->register(QuoteFeeServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

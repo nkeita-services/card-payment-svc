@@ -75,4 +75,14 @@ interface CashInTransactionRepositoryInterface
         string $transactionId,
         string $status
     ): CashInTransactionEntityInterface;
+
+    /**
+     * @param string $transactionId
+     * @param array $fees
+     * @return CashInTransactionEntityInterface
+     */
+    public function addTransactionFees(
+        string $transactionId,
+        array $fees
+    ):CashInTransactionEntityInterface;
 }

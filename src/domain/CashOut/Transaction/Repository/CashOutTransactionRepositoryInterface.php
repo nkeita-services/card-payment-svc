@@ -75,4 +75,14 @@ interface CashOutTransactionRepositoryInterface
         string $transactionId,
         string $status
     ): CashOutTransactionEntityInterface;
+
+    /**
+     * @param string $transactionId
+     * @param array $fees
+     * @return CashOutTransactionEntityInterface
+     */
+    public function addTransactionFees(
+        string $transactionId,
+        array $fees
+    ):CashOutTransactionEntityInterface;
 }

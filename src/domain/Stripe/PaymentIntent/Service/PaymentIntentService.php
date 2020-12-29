@@ -6,10 +6,13 @@ namespace Payment\Stripe\PaymentIntent\Service;
 
 use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
-use Payment\CashIn\Transaction\Service\CashOutTransactionServiceInterface;
+use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
+//use Payment\CashIn\Transaction\Service\CashOutTransactionServiceInterface;
+//use Payment\CashOut\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryInterface;
 use Payment\Stripe\PaymentIntent\Service\Exception\PaymentIntentException;
+use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 
@@ -27,22 +30,30 @@ class PaymentIntentService implements PaymentIntentServiceInterface
     private $publishableKey;
 
     /**
-     * @var CashOutTransactionServiceInterface
+     * @var CashInTransactionServiceInterface
      */
     private $cashInTransactionService;
 
     /**
+     * @var QuoteFeeServiceInterface
+     */
+    private $quoteFeeService;
+
+    /**
      * PaymentIntentService constructor.
      * @param string $publishableKey
-     * @param CashOutTransactionServiceInterface $cashInTransactionService
+     * @param CashInTransactionServiceInterface $cashInTransactionService
+     * @param QuoteFeeServiceInterface $quoteFeeService
      */
     public function __construct(
         string $publishableKey,
-        CashOutTransactionServiceInterface $cashInTransactionService
+        CashInTransactionServiceInterface $cashInTransactionService,
+        QuoteFeeServiceInterface $quoteFeeService
     )
     {
         $this->publishableKey = $publishableKey;
         $this->cashInTransactionService = $cashInTransactionService;
+        $this->quoteFeeService = $quoteFeeService;
     }
 
 
@@ -56,6 +67,13 @@ class PaymentIntentService implements PaymentIntentServiceInterface
         $transaction = $this
             ->cashInTransactionService
             ->store($transactionEntity);
+
+        $fees = $this->quoteFeeService->getQuotes($transaction);
+        $this->cashInTransactionService
+            ->addTransactionFees(
+                $transaction->getTransactionId(),
+                $fees->toArray()
+            );
 
         try {
             $intent = PaymentIntent::create([

@@ -126,4 +126,22 @@ class CashInTransactionService implements CashInTransactionServiceInterface
                 'pending'
             );
     }
+
+    /**
+     * @param string $transactionId
+     * @param array $fees
+     * @return CashInTransactionEntityInterface
+     */
+    public function addTransactionFees(
+        string $transactionId,
+        array $fees
+    ):CashInTransactionEntityInterface
+    {
+        return $this
+            ->cashInTransactionRepository
+            ->addTransactionFees(
+                $transactionId,
+                $fees
+            );
+    }
 }

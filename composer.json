@@ -15,7 +15,8 @@
         "paypal/paypal-checkout-sdk": "1.0.1",
         "ramsey/uuid": "^4.0",
         "stripe/stripe-php": "^7.28",
-        "nordsoftware/lumen-cors": "^3.3"
+        "nordsoftware/lumen-cors": "^3.3",
+        "ext-json": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",

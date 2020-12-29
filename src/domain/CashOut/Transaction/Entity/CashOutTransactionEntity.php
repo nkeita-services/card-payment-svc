@@ -39,6 +39,11 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
     private $accountId;
 
     /**
+     * @var string
+     */
+    private $regionId;
+
+    /**
      * @var array
      */
     private $originator;
@@ -66,6 +71,7 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
      * @param string $currency
      * @param string $description
      * @param string $accountId
+     * @param string $regionId
      * @param array $originator
      * @param string $status
      * @param int $timestamp
@@ -78,6 +84,7 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
         ?string $currency,
         ?string $description,
         ?string $accountId,
+        ?string $regionId,
         ?array $originator,
         ?string $status,
         ?int $timestamp,
@@ -89,6 +96,7 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
         $this->currency = $currency;
         $this->description = $description;
         $this->accountId = $accountId;
+        $this->regionId = $regionId;
         $this->originator = $originator;
         $this->status = $status;
         $this->timestamp = $timestamp;
@@ -161,6 +169,14 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
     {
         $this->transactionId = $transactionId;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegionId(): string
+    {
+        return $this->regionId;
     }
 
     /**

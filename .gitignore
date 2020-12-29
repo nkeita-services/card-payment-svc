@@ -6,3 +6,4 @@ Homestead.yaml
 .phpunit.result.cache
 /nbproject/private/
 GOOGLE_APPLICATION_CREDENTIALS.json
+.DS_Store

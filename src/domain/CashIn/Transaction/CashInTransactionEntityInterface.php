@@ -58,6 +58,11 @@ interface CashInTransactionEntityInterface
     /**
      * @return string
      */
+    public function getRegionId(): string;
+
+    /**
+     * @return string
+     */
     public function getStatus(): string;
 
     /**

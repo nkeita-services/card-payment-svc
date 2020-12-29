@@ -72,4 +72,14 @@ interface CashInTransactionServiceInterface
     public function fetchPendingTransactionFor(
         string $transactionType
     ):array;
+
+    /**
+     * @param string $transactionId
+     * @param array $fees
+     * @return CashInTransactionEntityInterface
+     */
+    public function addTransactionFees(
+        string $transactionId,
+        array $fees
+    ):CashInTransactionEntityInterface;
 }
