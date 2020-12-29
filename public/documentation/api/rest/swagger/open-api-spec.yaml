@@ -59,7 +59,7 @@ tags:
   - name: Paypal Integration
     description: Uses Paypal API
 paths:
-  /v1/stripe/payments/form/{amount}/{currency}/{accountId}:
+  /v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}:
     get:
       summary: Return a form
       tags:
@@ -542,6 +542,8 @@ components:
           $ref: '#/components/schemas/Originator'
         description:
           $ref: '#/components/schemas/Description'
+        regionId:
+          $ref: '#/components/schemas/RegionId'
     Originator:
       type: object
       properties:
@@ -635,6 +637,9 @@ components:
       type: string
       description: transaction description
       example: Top Up
+    RegionId:
+      type: string
+      example: 5f578c1d9b95aee41df844e6
     ApplicationContext:
       type: object
       properties:

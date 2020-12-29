@@ -10,6 +10,7 @@ use Payment\CashOut\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\MTN\Collection\Entity\RequestToPayEntityInterface;
 use Payment\MTN\Remittance\Entity\MTNTransferEntity;
 use Payment\MTN\Remittance\Repository\RemittanceRepositoryInterface;
+use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use Payment\Wallet\WalletGateway\WalletGatewayServiceInterface;
 
 class MTNRemittanceService implements MTNRemittanceServiceInterface
@@ -32,19 +33,27 @@ class MTNRemittanceService implements MTNRemittanceServiceInterface
     private $walletGatewayService;
 
     /**
+     * @var QuoteFeeServiceInterface
+     */
+    private $quoteFeeService;
+
+    /**
      * MTNRemittanceService constructor.
      * @param RemittanceRepositoryInterface $mtnRemittanceRepository
      * @param CashOutTransactionServiceInterface $cashOutTransactionService
      * @param WalletGatewayServiceInterface $walletGatewayService
+     * @param QuoteFeeServiceInterface $quoteFeeService
      */
     public function __construct(
         RemittanceRepositoryInterface $mtnRemittanceRepository,
         CashOutTransactionServiceInterface $cashOutTransactionService,
-        WalletGatewayServiceInterface $walletGatewayService)
-    {
+        WalletGatewayServiceInterface $walletGatewayService,
+        QuoteFeeServiceInterface $quoteFeeService
+    ){
         $this->mtnRemittanceRepository = $mtnRemittanceRepository;
         $this->cashOutTransactionService = $cashOutTransactionService;
         $this->walletGatewayService = $walletGatewayService;
+        $this->quoteFeeService = $quoteFeeService;
     }
 
 
@@ -65,6 +74,13 @@ class MTNRemittanceService implements MTNRemittanceServiceInterface
         $entity = $this->cashOutTransactionService
             ->store(
                 $entity
+            );
+
+        $fees = $this->quoteFeeService->getCashOutQuotes($entity);
+        $this->cashOutTransactionService
+            ->addTransactionFees(
+                $entity->getTransactionId(),
+                $fees->toArray()
             );
 
         $referenceId = $this

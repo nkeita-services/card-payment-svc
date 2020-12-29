@@ -42,6 +42,7 @@ class CashInTransactionRepository implements
                 'amount' => $transactionEntity->getAmount(),
                 'currency' => $transactionEntity->getCurrency(),
                 'description' => $transactionEntity->getDescription(),
+                'regionId'  => $transactionEntity->getRegionId(),
                 'originator' => $transactionEntity->getOriginator(),
                 'status' => $transactionEntity->getStatus(),
                 'timestamp' => $transactionEntity->getTimestamp(),
@@ -145,6 +146,7 @@ class CashInTransactionRepository implements
             $transaction->currency,
             $transaction->description,
             $transaction->accountId,
+            $transaction->regionId,
             $transaction->originator->getArrayCopy(),
             $transaction->status,
             $transaction->timestamp,
@@ -199,5 +201,29 @@ class CashInTransactionRepository implements
                 );
             }, $transactions->toArray());
 
+    }
+
+    /**
+     * @param string $transactionId
+     * @param array $fees
+     * @return CashInTransactionEntityInterface
+     */
+    public function addTransactionFees(
+        string $transactionId,
+        array $fees
+    ):CashInTransactionEntityInterface
+    {
+        $this
+            ->cashInTransactionCollection
+            ->updateOne(
+                ['_id' => new ObjectId($transactionId)],
+                ['$addToSet' => [
+                    'fees' => $fees
+                ]]
+            );
+
+        return $this->fetchWithTransactionId(
+            $transactionId
+        );
     }
 }

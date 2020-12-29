@@ -42,6 +42,7 @@ class CashOutTransactionRepository implements
                 'amount' => $transactionEntity->getAmount(),
                 'currency' => $transactionEntity->getCurrency(),
                 'description' => $transactionEntity->getDescription(),
+                'regionId'  => $transactionEntity->getRegionId(),
                 'originator' => $transactionEntity->getOriginator(),
                 'status' => $transactionEntity->getStatus(),
                 'timestamp' => $transactionEntity->getTimestamp(),
@@ -143,6 +144,7 @@ class CashOutTransactionRepository implements
             $transaction->currency,
             $transaction->description,
             $transaction->accountId,
+            $transaction->regionId,
             $transaction->originator->getArrayCopy(),
             $transaction->status,
             $transaction->timestamp,
@@ -197,5 +199,29 @@ class CashOutTransactionRepository implements
                 );
             }, $transactions->toArray());
 
+    }
+
+    /**
+     * @param string $transactionId
+     * @param array $fees
+     * @return CashOutTransactionEntityInterface
+     */
+    public function addTransactionFees(
+        string $transactionId,
+        array $fees
+    ):CashOutTransactionEntityInterface
+    {
+        $this
+            ->cashOutTransactionCollection
+            ->updateOne(
+                ['_id' => new ObjectId($transactionId)],
+                ['$addToSet' => [
+                    'fees' => $fees
+                ]]
+            );
+
+        return $this->fetchWithTransactionId(
+            $transactionId
+        );
     }
 }

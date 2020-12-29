@@ -73,4 +73,14 @@ interface CashOutTransactionServiceInterface
     public function fetchPendingTransactionFor(
         string $transactionType
     ):array;
+
+    /**
+     * @param string $transactionId
+     * @param array $fees
+     * @return CashOutTransactionEntityInterface
+     */
+    public function addTransactionFees(
+        string $transactionId,
+        array $fees
+    ):CashOutTransactionEntityInterface;
 }

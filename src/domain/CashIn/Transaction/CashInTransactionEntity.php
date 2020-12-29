@@ -37,6 +37,11 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     private $accountId;
 
     /**
+     * @var string
+     */
+    private $regionId;
+
+    /**
      * @var array
      */
     private $originator;
@@ -64,6 +69,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
      * @param string $currency
      * @param string $description
      * @param string $accountId
+     * @param string $regionId
      * @param array $originator
      * @param string $status
      * @param int $timestamp
@@ -76,6 +82,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         ?string $currency,
         ?string $description,
         ?string $accountId,
+        ?string $regionId,
         ?array $originator,
         ?string $status,
         ?int $timestamp,
@@ -87,6 +94,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         $this->currency = $currency;
         $this->description = $description;
         $this->accountId = $accountId;
+        $this->regionId = $regionId;
         $this->originator = $originator;
         $this->status = $status;
         $this->timestamp = $timestamp;
@@ -159,6 +167,14 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     {
         $this->transactionId = $transactionId;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegionId(): string
+    {
+        return $this->regionId;
     }
 
     /**

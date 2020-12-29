@@ -9,6 +9,7 @@ use Infrastructure\Secrets\SecretManagerInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\Paypal\PaymentExecution\Service\PaymentExecutionService;
 use Payment\Paypal\PaymentExecution\Service\PaymentExecutionServiceInterface;
+use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
@@ -27,7 +28,8 @@ class PaymentExecutionServiceProvider extends ServiceProvider
             return new PaymentExecutionService(
                 $app->make(CashInTransactionServiceInterface::class),
                 new PayPalHttpClient($environment),
-                $app->make(OrdersCreateRequest::class)
+                $app->make(OrdersCreateRequest::class),
+                $app->make(QuoteFeeServiceInterface::class)
             );
         });
     }

@@ -13,6 +13,7 @@ interface CollectionServiceInterface
      * @param string $accountId
      * @param float $amount
      * @param array $originator
+     * @param string $regionId
      * @param string|null $message
      * @param string|null $note
      * @return CashInTransactionEntityInterface
@@ -21,6 +22,7 @@ interface CollectionServiceInterface
         string $accountId,
         float $amount,
         array $originator,
+        string $regionId = null,
         string $message = null,
         string $note = null
     ): CashInTransactionEntityInterface;

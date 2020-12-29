@@ -12,6 +12,7 @@ use Payment\MTN\Collection\Entity\RequestToPayEntityInterface;
 use Payment\MTN\Collection\Repository\CollectionRepositoryInterface;
 use Payment\MTN\Collection\Repository\Exception\RequestToPayException;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException as RequestToPayServiceException;
+use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use Payment\Wallet\WalletGateway\WalletGatewayServiceInterface;
 
 class CollectionService implements CollectionServiceInterface
@@ -33,19 +34,27 @@ class CollectionService implements CollectionServiceInterface
     private $walletGatewayService;
 
     /**
+     * @var QuoteFeeServiceInterface
+     */
+    private $quoteFeeService;
+
+    /**
      * CollectionService constructor.
      * @param CollectionRepositoryInterface $collectionRepository
      * @param CashInTransactionServiceInterface $cashInTransactionService
      * @param WalletGatewayServiceInterface $walletGatewayService
+     * @param QuoteFeeServiceInterface $quoteFeeService
      */
     public function __construct(
         CollectionRepositoryInterface $collectionRepository,
         CashInTransactionServiceInterface $cashInTransactionService,
-        WalletGatewayServiceInterface $walletGatewayService
+        WalletGatewayServiceInterface $walletGatewayService,
+        QuoteFeeServiceInterface $quoteFeeService
     ){
         $this->collectionRepository = $collectionRepository;
         $this->cashInTransactionService = $cashInTransactionService;
         $this->walletGatewayService = $walletGatewayService;
+        $this->quoteFeeService = $quoteFeeService;
     }
 
 
@@ -56,6 +65,7 @@ class CollectionService implements CollectionServiceInterface
         string $accountId,
         float $amount,
         array $originator,
+        string $regionId = null,
         string $message = null,
         string $note = null
     ): CashInTransactionEntityInterface{
@@ -73,10 +83,18 @@ class CollectionService implements CollectionServiceInterface
                         ),
                         $message ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $accountId,
+                        $regionId,
                         $originator,
                         CashInTransactionEntityInterface::STATUS_PENDING,
                         time()
                     )
+                );
+
+            $fees = $this->quoteFeeService->getQuotes($cashInTransactionEntity);
+            $this->cashInTransactionService
+                ->addTransactionFees(
+                    $cashInTransactionEntity->getTransactionId(),
+                    $fees->toArray()
                 );
 
             $referenceId = $this

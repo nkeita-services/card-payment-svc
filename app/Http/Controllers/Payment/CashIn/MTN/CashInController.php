@@ -75,7 +75,8 @@ class CashInController extends Controller
             $cashInTransactionEntity = $this->collectionService->requestToPay(
                 $accountId,
                 $request->json('amount'),
-                $request->json('originator')
+                $request->json('originator'),
+                $request->json()->get('regionId')
             );
 
             $cashInTransactionEntity = $this->collectionService->requestToPayStatus(

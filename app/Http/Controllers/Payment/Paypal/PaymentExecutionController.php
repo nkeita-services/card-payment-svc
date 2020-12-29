@@ -17,6 +17,7 @@ use Payment\Paypal\PaymentExecution\Service\PaymentExecutionServiceInterface;
 use Illuminate\Support\Facades\Validator;
 use Payment\Paypal\PaymentExecution\Service\Exception\PaymentExecutionException;
 use App\Http\Controllers\Controller;
+use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 
 
 class PaymentExecutionController extends Controller
@@ -33,17 +34,25 @@ class PaymentExecutionController extends Controller
     private $paymentExecutionService;
 
     /**
+     * @var QuoteFeeServiceInterface
+     */
+    private $quoteFeeService;
+
+    /**
      * PaymentIntentController constructor.
      * @param AccountServiceInterface $accountService
      * @param PaymentExecutionServiceInterface $paymentExecutionService
+     * @param QuoteFeeServiceInterface $quoteFeeService
      */
     public function __construct(
         AccountServiceInterface $accountService,
-        PaymentExecutionServiceInterface $paymentExecutionService
+        PaymentExecutionServiceInterface $paymentExecutionService,
+        QuoteFeeServiceInterface $quoteFeeService
     )
     {
         $this->accountService = $accountService;
         $this->paymentExecutionService = $paymentExecutionService;
+        $this->quoteFeeService = $quoteFeeService;
     }
 
     /**
@@ -107,6 +116,7 @@ class PaymentExecutionController extends Controller
                     $request->get('currency'),
                     $request->get('description'),
                     $accountId,
+                    $request->json()->get('regionId'),
                     [
                         'originatorType' => "User",
                         'originatorId' => $request->get('originator')['originatorId']
@@ -116,6 +126,10 @@ class PaymentExecutionController extends Controller
                 ),
                 $paymentExecution
             );
+
+            $fees = $this->quoteFeeService->getQuotes($transaction);
+           // $this->paymentExecutionService->storeEvent()
+
         } catch (PaymentExecutionException $e) {
             return response()->json(
                 [

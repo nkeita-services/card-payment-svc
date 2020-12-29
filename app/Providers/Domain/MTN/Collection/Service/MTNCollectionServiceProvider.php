@@ -9,6 +9,7 @@ use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\MTN\Collection\Repository\CollectionRepositoryInterface;
 use Payment\MTN\Collection\Service\CollectionService;
 use Payment\MTN\Collection\Service\CollectionServiceInterface;
+use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use Payment\Wallet\WalletGateway\WalletGatewayServiceInterface;
 
 class MTNCollectionServiceProvider extends ServiceProvider
@@ -20,7 +21,8 @@ class MTNCollectionServiceProvider extends ServiceProvider
             return new CollectionService(
                 $app->make(CollectionRepositoryInterface::class),
                 $app->make(CashInTransactionServiceInterface::class),
-                $app->make(WalletGatewayServiceInterface::class)
+                $app->make(WalletGatewayServiceInterface::class),
+                $app->make(QuoteFeeServiceInterface::class)
             );
         });
     }

@@ -127,4 +127,22 @@ class CashOutTransactionService implements CashOutTransactionServiceInterface
                 'pending'
             );
     }
+
+    /**
+     * @param string $transactionId
+     * @param array $fees
+     * @return CashOutTransactionEntityInterface
+     */
+    public function addTransactionFees(
+        string $transactionId,
+        array $fees
+    ):CashOutTransactionEntityInterface
+    {
+        return $this
+            ->CashOutTransactionRepository
+            ->addTransactionFees(
+                $transactionId,
+                $fees
+            );
+    }
 }
