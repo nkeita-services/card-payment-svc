@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Providers\Infrastructure\Api\Rest\Client\Fee\Quote;
+namespace App\Providers\Infrastructure\Api\Rest\Client\WalletGateway\Fee\Quote;
 
 
 use Illuminate\Support\ServiceProvider;

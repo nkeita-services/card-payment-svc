@@ -529,6 +529,8 @@ components:
           $ref: '#/components/schemas/Currency'
         originator:
           $ref: '#/components/schemas/Originator'
+        regionId:
+          $ref: '#/components/schemas/RegionId'
     CashInRequest:
       type: object
       properties:
@@ -586,6 +588,8 @@ components:
           $ref: '#/components/schemas/Originator'
         description:
           $ref: '#/components/schemas/Description'
+        regionId:
+          $ref: '#/components/schemas/RegionId'
         applicationContext:
           $ref: '#/components/schemas/ApplicationContext'
     PaypalCashInResponse:

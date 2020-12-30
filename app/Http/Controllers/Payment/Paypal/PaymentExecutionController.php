@@ -34,25 +34,17 @@ class PaymentExecutionController extends Controller
     private $paymentExecutionService;
 
     /**
-     * @var QuoteFeeServiceInterface
-     */
-    private $quoteFeeService;
-
-    /**
      * PaymentIntentController constructor.
      * @param AccountServiceInterface $accountService
      * @param PaymentExecutionServiceInterface $paymentExecutionService
-     * @param QuoteFeeServiceInterface $quoteFeeService
      */
     public function __construct(
         AccountServiceInterface $accountService,
-        PaymentExecutionServiceInterface $paymentExecutionService,
-        QuoteFeeServiceInterface $quoteFeeService
+        PaymentExecutionServiceInterface $paymentExecutionService
     )
     {
         $this->accountService = $accountService;
         $this->paymentExecutionService = $paymentExecutionService;
-        $this->quoteFeeService = $quoteFeeService;
     }
 
     /**
@@ -126,9 +118,6 @@ class PaymentExecutionController extends Controller
                 ),
                 $paymentExecution
             );
-
-            $fees = $this->quoteFeeService->getQuotes($transaction);
-           // $this->paymentExecutionService->storeEvent()
 
         } catch (PaymentExecutionException $e) {
             return response()->json(
