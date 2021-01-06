@@ -48,7 +48,7 @@ class QuoteMapper implements QuoteMapperInterface
             'amount'=> floatval($transaction->getAmount()),
             'accountId'=>$transaction->getAccountId(),
             'walletOrganizations'=> $accountData->getOrganizations(),
-            'regionId'=> $transaction->getRegionId(),
+            'regions'=> $transaction->getRegions(),
             'operation'=> $transaction->getDescription(),
             'currency'=> $transaction->getCurrency(),
             'originator' =>  $transaction->getOriginator()
@@ -75,7 +75,7 @@ class QuoteMapper implements QuoteMapperInterface
             'amount'=> floatval($transaction->getAmount()),
             'accountId'=>$transaction->getAccountId(),
             'walletOrganizations'=> $accountData->getOrganizations(),
-            'regionId'=> $transaction->getRegionId(),
+            'regions'=> $transaction->getRegions(),
             'operation'=> $transaction->getDescription(),
             'currency'=> $transaction->getCurrency(),
             'originator' =>  $transaction->getOriginator()

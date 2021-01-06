@@ -73,7 +73,7 @@ class QuoteFeeService implements QuoteFeeServiceInterface
 
         return QuoteFeeEntity::fromArray([
             'walletOrganizations' => $paymentMean->getWalletOrganizations(),
-            'regionId' => $paymentMean->getRegionId(),
+            'regions' => $paymentMean->getRegions(),
             'paymentMean' => $paymentMean->getPaymentMean(),
             'nbk' => $nbk->getPaymentMean()
         ]);
@@ -111,7 +111,7 @@ class QuoteFeeService implements QuoteFeeServiceInterface
 
         return QuoteFeeEntity::fromArray([
             'walletOrganizations' => $paymentMean->getWalletOrganizations(),
-            'regionId' => $paymentMean->getRegionId(),
+            'regions' => $paymentMean->getRegions(),
             'paymentMean' => $paymentMean->getPaymentMean(),
             'nbk' => $nbk->getPaymentMean()
         ]);*/

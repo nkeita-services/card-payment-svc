@@ -56,9 +56,9 @@ interface CashInTransactionEntityInterface
     public function setTransactionId(string $transactionId): CashInTransactionEntity;
 
     /**
-     * @return string
+     * @return array
      */
-    public function getRegionId(): string;
+    public function getRegions(): array ;
 
     /**
      * @return string

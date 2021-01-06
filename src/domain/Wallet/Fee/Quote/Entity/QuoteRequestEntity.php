@@ -17,9 +17,9 @@ class QuoteRequestEntity implements QuoteRequestEntityInterface
     private $walletOrganizations;
 
     /**
-     * @var string
+     * @var array
      */
-    private $regionId;
+    private $regions;
 
     /**
      * @var string
@@ -52,7 +52,7 @@ class QuoteRequestEntity implements QuoteRequestEntityInterface
      * @param string $amount
      * @param string $accountId
      * @param array $walletOrganizations
-     * @param string $regionId
+     * @param array $regions
      * @param string $operation
      * @param string $currency
      * @param array $originator
@@ -62,14 +62,14 @@ class QuoteRequestEntity implements QuoteRequestEntityInterface
         ?string $amount,
         ?string $accountId,
         ?array $walletOrganizations,
-        ?string $regionId,
+        ?array $regions,
         ?string $operation,
         ?string $currency,
         ?array $originator
     ){
         $this->paymentMean = $paymentMean;
         $this->walletOrganizations = $walletOrganizations;
-        $this->regionId = $regionId;
+        $this->regions = $regions;
         $this->currency = $currency;
         $this->accountId = $accountId;
         $this->amount = $amount;
@@ -90,7 +90,7 @@ class QuoteRequestEntity implements QuoteRequestEntityInterface
             $data['amount'] ?? null,
             $data['accountId'] ?? null,
             $data['walletOrganizations'] ?? null,
-            $data['regionId'] ?? null,
+            $data['regions'] ?? null,
             $data['operation'] ?? null,
             $data['currency'] ?? null,
             $data['originator'] ?? null
@@ -108,7 +108,7 @@ class QuoteRequestEntity implements QuoteRequestEntityInterface
             "amount"=> floatval($this->amount),
             "accountId"=>$this->currency,
             "walletOrganizations"=>$this->walletOrganizations,
-            "regionId"=>$this->regionId,
+            "regions"=>$this->regions,
             'operation'=>$this->operation,
             'currency'=>$this->currency,
             'originator'=>$this->originator
@@ -150,11 +150,11 @@ class QuoteRequestEntity implements QuoteRequestEntityInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getRegionId(): string
+    public function getRegions(): array
     {
-        return $this->regionId;
+        return $this->regions;
     }
 
     /**

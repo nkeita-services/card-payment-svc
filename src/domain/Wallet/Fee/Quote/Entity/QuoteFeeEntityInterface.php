@@ -23,9 +23,9 @@ interface QuoteFeeEntityInterface
     public function getWalletOrganizations(): array;
 
     /**
-     * @return string
+     * @return array
      */
-    public function getRegionId(): string;
+    public function getRegions(): array ;
 
     /**
      * @return array

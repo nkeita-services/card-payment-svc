@@ -580,8 +580,8 @@ components:
           $ref: '#/components/schemas/Currency'
         originator:
           $ref: '#/components/schemas/Originator'
-        regionId:
-          $ref: '#/components/schemas/RegionId'
+        regions:
+          $ref: '#/components/schemas/Regions'
     CashInRequest:
       type: object
       properties:
@@ -595,8 +595,8 @@ components:
           $ref: '#/components/schemas/Originator'
         description:
           $ref: '#/components/schemas/Description'
-        regionId:
-          $ref: '#/components/schemas/RegionId'
+        regions:
+          $ref: '#/components/schemas/Regions'
     Originator:
       type: object
       properties:
@@ -639,8 +639,8 @@ components:
           $ref: '#/components/schemas/Originator'
         description:
           $ref: '#/components/schemas/Description'
-        regionId:
-          $ref: '#/components/schemas/RegionId'
+        regions:
+          $ref: '#/components/schemas/Regions'
         applicationContext:
           $ref: '#/components/schemas/ApplicationContext'
     PaypalCashInResponse:
@@ -692,9 +692,11 @@ components:
       type: string
       description: transaction description
       example: Top Up
-    RegionId:
-      type: string
-      example: 5f578c1d9b95aee41df844e6
+    Regions:
+      type: array
+      items:
+        type: string
+        example: 5e99a07063389569485205f3
     ApplicationContext:
       type: object
       properties:
