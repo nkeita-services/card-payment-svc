@@ -4,10 +4,12 @@
 namespace Payment\CashIn\Transaction\Repository;
 
 
+use InvalidArgumentException;
 use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use MongoDB\Collection;
 use MongoDB\BSON\ObjectId;
+use Payment\CashIn\Transaction\Repository\Exception\CashInTransactionNotFoundException;
 
 class CashInTransactionRepository implements
     CashInTransactionRepositoryInterface
@@ -42,7 +44,7 @@ class CashInTransactionRepository implements
                 'amount' => $transactionEntity->getAmount(),
                 'currency' => $transactionEntity->getCurrency(),
                 'description' => $transactionEntity->getDescription(),
-                'regionId'  => $transactionEntity->getRegionId(),
+                'regionId' => $transactionEntity->getRegionId(),
                 'originator' => $transactionEntity->getOriginator(),
                 'status' => $transactionEntity->getStatus(),
                 'timestamp' => $transactionEntity->getTimestamp(),
@@ -92,6 +94,49 @@ class CashInTransactionRepository implements
     /**
      * @inheritDoc
      */
+    public function fetchWithEventTypeAndEventId(
+        string $eventType,
+        string $eventId
+    ): CashInTransactionEntityInterface
+    {
+        $eventTypeNameMapping = [
+            'CAPTURE' => 'intent'
+        ];
+
+        if (!array_key_exists($eventType, $eventTypeNameMapping)) {
+            throw new InvalidArgumentException(
+                sprintf('Invalid type %s', $eventType)
+            );
+        }
+
+        $transaction = $this->cashInTransactionCollection->findOne(
+            [
+                'events' => [
+                '$elemMatch' => [
+                    'id' => $eventId, $eventTypeNameMapping[$eventType] => $eventType]
+                ]
+
+            ]
+        );
+
+        if (empty($transaction)) {
+            throw new CashInTransactionNotFoundException(
+                sprintf(
+                    'CashIn transaction of type %s and Id %s  not found',
+                    $eventType,
+                    $eventId
+                )
+            );
+        }
+        return $this->createCashInTransactionEntityFromDocument(
+            $transaction
+        );
+    }
+
+
+    /**
+     * @inheritDoc
+     */
     public function addTransactionEvent(
         string $transactionId,
         string $eventType,
@@ -122,7 +167,7 @@ class CashInTransactionRepository implements
         $key = array_key_first($criteria);
 
         $transaction = $this->cashInTransactionCollection->findOne(
-            [sprintf('extras.%s',$key) => $criteria[$key]]
+            [sprintf('extras.%s', $key) => $criteria[$key]]
         );
 
         return $this->createCashInTransactionEntityFromDocument(
@@ -146,11 +191,12 @@ class CashInTransactionRepository implements
             $transaction->currency,
             $transaction->description,
             $transaction->accountId,
-            $transaction->regionId,
+            $transaction->regionId ?? null,
             $transaction->originator->getArrayCopy(),
             $transaction->status,
             $transaction->timestamp,
-            $transaction->extras->getArrayCopy()
+            $transaction->extras->getArrayCopy(),
+            $transaction->events->getArrayCopy() ?? []
         );
     }
 
@@ -211,7 +257,7 @@ class CashInTransactionRepository implements
     public function addTransactionFees(
         string $transactionId,
         array $fees
-    ):CashInTransactionEntityInterface
+    ): CashInTransactionEntityInterface
     {
         $this
             ->cashInTransactionCollection

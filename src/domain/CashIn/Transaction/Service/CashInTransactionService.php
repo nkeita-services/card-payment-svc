@@ -70,6 +70,22 @@ class CashInTransactionService implements CashInTransactionServiceInterface
     /**
      * @inheritDoc
      */
+    public function fetchWithEventTypeAndEventId(
+        string $eventType,
+        string $eventId): CashInTransactionEntityInterface
+    {
+        return $this
+            ->cashInTransactionRepository
+            ->fetchWithEventTypeAndEventId(
+                $eventType,
+                $eventId
+            );
+    }
+
+
+    /**
+     * @inheritDoc
+     */
     public function addTransactionEvent(
         string $transactionId,
         string $eventType,

@@ -35,6 +35,16 @@ interface CashInTransactionServiceInterface
     ): CashInTransactionEntityInterface;
 
     /**
+     * @param string $eventType
+     * @param string $eventId
+     * @return CashInTransactionEntityInterface
+     */
+    public function fetchWithEventTypeAndEventId(
+        string $eventType,
+        string $eventId
+    ):CashInTransactionEntityInterface;
+
+    /**
      * @param string $transactionId
      * @param string $eventType
      * @param array $event

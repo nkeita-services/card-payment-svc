@@ -107,4 +107,14 @@ $router->get('/v1/paypal/payments/cancel', [
     'as'=>'cancel'
 ]);
 
+$router->get('/v1/cash-ins/eventType/{eventType}/eventId/{eventId}', [
+    'uses' => 'Payment\CashIn\FetchCashInRequestController@fetchFromEventTypeAndEventId',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/CashInRead',
+    'groups'=> [
+        'root',
+        'admin'
+    ]
+]);
+
 

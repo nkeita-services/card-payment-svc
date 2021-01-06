@@ -62,6 +62,11 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     private $extras;
 
     /**
+     * @var array
+     */
+    private $events;
+
+    /**
      * CashInTransactionEntity constructor.
      * @param string $type
      * @param string $transactionId
@@ -74,6 +79,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
      * @param string $status
      * @param int $timestamp
      * @param array $extras
+     * @param array $events
      */
     public function __construct(
         ?string $type,
@@ -86,8 +92,10 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         ?array $originator,
         ?string $status,
         ?int $timestamp,
-        array $extras = []
-    ){
+        array $extras = [],
+        array $events = []
+    )
+    {
         $this->type = $type;
         $this->transactionId = $transactionId;
         $this->amount = $amount;
@@ -99,6 +107,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         $this->status = $status;
         $this->timestamp = $timestamp;
         $this->extras = $extras;
+        $this->events = $events;
     }
 
 
@@ -215,5 +224,26 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     public function isSuccessful(): bool
     {
         return $this->status == 'successful';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array
+    {
+        return [
+            'type' => $this->type,
+            'transactionId' => $this->transactionId,
+            'amount' => $this->amount,
+            'currency' => $this->currency,
+            'description' => $this->description,
+            'accountId' => $this->accountId,
+            'regionId' => $this->regionId,
+            'originator' => $this->originator,
+            'status' => $this->status,
+            'timestamp' => $this->timestamp,
+            'extras' => $this->extras,
+            'events'=>$this->events
+        ];
     }
 }

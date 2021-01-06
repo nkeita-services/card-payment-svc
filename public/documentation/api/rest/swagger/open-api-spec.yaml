@@ -58,6 +58,8 @@ tags:
     description: MTN Integration
   - name: Paypal Integration
     description: Uses Paypal API
+  - name: CashIn Information
+    description: CashIn Information
 paths:
   /v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}:
     get:
@@ -478,6 +480,55 @@ paths:
                 status: fail
                 statusCode: 4010
                 statusDescription: Error when creating order payment
+  /v1/cash-ins/eventType/{eventType}/eventId/{eventId}:
+    get:
+      summary: Return a cash in information
+      tags:
+        - CashIn Information
+      security:
+        - oAuth2:
+          - CashInRead
+      parameters:
+        - name: eventType
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Event type
+            enum:
+              - CAPTURE
+              - TOPUP
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Event ID
+      responses:
+        '200':
+          description: Successfully fetched cash in information
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        type: object
+                        properties:
+                          transactionId:
+                            type: string
+                            example: 5e95b31b3a480d75ac0aa204
+                          status:
+                            type: string
+                            enum:
+                              - pending
+                              - successful
+                              - error
 components:
   securitySchemes:
     oAuth2:

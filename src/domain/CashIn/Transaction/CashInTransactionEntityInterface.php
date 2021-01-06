@@ -85,6 +85,11 @@ interface CashInTransactionEntityInterface
      */
     public function isSuccessful():bool;
 
+    /**
+     * @return array
+     */
+    public function toArray(): array ;
+
 
 
 }
