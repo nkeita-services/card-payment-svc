@@ -86,4 +86,5 @@ interface CashInTransactionEntityInterface
     public function isSuccessful():bool;
 
 
+
 }

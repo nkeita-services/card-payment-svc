@@ -6,9 +6,10 @@ namespace Infrastructure\Api\Rest\Client\Account;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use Infrastructure\Api\Rest\Client\Account\Mapper\AccountBalanceOperationResultMapperInterface;
 use Infrastructure\Api\Rest\Client\Account\Mapper\AccountMapperInterface;
+use Payment\Account\Entity\AccountBalanceOperationResultInterface;
 use Payment\Account\Entity\AccountEntityInterface;
-use Payment\Account\Collection\AccountCollectionInterface;
 
 class AccountApiGuzzleHttpClient implements AccountApiClientInterface
 {
@@ -23,15 +24,26 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
     private $accountMapper;
 
     /**
+     * @var AccountBalanceOperationResultMapperInterface
+     */
+    private $accountBalanceOperationResultMapper;
+
+    /**
      * AccountApiGuzzleHttpClient constructor.
      * @param Client $guzzleClient
      * @param AccountMapperInterface $accountMapper
+     * @param AccountBalanceOperationResultMapperInterface $accountBalanceOperationResultMapper
      */
-    public function __construct(Client $guzzleClient, AccountMapperInterface $accountMapper)
-    {
+    public function __construct(
+        Client $guzzleClient,
+        AccountMapperInterface $accountMapper,
+        AccountBalanceOperationResultMapperInterface $accountBalanceOperationResultMapper
+    ){
         $this->guzzleClient = $guzzleClient;
         $this->accountMapper = $accountMapper;
+        $this->accountBalanceOperationResultMapper = $accountBalanceOperationResultMapper;
     }
+
 
     /**
      * @inheritDoc
@@ -57,7 +69,7 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
         string $accountId,
         string $amount,
         string $description
-    ): AccountEntityInterface{
+    ): AccountBalanceOperationResultInterface{
         $response = $this
             ->guzzleClient
             ->patch(
@@ -74,7 +86,7 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
                 ]
             );
 
-        return $this->accountMapper->createAccountFromApiResponse(
+        return $this->accountBalanceOperationResultMapper->fromApiResponse(
             $response
         );
     }
@@ -88,7 +100,7 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
         string $accountId,
         string $amount,
         string $description
-    ): AccountEntityInterface{
+    ): AccountBalanceOperationResultInterface {
         $response = $this
             ->guzzleClient
             ->patch(
@@ -105,7 +117,7 @@ class AccountApiGuzzleHttpClient implements AccountApiClientInterface
                 ]
             );
 
-        return $this->accountMapper->createAccountFromApiResponse(
+        return $this->accountBalanceOperationResultMapper->fromApiResponse(
             $response
         );
     }

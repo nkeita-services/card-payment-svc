@@ -4,6 +4,7 @@
 namespace Payment\Account\Service;
 
 
+use Payment\Account\Entity\AccountBalanceOperationResultInterface;
 use Payment\Account\Entity\AccountEntityInterface;
 use Payment\Account\Collection\AccountCollectionInterface;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
@@ -25,17 +26,17 @@ interface AccountServiceInterface
 
     /**
      * @param CashInTransactionEntityInterface $transactionEntity
-     * @return CashInTransactionEntityInterface
+     * @return AccountBalanceOperationResultInterface
      */
     public function topUpFromCashInTransaction(
         CashInTransactionEntityInterface $transactionEntity
-    ): CashInTransactionEntityInterface;
+    ): AccountBalanceOperationResultInterface;
 
     /**
      * @param CashOutTransactionEntityInterface $transactionEntity
-     * @return CashOutTransactionEntityInterface
+     * @return AccountBalanceOperationResultInterface
      */
     public function debitFromCashOutTransaction(
         CashOutTransactionEntityInterface $transactionEntity
-    ): CashOutTransactionEntityInterface;
+    ): AccountBalanceOperationResultInterface;
 }

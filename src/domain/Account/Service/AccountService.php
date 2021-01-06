@@ -3,6 +3,7 @@
 
 namespace Payment\Account\Service;
 
+use Payment\Account\Entity\AccountBalanceOperationResultInterface;
 use Payment\Account\Entity\AccountEntityInterface;
 use Payment\Account\Collection\AccountCollectionInterface;
 use Payment\Account\Repository\AccountRepositoryInterface;
@@ -50,9 +51,9 @@ class AccountService implements AccountServiceInterface
      */
     public function topUpFromCashInTransaction(
         CashInTransactionEntityInterface $transactionEntity
-    ): CashInTransactionEntityInterface
+    ): AccountBalanceOperationResultInterface
     {
-        $this
+        return $this
            ->accountRepository
            ->topUpWithUserIdAndAccountId(
                $transactionEntity->getOriginatorId(),
@@ -60,8 +61,6 @@ class AccountService implements AccountServiceInterface
                $transactionEntity->getAmount(),
                $transactionEntity->getDescription()
            );
-
-        return $transactionEntity;
     }
 
     /**
@@ -69,8 +68,8 @@ class AccountService implements AccountServiceInterface
      */
     public function debitFromCashOutTransaction(
         CashOutTransactionEntityInterface $transactionEntity
-    ): CashOutTransactionEntityInterface{
-        $this
+    ): AccountBalanceOperationResultInterface{
+        return $this
             ->accountRepository
             ->debitWithUserIdAndAccountId(
                 $transactionEntity->getOriginatorId(),
@@ -79,6 +78,5 @@ class AccountService implements AccountServiceInterface
                 $transactionEntity->getDescription()
             );
 
-        return $transactionEntity;
     }
 }

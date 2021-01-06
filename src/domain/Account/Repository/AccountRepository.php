@@ -5,6 +5,7 @@ namespace Payment\Account\Repository;
 
 
 use Infrastructure\Api\Rest\Client\Account\AccountApiClientInterface;
+use Payment\Account\Entity\AccountBalanceOperationResultInterface;
 use Payment\Account\Entity\AccountEntityInterface;
 use Payment\Account\Collection\AccountCollectionInterface;
 
@@ -44,7 +45,7 @@ class AccountRepository implements AccountRepositoryInterface
         string $accountId,
         float $amount,
         string $description
-    ): AccountEntityInterface
+    ): AccountBalanceOperationResultInterface
     {
         return $this
             ->accountApiClient
@@ -64,7 +65,7 @@ class AccountRepository implements AccountRepositoryInterface
         string $accountId,
         float $amount,
         string $description
-    ): AccountEntityInterface{
+    ): AccountBalanceOperationResultInterface{
         return $this
             ->accountApiClient
             ->debitWithUserIdAndAccountId(

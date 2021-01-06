@@ -42,12 +42,12 @@ class CashInController extends Controller
         CollectionService $collectionService,
         CashInTransactionService $cashInTransactionService,
         AccountService $accountService
-    ){
+    )
+    {
         $this->collectionService = $collectionService;
         $this->cashInTransactionService = $cashInTransactionService;
         $this->accountService = $accountService;
     }
-
 
 
     public function form(
@@ -83,8 +83,8 @@ class CashInController extends Controller
                 $cashInTransactionEntity->getTransactionId()
             );
 
-            if($cashInTransactionEntity->isSuccessful()){
-                $this
+            if ($cashInTransactionEntity->isSuccessful()) {
+                $result = $this
                     ->accountService
                     ->topUpFromCashInTransaction(
                         $cashInTransactionEntity
@@ -104,7 +104,7 @@ class CashInController extends Controller
             'data' => [
                 'CashIn' => [
                     'transactionId' => $cashInTransactionEntity->getTransactionId(),
-                    'status'=> $cashInTransactionEntity->getStatus()
+                    'status' => $cashInTransactionEntity->getStatus()
                 ]
             ]
         ]);
@@ -112,7 +112,8 @@ class CashInController extends Controller
 
     public function callback(
         Request $request
-    ){
+    )
+    {
         $this->cashInTransactionService
             ->addTransactionEvent(
                 '5fa7d7eecd12e8702c35ce13',
