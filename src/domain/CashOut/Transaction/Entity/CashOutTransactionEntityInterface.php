@@ -92,4 +92,9 @@ interface CashOutTransactionEntityInterface
     public function setCurrency(
         string $currency
     ): CashOutTransactionEntityInterface;
+
+    /**
+     * @return array
+     */
+    public function getEvents(): ?array;
 }

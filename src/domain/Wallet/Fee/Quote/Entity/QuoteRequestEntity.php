@@ -104,7 +104,7 @@ class QuoteRequestEntity implements QuoteRequestEntityInterface
     public function toArray(): array
     {
         $transactionData =  [
-            "paymentMean"=> $this->paymentMean,
+            "paymentMean"=> ucfirst(strtolower($this->paymentMean)),
             "amount"=> floatval($this->amount),
             "accountId"=>$this->currency,
             "walletOrganizations"=>$this->walletOrganizations,

@@ -46,7 +46,8 @@ class CashOutTransactionRepository implements
                 'originator' => $transactionEntity->getOriginator(),
                 'status' => $transactionEntity->getStatus(),
                 'timestamp' => $transactionEntity->getTimestamp(),
-                'extras' => $transactionEntity->getExtras()
+                'extras' => $transactionEntity->getExtras(),
+                'events' => $transactionEntity->getEvents()
             ]
         );
 

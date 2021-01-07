@@ -64,6 +64,12 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
     private $extras;
 
     /**
+     * @var array
+     */
+    private $events;
+
+
+    /**
      * CashInTransactionEntity constructor.
      * @param string $type
      * @param string $transactionId
@@ -76,6 +82,7 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
      * @param string $status
      * @param int $timestamp
      * @param array $extras
+     * @param array $events
      */
     public function __construct(
         ?string $type,
@@ -88,7 +95,8 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
         ?array $originator,
         ?string $status,
         ?int $timestamp,
-        array $extras = []
+        array $extras = [],
+        array $events = []
     ){
         $this->type = $type;
         $this->transactionId = $transactionId;
@@ -101,6 +109,7 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
         $this->status = $status;
         $this->timestamp = $timestamp;
         $this->extras = $extras;
+        $this->events = $events;
     }
 
 
@@ -229,5 +238,14 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
     {
         $this->currency = $currency;
         return $this;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getEvents(): ?array
+    {
+        return $this->events;
     }
 }

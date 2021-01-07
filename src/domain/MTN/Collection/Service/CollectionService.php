@@ -12,6 +12,7 @@ use Payment\MTN\Collection\Entity\RequestToPayEntityInterface;
 use Payment\MTN\Collection\Repository\CollectionRepositoryInterface;
 use Payment\MTN\Collection\Repository\Exception\RequestToPayException;
 use Payment\MTN\Collection\Service\Exception\RequestToPayException as RequestToPayServiceException;
+use Payment\Wallet\Fee\Quote\Service\Exception\QuoteNotFoundServiceException;
 use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use Payment\Wallet\WalletGateway\WalletGatewayServiceInterface;
 
@@ -90,12 +91,14 @@ class CollectionService implements CollectionServiceInterface
                     )
                 );
 
-            /*$fees = $this->quoteFeeService->getQuotes($cashInTransactionEntity);
-            $this->cashInTransactionService
-                ->addTransactionFees(
-                    $cashInTransactionEntity->getTransactionId(),
-                    $fees->toArray()
-                );*/
+            try {
+                $fees = $this->quoteFeeService->getQuotes($cashInTransactionEntity);
+                $this->cashInTransactionService
+                    ->addTransactionFees(
+                        $cashInTransactionEntity->getTransactionId(),
+                        $fees->toArray()
+                    );
+            } catch (QuoteNotFoundServiceException $e) {}
 
             $referenceId = $this
                 ->collectionRepository

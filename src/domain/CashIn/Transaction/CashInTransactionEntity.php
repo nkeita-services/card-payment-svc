@@ -227,6 +227,15 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     }
 
     /**
+     * @return array
+     */
+    public function getEvents(): ?array
+    {
+        return $this->events;
+    }
+
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array

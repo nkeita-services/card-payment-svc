@@ -10,6 +10,7 @@ use Payment\CashOut\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\MTN\Collection\Entity\RequestToPayEntityInterface;
 use Payment\MTN\Remittance\Entity\MTNTransferEntity;
 use Payment\MTN\Remittance\Repository\RemittanceRepositoryInterface;
+use Payment\Wallet\Fee\Quote\Service\Exception\QuoteNotFoundServiceException;
 use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use Payment\Wallet\WalletGateway\WalletGatewayServiceInterface;
 
@@ -76,12 +77,14 @@ class MTNRemittanceService implements MTNRemittanceServiceInterface
                 $entity
             );
 
-       /* $fees = $this->quoteFeeService->getCashOutQuotes($entity);
-        $this->cashOutTransactionService
-            ->addTransactionFees(
-                $entity->getTransactionId(),
-                $fees->toArray()
-            );*/
+        try {
+            $fees = $this->quoteFeeService->getCashOutQuotes($entity);
+            $this->cashOutTransactionService
+                ->addTransactionFees(
+                    $entity->getTransactionId(),
+                    $fees->toArray()
+                );
+        } catch (QuoteNotFoundServiceException $e) {}
 
         $referenceId = $this
             ->mtnRemittanceRepository
