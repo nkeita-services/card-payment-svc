@@ -76,12 +76,12 @@ class MTNRemittanceService implements MTNRemittanceServiceInterface
                 $entity
             );
 
-        $fees = $this->quoteFeeService->getCashOutQuotes($entity);
+       /* $fees = $this->quoteFeeService->getCashOutQuotes($entity);
         $this->cashOutTransactionService
             ->addTransactionFees(
                 $entity->getTransactionId(),
                 $fees->toArray()
-            );
+            );*/
 
         $referenceId = $this
             ->mtnRemittanceRepository

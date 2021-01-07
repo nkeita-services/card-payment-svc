@@ -68,12 +68,12 @@ class PaymentIntentService implements PaymentIntentServiceInterface
             ->cashInTransactionService
             ->store($transactionEntity);
 
-        $fees = $this->quoteFeeService->getQuotes($transaction);
+       /* $fees = $this->quoteFeeService->getQuotes($transaction);
         $this->cashInTransactionService
             ->addTransactionFees(
                 $transaction->getTransactionId(),
                 $fees->toArray()
-            );
+            );*/
 
         try {
             $intent = PaymentIntent::create([

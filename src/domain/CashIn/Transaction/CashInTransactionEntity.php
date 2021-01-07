@@ -37,9 +37,9 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     private $accountId;
 
     /**
-     * @var string
+     * @var array
      */
-    private $regionId;
+    private $regions;
 
     /**
      * @var array
@@ -74,7 +74,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
      * @param string $currency
      * @param string $description
      * @param string $accountId
-     * @param string $regionId
+     * @param array|null $regions
      * @param array $originator
      * @param string $status
      * @param int $timestamp
@@ -88,7 +88,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         ?string $currency,
         ?string $description,
         ?string $accountId,
-        ?string $regionId,
+        ?array $regions,
         ?array $originator,
         ?string $status,
         ?int $timestamp,
@@ -102,7 +102,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         $this->currency = $currency;
         $this->description = $description;
         $this->accountId = $accountId;
-        $this->regionId = $regionId;
+        $this->regions = $regions;
         $this->originator = $originator;
         $this->status = $status;
         $this->timestamp = $timestamp;
@@ -179,11 +179,11 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getRegionId(): string
+    public function getRegions(): array
     {
-        return $this->regionId;
+        return $this->regions;
     }
 
     /**
@@ -247,7 +247,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
             'currency' => $this->currency,
             'description' => $this->description,
             'accountId' => $this->accountId,
-            'regionId' => $this->regionId,
+            'regions' => $this->regions,
             'originator' => $this->originator,
             'status' => $this->status,
             'timestamp' => $this->timestamp,

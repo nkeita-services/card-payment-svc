@@ -108,7 +108,7 @@ class PaymentExecutionController extends Controller
                     $request->get('currency'),
                     $request->get('description'),
                     $accountId,
-                    $request->json()->get('regionId'),
+                    $request->json()->get('regions'),
                     [
                         'originatorType' => "User",
                         'originatorId' => $request->get('originator')['originatorId']

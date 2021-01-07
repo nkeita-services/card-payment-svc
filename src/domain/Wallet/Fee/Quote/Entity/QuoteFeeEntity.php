@@ -14,7 +14,7 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
     /**
      * @var string
      */
-    private $regionId;
+    private $regions;
 
     /**
      * @var array
@@ -30,18 +30,18 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
     /**
      * OrganizationEntity constructor.
      * @param array|null $walletOrganizations
-     * @param string $regionId
+     * @param array|null $regions
      * @param array|null $paymentMean
      * @param array|null $nbk
      */
     public function __construct(
         ?array $walletOrganizations = null,
-        ?string $regionId = null,
+        ?array $regions = null,
         ?array $paymentMean = null,
         ?array $nbk = null
     ){
         $this->walletOrganizations = $walletOrganizations;
-        $this->regionId = $regionId;
+        $this->regions = $regions;
         $this->paymentMean = $paymentMean;
         $this->nbk = $nbk;
     }
@@ -54,7 +54,7 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
     {
         return new static(
             $data['walletOrganizations'] ?? null,
-            $data['regionId'] ?? null,
+            $data['regions'] ?? null,
             $data['paymentMean'] ?? null,
             $data['nbk'] ?? null
         );
@@ -67,7 +67,7 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
     {
         $quoteData =  [
             "walletOrganizations"=> $this->walletOrganizations,
-            "regionId"=> $this->regionId,
+            "regions"=> $this->regions,
             "paymentMean"=>$this->paymentMean,
             "nbk"=>$this->nbk
         ];
@@ -90,11 +90,11 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getRegionId(): string
+    public function getRegions(): array
     {
-        return $this->regionId;
+        return $this->regions;
     }
 
     /**

@@ -65,7 +65,7 @@ class CollectionService implements CollectionServiceInterface
         string $accountId,
         float $amount,
         array $originator,
-        string $regionId = null,
+        array $regions = null,
         string $message = null,
         string $note = null
     ): CashInTransactionEntityInterface{
@@ -83,19 +83,19 @@ class CollectionService implements CollectionServiceInterface
                         ),
                         $message ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $accountId,
-                        $regionId,
+                        $regions,
                         $originator,
                         CashInTransactionEntityInterface::STATUS_PENDING,
                         time()
                     )
                 );
 
-            $fees = $this->quoteFeeService->getQuotes($cashInTransactionEntity);
+            /*$fees = $this->quoteFeeService->getQuotes($cashInTransactionEntity);
             $this->cashInTransactionService
                 ->addTransactionFees(
                     $cashInTransactionEntity->getTransactionId(),
                     $fees->toArray()
-                );
+                );*/
 
             $referenceId = $this
                 ->collectionRepository

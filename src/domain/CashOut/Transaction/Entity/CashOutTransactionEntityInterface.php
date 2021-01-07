@@ -56,9 +56,9 @@ interface CashOutTransactionEntityInterface
     public function setTransactionId(string $transactionId): CashOutTransactionEntityInterface;
 
     /**
-     * @return string
+     * @return array
      */
-    public function getRegionId(): string;
+    public function getRegions(): array ;
 
     /**
      * @return string
