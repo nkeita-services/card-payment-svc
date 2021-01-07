@@ -117,4 +117,14 @@ $router->get('/v1/cash-ins/eventType/{eventType}/eventId/{eventId}', [
     ]
 ]);
 
+$router->get('/v1/cash-ins/events/topUp/{transactionId}/fees', [
+    'uses' => 'Payment\CashIn\GetTopUpFeesController@fetchFromTransactionId',
+    'middleware' => 'auth',
+    'as'=>'payment-gateway/CashInRead',
+    'groups'=> [
+        'root',
+        'admin'
+    ]
+]);
+
 

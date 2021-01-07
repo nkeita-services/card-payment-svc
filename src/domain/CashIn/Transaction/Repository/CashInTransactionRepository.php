@@ -100,11 +100,8 @@ class CashInTransactionRepository implements
         string $eventId
     ): CashInTransactionEntityInterface
     {
-        $eventTypeNameMapping = [
-            'CAPTURE' => 'intent'
-        ];
 
-        if (!array_key_exists($eventType, $eventTypeNameMapping)) {
+        if (!array_key_exists($eventType, static::EVENT_TYPE_NAME_MAPPING)) {
             throw new InvalidArgumentException(
                 sprintf('Invalid type %s', $eventType)
             );
@@ -114,7 +111,7 @@ class CashInTransactionRepository implements
             [
                 'events' => [
                 '$elemMatch' => [
-                    'id' => $eventId, $eventTypeNameMapping[$eventType] => $eventType]
+                    'id' => $eventId, static::EVENT_TYPE_NAME_MAPPING[$eventType] => $eventType]
                 ]
 
             ]

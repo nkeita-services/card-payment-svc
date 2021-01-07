@@ -9,6 +9,10 @@ use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 interface CashInTransactionRepositoryInterface
 {
 
+    const EVENT_TYPE_NAME_MAPPING = [
+        'CAPTURE' => 'intent'
+    ];
+
     /**
      * @param CashInTransactionEntityInterface $transactionEntity
      * @return CashInTransactionEntityInterface
@@ -25,7 +29,7 @@ interface CashInTransactionRepositoryInterface
     public function addExtras(
         string $transactionId,
         array $extras
-    ):CashInTransactionRepositoryInterface;
+    ): CashInTransactionRepositoryInterface;
 
     /**
      * @param string $transactionId
@@ -43,7 +47,7 @@ interface CashInTransactionRepositoryInterface
     public function fetchWithEventTypeAndEventId(
         string $eventType,
         string $eventId
-    ):CashInTransactionEntityInterface;
+    ): CashInTransactionEntityInterface;
 
     /**
      * @param string $transactionType
@@ -53,7 +57,7 @@ interface CashInTransactionRepositoryInterface
     public function fetchAllWithTransactionTypeAndStatus(
         string $transactionType,
         string $transactionStatus
-    ):array ;
+    ): array;
 
     /**
      * @param string $transactionId
@@ -65,8 +69,7 @@ interface CashInTransactionRepositoryInterface
         string $transactionId,
         string $eventType,
         array $event
-    ):CashInTransactionEntityInterface;
-
+    ): CashInTransactionEntityInterface;
 
 
     /**
@@ -75,7 +78,7 @@ interface CashInTransactionRepositoryInterface
      */
     public function lookUpExtraInformationFor(
         array $criteria
-    ):CashInTransactionEntityInterface;
+    ): CashInTransactionEntityInterface;
 
     /**
      * @param string $transactionId
@@ -95,5 +98,5 @@ interface CashInTransactionRepositoryInterface
     public function addTransactionFees(
         string $transactionId,
         array $fees
-    ):CashInTransactionEntityInterface;
+    ): CashInTransactionEntityInterface;
 }
