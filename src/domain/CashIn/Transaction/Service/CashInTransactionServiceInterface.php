@@ -5,6 +5,7 @@ namespace Payment\CashIn\Transaction\Service;
 
 
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
+use Payment\CashIn\Transaction\Fees\CashInFeesEntityInterface;
 
 interface CashInTransactionServiceInterface
 {
@@ -43,6 +44,15 @@ interface CashInTransactionServiceInterface
         string $eventType,
         string $eventId
     ):CashInTransactionEntityInterface;
+
+
+    /**
+     * @param string $transactionId
+     * @return CashInFeesEntityInterface
+     */
+    public function fetchFeesFromTopUpTransactionId(
+        string $transactionId
+    ): CashInFeesEntityInterface;
 
     /**
      * @param string $transactionId

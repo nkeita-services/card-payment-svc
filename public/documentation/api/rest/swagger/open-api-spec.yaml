@@ -529,6 +529,37 @@ paths:
                               - pending
                               - successful
                               - error
+  /v1/cash-ins/events/topUp/{transactionId}/fees:
+    get:
+      summary: Return fees associated to a cash in operation
+      tags:
+        - CashIn Information
+      security:
+        - oAuth2:
+            - CashInRead
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          example: 0WP58559F5302133R
+          schema:
+            type: string
+            description: transaction ID associated to top up operation
+      responses:
+        '200':
+          description: Successfully fetched fees information
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      Fees:
+                        $ref: '#/components/schemas/TopUpFees'
 components:
   securitySchemes:
     oAuth2:
@@ -706,3 +737,9 @@ components:
           type: string
           description: Cancel or fail Url
           example: https://your-domain/cancel
+    TopUpFees:
+      type: object
+      properties:
+        amount:
+          type: string
+          example: 10.2

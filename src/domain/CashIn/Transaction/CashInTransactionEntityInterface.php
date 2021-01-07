@@ -90,6 +90,11 @@ interface CashInTransactionEntityInterface
      */
     public function toArray(): array ;
 
+    /**
+     * @return array
+     */
+    public function getEvents(): array;
+
 
 
 }

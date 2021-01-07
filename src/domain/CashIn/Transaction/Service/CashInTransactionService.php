@@ -5,6 +5,8 @@ namespace Payment\CashIn\Transaction\Service;
 
 
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
+use Payment\CashIn\Transaction\Fees\CashInFeesEntity;
+use Payment\CashIn\Transaction\Fees\CashInFeesEntityInterface;
 use Payment\CashIn\Transaction\Repository\CashInTransactionRepositoryInterface;
 
 class CashInTransactionService implements CashInTransactionServiceInterface
@@ -21,7 +23,8 @@ class CashInTransactionService implements CashInTransactionServiceInterface
      */
     public function __construct(
         CashInTransactionRepositoryInterface $cashInTransactionRepository
-    ){
+    )
+    {
         $this->cashInTransactionRepository = $cashInTransactionRepository;
     }
 
@@ -31,7 +34,8 @@ class CashInTransactionService implements CashInTransactionServiceInterface
      */
     public function store(
         CashInTransactionEntityInterface $transactionEntity
-    ): CashInTransactionEntityInterface{
+    ): CashInTransactionEntityInterface
+    {
         return $this
             ->cashInTransactionRepository
             ->store(
@@ -45,8 +49,9 @@ class CashInTransactionService implements CashInTransactionServiceInterface
     public function addAdditionalInfo(
         string $transactionId,
         array $additionalInfo
-    ): void{
-         $this
+    ): void
+    {
+        $this
             ->cashInTransactionRepository
             ->addExtras(
                 $transactionId,
@@ -59,7 +64,8 @@ class CashInTransactionService implements CashInTransactionServiceInterface
      */
     public function fetchWithTransactionId(
         string $transactionId
-    ): CashInTransactionEntityInterface{
+    ): CashInTransactionEntityInterface
+    {
         return $this
             ->cashInTransactionRepository
             ->fetchWithTransactionId(
@@ -82,6 +88,46 @@ class CashInTransactionService implements CashInTransactionServiceInterface
             );
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function fetchFeesFromTopUpTransactionId(
+        string $transactionId
+    ): CashInFeesEntityInterface
+    {
+        $eventType = 'CAPTURE';
+        $eventTypeName = CashInTransactionRepositoryInterface::EVENT_TYPE_NAME_MAPPING[$eventType];
+
+        $cashInTransaction = $this
+            ->fetchWithEventTypeAndEventId(
+                $eventType,
+                $transactionId
+            );
+
+        $feesEvent = array_filter(
+            $cashInTransaction->getEvents(),
+            function ($event) use ($eventTypeName, $eventType) {
+                if (array_key_exists($eventTypeName, $event)) {
+                    return $event->{$eventTypeName} == $eventType;
+                }
+                return false;
+            }
+        );
+
+        if(empty($feesEvent)){
+            throw new \DomainException(
+                sprintf('No fee event found for %s', $transactionId)
+            );
+        }
+
+        $feesEvent = current($feesEvent);
+
+        return new CashInFeesEntity(
+            $feesEvent['amount']
+        );
+
+    }
+
 
     /**
      * @inheritDoc
@@ -90,7 +136,8 @@ class CashInTransactionService implements CashInTransactionServiceInterface
         string $transactionId,
         string $eventType,
         array $event
-    ): CashInTransactionEntityInterface{
+    ): CashInTransactionEntityInterface
+    {
         return $this
             ->cashInTransactionRepository
             ->addTransactionEvent(
@@ -105,7 +152,8 @@ class CashInTransactionService implements CashInTransactionServiceInterface
      */
     public function lookUpExtraInformationFor(
         array $criteria
-    ): CashInTransactionEntityInterface{
+    ): CashInTransactionEntityInterface
+    {
         return $this
             ->cashInTransactionRepository
             ->lookUpExtraInformationFor(
@@ -151,7 +199,7 @@ class CashInTransactionService implements CashInTransactionServiceInterface
     public function addTransactionFees(
         string $transactionId,
         array $fees
-    ):CashInTransactionEntityInterface
+    ): CashInTransactionEntityInterface
     {
         return $this
             ->cashInTransactionRepository
