@@ -89,8 +89,6 @@ class CashInController extends Controller
                     ->topUpFromCashInTransaction(
                         $cashInTransactionEntity
                     );
-
-                var_dump($result->transactionId());exit;
             }
 
         } catch (RequestToPayException $exception) {
