@@ -71,12 +71,12 @@ class PaymentExecutionService implements PaymentExecutionServiceInterface
             ->cashInTransactionService
             ->store($transactionEntity);
 
-        $fees = $this->quoteFeeService->getQuotes($transaction);
+       /* $fees = $this->quoteFeeService->getQuotes($transaction);
         $this->cashInTransactionService
             ->addTransactionFees(
                 $transaction->getTransactionId(),
                 $fees->toArray()
-            );
+            );*/
 
         $this->paymentExecutionRequest
             ->prefer('return=representation');

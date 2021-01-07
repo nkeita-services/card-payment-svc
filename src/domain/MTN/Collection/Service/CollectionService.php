@@ -90,12 +90,12 @@ class CollectionService implements CollectionServiceInterface
                     )
                 );
 
-            $fees = $this->quoteFeeService->getQuotes($cashInTransactionEntity);
+            /*$fees = $this->quoteFeeService->getQuotes($cashInTransactionEntity);
             $this->cashInTransactionService
                 ->addTransactionFees(
                     $cashInTransactionEntity->getTransactionId(),
                     $fees->toArray()
-                );
+                );*/
 
             $referenceId = $this
                 ->collectionRepository

@@ -96,26 +96,6 @@ class QuoteFeeService implements QuoteFeeServiceInterface
         return $this->calculateQuotes(
             $quoteRequestEntity
         );
-
-       /* $paymentMean = $this
-            ->getQuote(
-            $quoteRequestEntity
-        );
-
-        $nbk =  $this->getQuote(
-            $quoteRequestEntity
-                ->setPaymentMean(
-                    self::NBK
-                )
-        );
-
-        return QuoteFeeEntity::fromArray([
-            'walletOrganizations' => $paymentMean->getWalletOrganizations(),
-            'regions' => $paymentMean->getRegions(),
-            'paymentMean' => $paymentMean->getPaymentMean(),
-            'nbk' => $nbk->getPaymentMean()
-        ]);*/
-
     }
 
     /**
