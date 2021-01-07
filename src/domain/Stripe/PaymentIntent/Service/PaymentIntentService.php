@@ -12,6 +12,7 @@ use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\Stripe\PaymentIntent\Entity\PaymentIntentInterface;
 use Payment\Stripe\PaymentIntent\Repository\PaymentIntentRepositoryInterface;
 use Payment\Stripe\PaymentIntent\Service\Exception\PaymentIntentException;
+use Payment\Wallet\Fee\Quote\Service\Exception\QuoteNotFoundServiceException;
 use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
@@ -68,12 +69,14 @@ class PaymentIntentService implements PaymentIntentServiceInterface
             ->cashInTransactionService
             ->store($transactionEntity);
 
-       /* $fees = $this->quoteFeeService->getQuotes($transaction);
+        try {
+        $fees = $this->quoteFeeService->getQuotes($transaction);
         $this->cashInTransactionService
             ->addTransactionFees(
                 $transaction->getTransactionId(),
                 $fees->toArray()
-            );*/
+            );
+        } catch (QuoteNotFoundServiceException $e) {}
 
         try {
             $intent = PaymentIntent::create([

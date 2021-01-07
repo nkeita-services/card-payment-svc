@@ -48,7 +48,8 @@ class CashInTransactionRepository implements
                 'originator' => $transactionEntity->getOriginator(),
                 'status' => $transactionEntity->getStatus(),
                 'timestamp' => $transactionEntity->getTimestamp(),
-                'extras' => $transactionEntity->getExtras()
+                'extras' => $transactionEntity->getExtras(),
+                'events' => $transactionEntity->getEvents()
             ]
         );
 
@@ -261,7 +262,7 @@ class CashInTransactionRepository implements
             ->updateOne(
                 ['_id' => new ObjectId($transactionId)],
                 ['$addToSet' => [
-                    'fees' => $fees
+                    'events' => ['fees' => $fees]
                 ]]
             );
 

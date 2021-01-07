@@ -7,6 +7,7 @@ use Payment\CashIn\Transaction\CashInTransactionEntity;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\Paypal\PaymentExecution\Entity\PaymentExecutionInterface;
+use Payment\Wallet\Fee\Quote\Service\Exception\QuoteNotFoundServiceException;
 use Payment\Wallet\Fee\Quote\Service\QuoteFeeServiceInterface;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
@@ -71,12 +72,16 @@ class PaymentExecutionService implements PaymentExecutionServiceInterface
             ->cashInTransactionService
             ->store($transactionEntity);
 
-       /* $fees = $this->quoteFeeService->getQuotes($transaction);
-        $this->cashInTransactionService
-            ->addTransactionFees(
-                $transaction->getTransactionId(),
-                $fees->toArray()
-            );*/
+        try {
+            $fees = $this->quoteFeeService->getQuotes($transaction);
+             $this->cashInTransactionService
+                 ->addTransactionFees(
+                     $transaction->getTransactionId(),
+                     $fees->toArray()
+                 );
+
+        }catch (QuoteNotFoundServiceException $e) {}
+
 
         $this->paymentExecutionRequest
             ->prefer('return=representation');

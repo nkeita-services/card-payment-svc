@@ -58,7 +58,7 @@ interface CashInTransactionEntityInterface
     /**
      * @return array
      */
-    public function getRegions(): array ;
+    public function getRegions(): array;
 
     /**
      * @return string
@@ -88,13 +88,11 @@ interface CashInTransactionEntityInterface
     /**
      * @return array
      */
-    public function toArray(): array ;
+    public function toArray(): array;
 
     /**
      * @return array
      */
-    public function getEvents(): array;
-
-
+    public function getEvents(): ?array;
 
 }

@@ -4,8 +4,10 @@
 namespace Infrastructure\Api\Rest\Client\WalletGateway\Fee\Quote;
 
 
+use DomainException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\RequestOptions;
 use Infrastructure\Api\Rest\Client\WalletGateway\Fee\Quote\Mapper\QuoteFeeMapperInterface;
 use Infrastructure\Api\Rest\Client\WalletGateway\Fee\Quote\Exception\QuoteFeeNotFoundException;
@@ -50,20 +52,32 @@ class QuoteFeeApiGuzzleHttpClient implements QuoteFeeApiClientInterface
                 RequestOptions::JSON => $quoteFeePayload
             ]);
 
-        } catch (ClientException $e) {
-            if($e->getResponse()->getStatusCode() == 404){
+            return $this
+                ->quoteFeeMapper
+                ->createQuoteFeeFromApiResponse(
+                    $response
+                );
+
+        } catch (ClientException $exception) {
+
+           if($exception->getResponse()->getStatusCode() == 404){
+
                 throw new QuoteFeeNotFoundException(
                     sprintf('Quote not found')
                 );
             }
 
-            throw $e;
+            throw $exception;
+        }catch (ServerException $e){
+            $decodedPayload = json_decode(
+                $e->getResponse()->getBody()->getContents(), true
+            );
+
+            throw new QuoteFeeNotFoundException(
+                $decodedPayload['StatusDescription']
+            );
         }
 
-        return $this
-            ->quoteFeeMapper
-            ->createQuoteFeeFromApiResponse(
-            $response
-        );
+
     }
 }

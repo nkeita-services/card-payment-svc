@@ -7,6 +7,8 @@ namespace Payment\Wallet\Fee\Quote\Service;
 use Payment\CashIn\Transaction\CashInTransactionEntityInterface;
 use Payment\CashOut\Transaction\Entity\CashOutTransactionEntityInterface;
 use Payment\Wallet\Fee\Quote\Entity\QuoteRequestEntityInterface;
+use Payment\Wallet\Fee\Quote\Repository\Exception\QuoteNotFoundRepositoryException;
+use Payment\Wallet\Fee\Quote\Service\Exception\QuoteNotFoundServiceException;
 use Payment\Wallet\Fee\Quote\Service\Mapper\QuoteMapperInterface;
 use Payment\Wallet\Fee\Quote\Entity\QuoteFeeEntityInterface;
 use Payment\Wallet\Fee\Quote\Entity\QuoteFeeEntity;
@@ -59,24 +61,32 @@ class QuoteFeeService implements QuoteFeeServiceInterface
         QuoteRequestEntityInterface $quoteRequestEntity
     ) : QuoteFeeEntityInterface
     {
-        $paymentMean = $this
-            ->getQuote(
+        try {
+            $paymentMean = $this
+                ->getQuote(
+                    $quoteRequestEntity
+                );
+
+            $nbk =  $this->getQuote(
                 $quoteRequestEntity
+                    ->setPaymentMean(
+                        self::NBK
+                    )
             );
 
-        $nbk =  $this->getQuote(
-            $quoteRequestEntity
-                ->setPaymentMean(
-                    self::NBK
-                )
-        );
+            return QuoteFeeEntity::fromArray([
+                'walletOrganizations' => $paymentMean->getWalletOrganizations(),
+                'regions' => $paymentMean->getRegions(),
+                'paymentMean' => $paymentMean->getPaymentMean(),
+                'nbk' => $nbk->getPaymentMean()
+            ]);
 
-        return QuoteFeeEntity::fromArray([
-            'walletOrganizations' => $paymentMean->getWalletOrganizations(),
-            'regions' => $paymentMean->getRegions(),
-            'paymentMean' => $paymentMean->getPaymentMean(),
-            'nbk' => $nbk->getPaymentMean()
-        ]);
+        } catch (QuoteNotFoundRepositoryException $e) {
+            throw new QuoteNotFoundServiceException(
+                $e->getMessage()
+            );
+        }
+
     }
 
     /**
@@ -87,15 +97,25 @@ class QuoteFeeService implements QuoteFeeServiceInterface
         CashInTransactionEntityInterface $transaction
     ) : QuoteFeeEntityInterface
     {
+
         $quoteRequestEntity = $this
             ->quoteMapper
             ->createQuotePayloadFromTransaction(
                 $transaction
             );
 
-        return $this->calculateQuotes(
-            $quoteRequestEntity
-        );
+        try {
+
+            return $this->calculateQuotes(
+                $quoteRequestEntity
+            );
+
+        } catch (QuoteNotFoundRepositoryException $e) {
+            throw new QuoteNotFoundServiceException(
+                $e->getMessage()
+            );
+        }
+
     }
 
     /**
@@ -106,14 +126,22 @@ class QuoteFeeService implements QuoteFeeServiceInterface
         CashOutTransactionEntityInterface $transaction
     ) : QuoteFeeEntityInterface
     {
-        $quoteRequestEntity = $this
-            ->quoteMapper
-            ->createQuotePayloadFromCashOut(
-                $transaction
+        try {
+            $quoteRequestEntity = $this
+                ->quoteMapper
+                ->createQuotePayloadFromCashOut(
+                    $transaction
+                );
+        } catch (QuoteNotFoundRepositoryException $e) {
+            throw new QuoteNotFoundServiceException(
+                $e->getMessage()
             );
+        }
+
 
         return $this->calculateQuotes(
             $quoteRequestEntity
         );
+
     }
 }

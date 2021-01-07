@@ -4,9 +4,11 @@
 namespace Payment\Wallet\Fee\Quote\Repository;
 
 
+use Infrastructure\Api\Rest\Client\WalletGateway\Fee\Quote\Exception\QuoteFeeNotFoundException;
 use Infrastructure\Api\Rest\Client\WalletGateway\Fee\Quote\QuoteFeeApiClientInterface;
 use Payment\Wallet\Fee\Quote\Entity\QuoteRequestEntityInterface;
 use Payment\Wallet\Fee\Quote\Entity\QuoteFeeEntityInterface;
+use Payment\Wallet\Fee\Quote\Repository\Exception\QuoteNotFoundRepositoryException;
 
 class QuoteFeeRepository implements QuoteFeeRepositoryInterface
 {
@@ -34,10 +36,16 @@ class QuoteFeeRepository implements QuoteFeeRepositoryInterface
         QuoteRequestEntityInterface $quoteRequestEntity
     ) : QuoteFeeEntityInterface
     {
-        return $this
-            ->quoteFeeApiClient
-            ->getQuote(
-                $quoteRequestEntity->toArray()
-            );
+         try {
+            return $this
+                ->quoteFeeApiClient
+                ->getQuote(
+                    $quoteRequestEntity->toArray()
+                );
+         } catch (QuoteFeeNotFoundException $e) {
+             throw new QuoteNotFoundRepositoryException(
+                 $e->getMessage()
+             );
+         }
     }
 }
