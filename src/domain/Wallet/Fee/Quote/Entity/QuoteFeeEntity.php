@@ -12,7 +12,7 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
     private $walletOrganizations;
 
     /**
-     * @var string
+     * @var array
      */
     private $regions;
 
@@ -26,6 +26,16 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
      */
     private $nbk;
 
+    /**
+     * @var string
+     */
+    private $eventType;
+
+    /**
+     * @var string
+     */
+    private $transactionId;
+
 
     /**
      * OrganizationEntity constructor.
@@ -33,17 +43,24 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
      * @param array|null $regions
      * @param array|null $paymentMean
      * @param array|null $nbk
+     * @param string|null $eventType
+     * @param string|null $transactionId
      */
     public function __construct(
         ?array $walletOrganizations = null,
         ?array $regions = null,
         ?array $paymentMean = null,
-        ?array $nbk = null
+        ?array $nbk = null,
+        ?string $eventType = null,
+        ?string $transactionId = null
+
     ){
         $this->walletOrganizations = $walletOrganizations;
         $this->regions = $regions;
         $this->paymentMean = $paymentMean;
         $this->nbk = $nbk;
+        $this->eventType = $eventType;
+        $this->transactionId = $transactionId;
     }
 
     /**
@@ -56,7 +73,9 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
             $data['walletOrganizations'] ?? null,
             $data['regions'] ?? null,
             $data['paymentMean'] ?? null,
-            $data['nbk'] ?? null
+            $data['nbk'] ?? null,
+            $data['eventType'] ?? null,
+            $data['transactionId'] ?? null
         );
     }
 
@@ -66,10 +85,12 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
     public function toArray(): array
     {
         $quoteData =  [
-            "walletOrganizations"=> $this->walletOrganizations,
-            "regions"=> $this->regions,
-            "paymentMean"=>$this->paymentMean,
-            "nbk"=>$this->nbk
+            "walletOrganizations" => $this->walletOrganizations,
+            "regions" => $this->regions,
+            "paymentMean" =>$this->paymentMean,
+            "nbk" => $this->nbk,
+            "eventType" => $this->eventType,
+            "transactionId" => $this->transactionId
         ];
 
         return array_filter(
@@ -111,5 +132,41 @@ class QuoteFeeEntity implements QuoteFeeEntityInterface
     public function getNbk(): array
     {
         return $this->nbk;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEventType(): string
+    {
+        return $this->eventType;
+    }
+
+    /**
+     * @param string $eventType
+     * @return QuoteFeeEntityInterface
+     */
+    public function setEventType(string $eventType): QuoteFeeEntityInterface
+    {
+        $this->eventType = $eventType;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionId(): string
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * @param string $transactionId
+     * @return QuoteFeeEntityInterface
+     */
+    public function setTransactionId(string $transactionId): QuoteFeeEntityInterface
+    {
+        $this->transactionId = $transactionId;
+        return $this;
     }
 }

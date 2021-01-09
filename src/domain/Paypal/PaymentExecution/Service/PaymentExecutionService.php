@@ -68,12 +68,20 @@ class PaymentExecutionService implements PaymentExecutionServiceInterface
         PaymentExecutionInterface $paymentExecution
     ): CashInTransactionEntityInterface
     {
+
         $transaction = $this
             ->cashInTransactionService
             ->store($transactionEntity);
 
         try {
             $fees = $this->quoteFeeService->getQuotes($transaction);
+            $fees->setEventType(
+                CashInTransactionEntityInterface::FEES_EVENT
+            );
+            $fees->setTransactionId(
+                $transaction
+                    ->getTransactionId()
+            );
              $this->cashInTransactionService
                  ->addTransactionFees(
                      $transaction->getTransactionId(),
@@ -201,6 +209,9 @@ class PaymentExecutionService implements PaymentExecutionServiceInterface
                     'orderId' => $orderId
                 ]
             );
+
+        $event['eventType'] = $eventType;
+        $event['transactionId'] = $transaction->getTransactionId();
 
         $this->cashInTransactionService
             ->addTransactionEvent(

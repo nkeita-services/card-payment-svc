@@ -58,10 +58,11 @@ $router->put('/v1/mtn/payments/callback', [
 
 $router->post('/v1/paypal/payments/execute/{accountId}', [
     'uses' => 'Payment\Paypal\PaymentExecutionController@createOrder',
+   // 'middleware' => 'auth',
     'as'=>'payment-gateway/PaypalPaymentExecutionCreateExecution'
 ]);
 
-$router->post('/paypal/payments/paypalwebhook', [
+$router->post('/v1/paypal/payments/paypalwebhook', [
     'uses' => 'Payment\Paypal\PaymentExecutionController@webHook',
     'as'=>'payment-gateway/paypalWebHook'
 ]);

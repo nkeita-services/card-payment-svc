@@ -92,7 +92,18 @@ class CollectionService implements CollectionServiceInterface
                 );
 
             try {
-                $fees = $this->quoteFeeService->getQuotes($cashInTransactionEntity);
+                $fees = $this->quoteFeeService
+                    ->getQuotes(
+                    $cashInTransactionEntity
+                );
+                $fees->setEventType(
+                    CashInTransactionEntityInterface::FEES_EVENT
+                );
+                $fees->setTransactionId(
+                    $cashInTransactionEntity
+                        ->getTransactionId()
+                );
+
                 $this->cashInTransactionService
                     ->addTransactionFees(
                         $cashInTransactionEntity->getTransactionId(),

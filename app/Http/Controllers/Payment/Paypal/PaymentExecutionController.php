@@ -244,6 +244,10 @@ class PaymentExecutionController extends Controller
                 $request->get('token')
             );
 
+            $this->accountService->topUpFromCashInTransaction(
+                $transaction
+            );
+
             if (!is_null( $transaction->getExtras()['successUrl']))
             {
                 return redirect(
@@ -255,10 +259,6 @@ class PaymentExecutionController extends Controller
                     )
                 );
             }
-
-            $this->accountService->topUpFromCashInTransaction(
-                $transaction
-            );
 
             return view('paypal.success');
         } catch (PaymentExecutionException $e) {

@@ -33,8 +33,30 @@ interface QuoteFeeEntityInterface
     public function getPaymentMean(): array;
 
     /**
-     * @return array
-     */
+    * @return array
+    */
     public function getNbk(): array;
+
+    /**
+     * @return string
+     */
+    public function getEventType(): string;
+
+    /**
+     * @param string $eventType
+     * @return QuoteFeeEntityInterface
+     */
+    public function setEventType(string $eventType): QuoteFeeEntityInterface;
+
+    /**
+     * @return string
+     */
+    public function getTransactionId(): string;
+
+    /**
+     * @param string $TransactionId
+     * @return QuoteFeeEntityInterface
+     */
+    public function setTransactionId(string $TransactionId): QuoteFeeEntityInterface;
 
 }

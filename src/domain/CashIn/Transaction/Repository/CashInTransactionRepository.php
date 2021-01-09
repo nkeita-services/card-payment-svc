@@ -145,7 +145,7 @@ class CashInTransactionRepository implements
             ->cashInTransactionCollection
             ->updateOne(
                 ['_id' => new ObjectId($transactionId)],
-                ['$addToSet' => [
+                ['$push' => [
                     'events' => $event
                 ]]
             );
@@ -261,8 +261,8 @@ class CashInTransactionRepository implements
             ->cashInTransactionCollection
             ->updateOne(
                 ['_id' => new ObjectId($transactionId)],
-                ['$addToSet' => [
-                    'events' => ['fees' => $fees]
+                ['$push' => [
+                    'events' =>  $fees
                 ]]
             );
 
