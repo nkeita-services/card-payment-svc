@@ -110,8 +110,10 @@ class CashInTransactionRepository implements
         $transaction = $this->cashInTransactionCollection->findOne(
             [
                 'events' => [
-                '$elemMatch' => [
-                    'id' => $eventId, static::EVENT_TYPE_NAME_MAPPING[$eventType] => $eventType]
+                    '$elemMatch' => [
+                        'eventId' => $eventId,
+                        static::EVENT_TYPE_NAME_MAPPING[$eventType] => $eventType
+                    ]
                 ]
 
             ]
@@ -262,7 +264,7 @@ class CashInTransactionRepository implements
             ->updateOne(
                 ['_id' => new ObjectId($transactionId)],
                 ['$push' => [
-                    'events' =>  $fees
+                    'events' => $fees
                 ]]
             );
 

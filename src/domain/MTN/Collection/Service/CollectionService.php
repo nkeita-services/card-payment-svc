@@ -109,7 +109,9 @@ class CollectionService implements CollectionServiceInterface
                         $cashInTransactionEntity->getTransactionId(),
                         $fees->toArray()
                     );
-            } catch (QuoteNotFoundServiceException $e) {}
+            } catch (QuoteNotFoundServiceException $e) {
+                throw $e;
+            }
 
             $referenceId = $this
                 ->collectionRepository

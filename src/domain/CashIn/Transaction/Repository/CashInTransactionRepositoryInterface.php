@@ -10,7 +10,7 @@ interface CashInTransactionRepositoryInterface
 {
 
     const EVENT_TYPE_NAME_MAPPING = [
-        'CAPTURE' => 'intent'
+        'TopUp'=>'eventType'
     ];
 
     /**

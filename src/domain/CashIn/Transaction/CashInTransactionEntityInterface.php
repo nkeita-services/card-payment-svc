@@ -11,7 +11,7 @@ interface CashInTransactionEntityInterface
     const STATUS_PENDING = 'pending';
     const STATUS_ERROR = 'error';
     const STATUS_SUCCESSFUL = 'successful';
-    const FEES_EVENT = " Fees";
+    const FEES_EVENT = "Fees";
     const DESCRIPTION_DEFAULT = 'request to pay';
 
     /**

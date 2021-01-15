@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Payment\Account\Service\AccountService;
 use Payment\Account\Service\AccountServiceInterface;
 use Payment\CashIn\Transaction\Service\CashInTransactionService;
+use Payment\CashIn\Transaction\Service\CashInTransactionServiceInterface;
 use Payment\CashIn\Transaction\Service\CashOutTransactionServiceInterface;
 use Payment\MTN\Collection\Service\CollectionService;
 use Payment\MTN\Collection\Service\CollectionServiceInterface;
@@ -22,7 +23,7 @@ class CashInController extends Controller
     private $collectionService;
 
     /**
-     * @var CashOutTransactionServiceInterface
+     * @var CashInTransactionServiceInterface
      */
     private $cashInTransactionService;
 
@@ -88,6 +89,17 @@ class CashInController extends Controller
                     ->accountService
                     ->topUpFromCashInTransaction(
                         $cashInTransactionEntity
+                    );
+
+                $this
+                    ->cashInTransactionService
+                    ->addTransactionEvent(
+                        $cashInTransactionEntity->getTransactionId(),
+                        'TopUp',
+                        [
+                            'eventType' => 'TopUp',
+                            'eventId' => $result->transactionId(),
+                        ]
                     );
             }
 

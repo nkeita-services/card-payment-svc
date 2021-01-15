@@ -44,7 +44,7 @@ class GetTopUpFeesController
             'status' => 'success',
             'data' => [
                 'Fees' => [
-                    'amount'=> $topUpFeesEntity->amount()
+                    'amount'=> $topUpFeesEntity->toArray()
                 ]
             ]
         ]);

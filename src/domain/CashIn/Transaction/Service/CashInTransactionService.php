@@ -95,22 +95,17 @@ class CashInTransactionService implements CashInTransactionServiceInterface
         string $transactionId
     ): CashInFeesEntityInterface
     {
-        $eventType = 'CAPTURE';
-        $eventTypeName = CashInTransactionRepositoryInterface::EVENT_TYPE_NAME_MAPPING[$eventType];
 
         $cashInTransaction = $this
             ->fetchWithEventTypeAndEventId(
-                $eventType,
+                'TopUp',
                 $transactionId
             );
 
         $feesEvent = array_filter(
             $cashInTransaction->getEvents(),
-            function ($event) use ($eventTypeName, $eventType) {
-                if (array_key_exists($eventTypeName, $event)) {
-                    return $event->{$eventTypeName} == $eventType;
-                }
-                return false;
+            function ($event) {
+                return 'Fees' == $event->eventType;
             }
         );
 
@@ -121,11 +116,9 @@ class CashInTransactionService implements CashInTransactionServiceInterface
         }
 
         $feesEvent = current($feesEvent);
-
-        return new CashInFeesEntity(
-            $feesEvent['amount']
+        return CashInFeesEntity::fromMongoDBDocument(
+            $feesEvent
         );
-
     }
 
 
