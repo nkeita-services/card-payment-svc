@@ -171,7 +171,6 @@ $router->get('/v1/wechatpay/payments/notify', [
 ]);
 
 // Business collecting QRCODE
-
 $router->post('/v1/alipay-wechatpay/payments/execute/{accountId}/payment-type/{paymentMean}', [
     'uses' => 'Payment\AliPayWechatPay\BusinessCollectingQRCodeController@collectingQRCode',
     'middleware' => 'auth',
