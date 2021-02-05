@@ -7,7 +7,8 @@ namespace Payment\CashIn\Transaction;
 interface CashInTransactionEntityInterface
 {
     const TYPE_MTN = 'MTN';
-
+    const TYPE_ALIPAY = 'ALIPAY';
+    const TYPE_WECHATPAY = 'WECHATPAY';
     const STATUS_PENDING = 'pending';
     const STATUS_ERROR = 'error';
     const STATUS_SUCCESSFUL = 'successful';
