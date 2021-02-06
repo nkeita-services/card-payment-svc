@@ -77,6 +77,17 @@ class PaymentOrder implements PaymentOrderInterface
     private $subAppId;
 
     /**
+     * @var string
+     */
+    private $outTradeNo;
+
+    /**
+     * @var string
+     */
+    private $nonceStr;
+
+
+    /**
      * PaymentOrder constructor.
      * @param string $service
      * @param string $mchId
@@ -115,6 +126,8 @@ class PaymentOrder implements PaymentOrderInterface
         $this->authCode    = $authCode;
         $this->subOpenId   = $subOpenId;
         $this->subAppId    = $subAppId;
+        $this->nonceStr    = $this->setNonceStr();
+        $this->outTradeNo  = $this->setOutTradeNo();
     }
 
     /**
@@ -147,6 +160,14 @@ class PaymentOrder implements PaymentOrderInterface
      * @return string
      */
     public function getOutTradeNo() : string
+    {
+        return $this->outTradeNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function setOutTradeNo() : string
     {
         return $this->randomString(
             32,
@@ -210,10 +231,16 @@ class PaymentOrder implements PaymentOrderInterface
      */
     public function getNonceStr() : string
     {
-        return $this->randomString(
-            16,
-            self::ALPHABET
-        );
+        return $this->nonceStr;
+    }
+
+    public function setNonceStr() : string
+    {
+       return $this
+            ->randomString(
+                16,
+                self::ALPHABET
+            );
     }
 
     /**
@@ -249,25 +276,12 @@ class PaymentOrder implements PaymentOrderInterface
         return $this->subOpenId;
     }
 
-
-    public function setSubOpenid(?string $subOpenId) : PaymentOrderInterface
-    {
-        $this->subOpenId = $subOpenId;
-        return $this;
-    }
-
     /**
      * @return string
      */
     public function getSubAppId() : ?string
     {
         return $this->subAppId;
-    }
-
-    public function setSubAppId(?string $ubAppId) : PaymentOrderInterface
-    {
-        $this->subAppId = $ubAppId;
-        return $this;
     }
 
     /**
@@ -278,28 +292,12 @@ class PaymentOrder implements PaymentOrderInterface
         return $this->authCode;
     }
 
-    public function setAuthCode(?string $authCode) : PaymentOrderInterface
-    {
-        $this->authCode = $authCode;
-        return $this;
-    }
-
     /**
      * @return string
      */
     public function getAppId() : ?string
     {
         return $this->appId;
-    }
-
-    /**
-     * @param string $appId
-     * @return PaymentOrderInterface
-     */
-    public function setAppId(?string $appId) : PaymentOrderInterface
-    {
-        $this->appId = $appId;
-        return $this;
     }
 
     /**
@@ -314,16 +312,16 @@ class PaymentOrder implements PaymentOrderInterface
             'version' => self::VERSION,
             'sign_type' => self::SIGN_TYPE,
             'mch_id' => $this->mchId,
-            'out_trade_no' => $this->getOutTradeNo(),
-            //'device_info' => 'SN12345678',
+            'out_trade_no' => $this->outTradeNo,
+            //'device_info' => '',
             'body' => $this->body,
             'total_fee' => $this->totalFee,
             'mch_create_ip' => $this->mchCreateIp,
             'notify_url' => $this->notifyUrl,
-            'time_start' => '20210205202310',//date('YmdHis'),
-            'time_expire' => '20210206202310',//date('YmdHis') + (15 * 60),
+           // 'time_start' => date('YmdHis'),
+            //'time_expire' => date('YmdHis') + (15 * 60),
             //'op_user_id' => '10001',
-            'nonce_str' => $this->getNonceStr(),
+            'nonce_str' => $this->nonceStr,
         ];
     }
 }

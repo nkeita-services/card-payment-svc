@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Payment\AliPayWechatPay;
 
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Payment\Account\Service\AccountServiceInterface;
 use Payment\AliPayWechatPay\PaymentOrder\Service\PaymentOrderServiceInterface;
@@ -36,7 +37,10 @@ class NotificationController extends Controller
         $this->paymentOrderService = $paymentOrderService;
     }
 
-
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function notify(Request $request)
     {
         $dataNotification = $request->all();
@@ -55,9 +59,10 @@ class NotificationController extends Controller
                     $dataNotification
                 );
 
-            $this->accountService->topUpFromCashInTransaction(
-                $transaction
-            );
+            $this->accountService
+                ->topUpFromCashInTransaction(
+                    $transaction
+                );
 
         }
         return response()->json(
