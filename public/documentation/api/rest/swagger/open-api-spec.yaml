@@ -559,7 +559,52 @@ paths:
                     type: object
                     properties:
                       Fees:
-                        $ref: '#/components/schemas/TopUpFees'
+                        $ref: '#/components/schemas/TransactionFees'
+  /v1/cash-ins/events/accounts/{accountId}/topUp/fees/{fromTimestamp}/{toTimestamp}:
+    get:
+      summary: Return top up fees generated from a wallet account
+      tags:
+        - CashIn Information
+      security:
+        - oAuth2:
+            - CashInRead
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          example: 5ff7434e883fe49f83cee94a
+          schema:
+            type: string
+            description: account ID
+        - name: fromTimestamp
+          in: path
+          required: true
+          example: 1610789905
+          schema:
+            type: string
+            description: From timestamp
+        - name: toTimestamp
+          in: path
+          required: true
+          example: 1610789969
+          schema:
+            type: string
+            description: From timestamp
+      responses:
+        '200':
+          description: Successfully fetched fees
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      Fees:
+                        $ref: '#/components/schemas/AccountFees'
 components:
   securitySchemes:
     oAuth2:
@@ -739,9 +784,58 @@ components:
           type: string
           description: Cancel or fail Url
           example: https://your-domain/cancel
-    TopUpFees:
+    AccountFees:
       type: object
       properties:
-        amount:
-          type: string
-          example: 10.2
+        paymentMeans:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionFees'
+        totalFees:
+          type: object
+          properties:
+            paymentMeanFees:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  example: 12.4
+            nbkFees:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  example: 13.2
+    TransactionFees:
+      type: object
+      properties:
+        regions:
+          type: array
+          items:
+            type: string
+            example: 5e99a07063389569485205f3
+        paymentMean:
+          $ref: '#/components/schemas/PaymentMeanFees'
+        nbk:
+          $ref: '#/components/schemas/PaymentMeanFees'
+    PaymentMeanFees:
+      type: object
+      properties:
+        fees:
+          type: number
+          example: 8
+        spec:
+          type: object
+          properties:
+            feeId:
+              type: string
+              example: 5fff5406302aa143c3a94147
+            flat_fees:
+              type: number
+              example: 2.0
+            rate:
+              type: number
+              example: 3.0
+        type:
+          $ref: '#/components/schemas/CashInRequestType'
+
