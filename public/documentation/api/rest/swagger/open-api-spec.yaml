@@ -58,8 +58,16 @@ tags:
     description: MTN Integration
   - name: Paypal Integration
     description: Uses Paypal API
+  - name: Alipay Integration
+    description: Uses EasyEuro API
+  - name: Wechat Integration
+    description: Uses EasyEuro API
+  - name: Wechat & Alipay Integration
+    description: Wechat & Alipay Integration
   - name: CashIn Information
     description: CashIn Information
+
+
 paths:
   /v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}:
     get:
@@ -480,6 +488,302 @@ paths:
                 status: fail
                 statusCode: 4010
                 statusDescription: Error when creating order payment
+
+  /v1/alipay/collecting-qr-code/payments/execute/{accountId}:
+    post:
+      summary: Create payment order to connect Alipay for online payment service
+      tags:
+        - Alipay Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: 5e6e9889f5aae9439c41757b
+      requestBody:
+        description: Create Order for Payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentOrderRequest'
+      responses:
+        '201':
+          description: Successfully created payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        $ref: '#/components/schemas/PaymentOrderResponse'
+        '500':
+          description: Error when creating order payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4010
+                statusDescription: Error when creating payment order
+  /v1/alipay/wap-pay/payments/execute/{accountId}:
+    post:
+      summary: Create payment order to integrate payment api in alipay App payment
+      tags:
+        - Alipay Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: 5e6e9889f5aae9439c41757b
+      requestBody:
+        description: Create Order for Payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentOrderRequest'
+      responses:
+        '201':
+          description: Successfully created payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        $ref: '#/components/schemas/AlipayCashInResponse'
+        '500':
+          description: Error when creating order payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4010
+                statusDescription: Error when creating payment order
+  /v1/wechat/collecting-qr-code/payments/execute/{accountId}:
+    post:
+      summary: Create payment order to connect Wechat pay for online payment service
+      tags:
+        - Wechat Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: 5e6e9889f5aae9439c41757b
+      requestBody:
+        description: Create Order for Payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentOrderRequest'
+      responses:
+        '201':
+          description: Successfully created payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        $ref: '#/components/schemas/PaymentOrderResponse'
+        '500':
+          description: Error when creating  payment order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4010
+                statusDescription: Error when creating payment order
+  /v1/wechat/account-pay/payments/execute/{accountId}:
+    post:
+      summary: Create payment order to integrate payment api in Wechat service accounts.
+      tags:
+        - Wechat Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: 5e6e9889f5aae9439c41757b
+      requestBody:
+        description: Create Order for Payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WechatAccountPaymentOrderRequest'
+      responses:
+        '201':
+          description: Successfully created payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        $ref: '#/components/schemas/WechatCashInResponse'
+        '500':
+          description: Error when creating  payment order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4010
+                statusDescription: Error when creating payment order
+  /v1/wechat/app-pay/payments/execute/{accountId}:
+    post:
+      summary: Create payment order to integrate payment api in wechat App payment
+      tags:
+        - Wechat Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: 5e6e9889f5aae9439c41757b
+      requestBody:
+        description: Create Order for Payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WechatAppPaymentOrderRequest'
+      responses:
+        '201':
+          description: Successfully created payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        $ref: '#/components/schemas/WechatCashInResponse'
+        '500':
+          description: Error when creating  payment order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4010
+                statusDescription: Error when creating payment order
+  /v1/alipay-wechatpay/payments/execute/{accountId}/payment-type/{paymentMean}:
+    post:
+      summary: Create payment order to connect Wechat pay for online payment service
+      tags:
+        - Wechat & Alipay Integration
+      security:
+        - oAuth2:
+            - MTNCashIn
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Wallet Account ID
+            example: 5e6e9889f5aae9439c41757b
+        - name: paymentMean
+          in: path
+          required: true
+          schema:
+            type: string
+            description: paymentMean
+            example: 'Alipay'
+      requestBody:
+        description: Create Order for Payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessCollectingQRPaymentOrderRequest'
+      responses:
+        '201':
+          description: Successfully created payment intent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: '#/components/schemas/ResponseStatus'
+                  data:
+                    type: object
+                    properties:
+                      CashIn:
+                        $ref: '#/components/schemas/PaymentOrderResponse'
+        '500':
+          description: Error when creating  payment order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: fail
+                statusCode: 4010
+                statusDescription: Error when creating payment order
   /v1/cash-ins/eventType/{eventType}/eventId/{eventId}:
     get:
       summary: Return a cash in information
@@ -487,7 +791,7 @@ paths:
         - CashIn Information
       security:
         - oAuth2:
-          - CashInRead
+            - CashInRead
       parameters:
         - name: eventType
           in: path
@@ -559,52 +863,7 @@ paths:
                     type: object
                     properties:
                       Fees:
-                        $ref: '#/components/schemas/TransactionFees'
-  /v1/cash-ins/events/accounts/{accountId}/topUp/fees/{fromTimestamp}/{toTimestamp}:
-    get:
-      summary: Return top up fees generated from a wallet account
-      tags:
-        - CashIn Information
-      security:
-        - oAuth2:
-            - CashInRead
-      parameters:
-        - name: accountId
-          in: path
-          required: true
-          example: 5ff7434e883fe49f83cee94a
-          schema:
-            type: string
-            description: account ID
-        - name: fromTimestamp
-          in: path
-          required: true
-          example: 1610789905
-          schema:
-            type: string
-            description: From timestamp
-        - name: toTimestamp
-          in: path
-          required: true
-          example: 1610789969
-          schema:
-            type: string
-            description: From timestamp
-      responses:
-        '200':
-          description: Successfully fetched fees
-          content:
-            text/html:
-              schema:
-                type: object
-                properties:
-                  status:
-                    $ref: '#/components/schemas/ResponseStatus'
-                  data:
-                    type: object
-                    properties:
-                      Fees:
-                        $ref: '#/components/schemas/AccountFees'
+                        $ref: '#/components/schemas/TopUpFees'
 components:
   securitySchemes:
     oAuth2:
@@ -745,6 +1004,201 @@ components:
               type: string
               description: Payer Identifiant
               example: U7AFM93EDQUMY
+    PaymentOrderRequest:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        type:
+          type: string
+          enum:
+            - Alipay
+            - WechatPay
+        currency:
+          $ref: '#/components/schemas/Currency'
+        originator:
+          $ref: '#/components/schemas/Originator'
+        description:
+          $ref: '#/components/schemas/Description'
+        regions:
+          $ref: '#/components/schemas/Regions'
+        mch_id:
+          $ref: '#/components/schemas/MchId'
+        key:
+          $ref: '#/components/schemas/Key'
+        body:
+          $ref: '#/components/schemas/Body'
+        mch_create_ip:
+          $ref: '#/components/schemas/MchCreateIp'
+        notify_url:
+          $ref: '#/components/schemas/NotifyUrl'
+    WechatAccountPaymentOrderRequest:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        type:
+          type: string
+          example: WechatPay
+        currency:
+          $ref: '#/components/schemas/Currency'
+        originator:
+          $ref: '#/components/schemas/Originator'
+        description:
+          $ref: '#/components/schemas/Description'
+        regions:
+          $ref: '#/components/schemas/Regions'
+        mch_id:
+          $ref: '#/components/schemas/MchId'
+        key:
+          $ref: '#/components/schemas/Key'
+        body:
+          $ref: '#/components/schemas/Body'
+        mch_create_ip:
+          $ref: '#/components/schemas/MchCreateIp'
+        notify_url:
+          $ref: '#/components/schemas/NotifyUrl'
+        sub_openid:
+          $ref: '#/components/schemas/SubOpenId'
+        sub_appid:
+          $ref: '#/components/schemas/SubAppId'
+    WechatAppPaymentOrderRequest:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        type:
+          type: string
+          example: WechatPay
+        currency:
+          $ref: '#/components/schemas/Currency'
+        originator:
+          $ref: '#/components/schemas/Originator'
+        description:
+          $ref: '#/components/schemas/Description'
+        regions:
+          $ref: '#/components/schemas/Regions'
+        mch_id:
+          $ref: '#/components/schemas/MchId'
+        key:
+          $ref: '#/components/schemas/Key'
+        body:
+          $ref: '#/components/schemas/Body'
+        mch_create_ip:
+          $ref: '#/components/schemas/MchCreateIp'
+        notify_url:
+          $ref: '#/components/schemas/NotifyUrl'
+        appid:
+          $ref: '#/components/schemas/AppId'
+    BusinessCollectingQRPaymentOrderRequest:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        originator:
+          $ref: '#/components/schemas/Originator'
+        description:
+          $ref: '#/components/schemas/Description'
+        regions:
+          $ref: '#/components/schemas/Regions'
+        mch_id:
+          $ref: '#/components/schemas/MchId'
+        key:
+          $ref: '#/components/schemas/Key'
+        body:
+          $ref: '#/components/schemas/Body'
+        mch_create_ip:
+          $ref: '#/components/schemas/MchCreateIp'
+        notify_url:
+          $ref: '#/components/schemas/NotifyUrl'
+        auth_code:
+          $ref: '#/components/schemas/AuthCode'
+    PaymentOrderResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 5e99a07063389569485205f3
+        amount:
+          $ref: '#/components/schemas/Amount'
+        status:
+          type: string
+          example: pending
+        extras:
+          type: object
+          properties:
+            appid:
+              type: string
+              description: appid
+              example: 165be82cdb736221cf55e6b2f75ef7d35
+            charset:
+              type: string
+              description: Fixed :UTF-8
+              example: UTF-8
+            code_img_url:
+              type: string
+              description: URL of QR code image
+              example: https://pay.wepayez.com/pay/qrcode?uuid=https%3A%2F%2Fqr.alipay.com%2Fbax07020tmyfr4wojf5s80a0&s=078d89af7b3c7a7e329cefebe8574f05'
+            code_url:
+              type: string
+              description: QR code in text format, merchant systems can encode the value to be QRcode image
+              example: https://qr.alipay.com/bax07020tmyfr4wojf5s80a0
+            mch_id:
+              type: string
+              description: Unique merchant id allocated by EasyEuro
+              example: 127590000059
+            nonce_str:
+              type: string
+              description: Random string, less than 32 characters
+              example: YFAqERsJuOTGUUrL
+            result_code:
+              type: string
+              description: Request status 0 – success
+              example: 0
+            sign:
+              type: string
+              description: Message sigature
+              example: 1032CA9F0877777150B0EDE6A79DEBF3
+            sign_type:
+              type: string
+              description: Fixed:MD5
+              example: :MD5
+            status:
+              type: string
+              description: 0 – success
+              example: 0
+            uuid:
+              type: string
+              description: uuid
+              example: 165be82cdb736221cf55e6b2f75ef7d35
+            version:
+              type: string
+              description: Default 2.0
+              example: 2.0
+    AlipayCashInResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 5e99a07063389569485205f3
+        amount:
+          $ref: '#/components/schemas/Amount'
+        status:
+          type: string
+          example: pending
+    WechatCashInResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 5e99a07063389569485205f3
+        amount:
+          $ref: '#/components/schemas/Amount'
+        status:
+          type: string
+          example: pending
     Currency:
       type: string
       description: Currency
@@ -784,58 +1238,46 @@ components:
           type: string
           description: Cancel or fail Url
           example: https://your-domain/cancel
-    AccountFees:
+    TopUpFees:
       type: object
       properties:
-        paymentMeans:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionFees'
-        totalFees:
-          type: object
-          properties:
-            paymentMeanFees:
-              type: object
-              properties:
-                amount:
-                  type: number
-                  example: 12.4
-            nbkFees:
-              type: object
-              properties:
-                amount:
-                  type: number
-                  example: 13.2
-    TransactionFees:
-      type: object
-      properties:
-        regions:
-          type: array
-          items:
-            type: string
-            example: 5e99a07063389569485205f3
-        paymentMean:
-          $ref: '#/components/schemas/PaymentMeanFees'
-        nbk:
-          $ref: '#/components/schemas/PaymentMeanFees'
-    PaymentMeanFees:
-      type: object
-      properties:
-        fees:
-          type: number
-          example: 8
-        spec:
-          type: object
-          properties:
-            feeId:
-              type: string
-              example: 5fff5406302aa143c3a94147
-            flat_fees:
-              type: number
-              example: 2.0
-            rate:
-              type: number
-              example: 3.0
-        type:
-          $ref: '#/components/schemas/CashInRequestType'
-
+        amount:
+          type: string
+          example: 10.2
+    MchId:
+      type: string
+      description: Unique merchant id allocated by EasyEuro merchant account
+      example: "157590000059"
+    Key:
+      type: string
+      description: Signature key
+      example: "32bf86746b7a8258a174c728c17d3de4"
+    Body:
+      type: string
+      description: Product/service
+      example: "Iphone"
+    MchCreateIp:
+      type: string
+      description: IP address of the merchant system (client)
+      example: "127.0.0.1"
+    AppId:
+      type: string
+      description: Merchant APP corresponding to WeChat open platform mobile app APPID
+      example: "9875746b7a8258a174c728c1"
+    AuthCode:
+      type: string
+      description: Signature key
+      example: "64316746b7a8258a174c72"
+    SubOpenId:
+      type: string
+      description: The openId corresponding to the merchant Official Account that WeChat users follow（
+      example: "347846b7a8258a174c728c17d"
+    SubAppId:
+      type: string
+      description: WeChat Official Account Platform AppID
+      example: "746b7a8258a174c728c17d3de"
+    NotifyUrl:
+      type: string
+      description: Callback url provided by merchant system to receive asynchronous notification of payment result from EasyEuro platform.
+        Less than 255 characters ， URL format as http://wap.tenpay.com/tenpay.asp ,can be accessed from public network
+      example: "https://domain/notify"

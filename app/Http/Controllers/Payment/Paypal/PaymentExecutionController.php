@@ -87,13 +87,13 @@ class PaymentExecutionController extends Controller
 
         if($request->has('applicationContext'))
         {
-            $successUrl = $request->get('applicationContext')['successUrl'];
-            $cancelOrFailUrl = $request->get('applicationContext')['cancelOrFailUrl'];
+            $successUrl = $request->json()->get('applicationContext')['successUrl'];
+            $cancelOrFailUrl = $request->json()->get('applicationContext')['cancelOrFailUrl'];
         }
 
         $paymentExecution = new PaymentExecution(
-            $request->get('amount'),
-            $request->get('currency'),
+            $request->json()->get('amount'),
+            $request->json()->get('currency'),
             $accountId,
             isset($successUrl)? $successUrl : null,
             isset($cancelOrFailUrl)? $cancelOrFailUrl : null
@@ -104,14 +104,14 @@ class PaymentExecutionController extends Controller
                 new CashInTransactionEntity(
                     'PAYPAL',
                     null,
-                    $request->get('amount'),
-                    $request->get('currency'),
-                    $request->get('description'),
+                    $request->json()->get('amount'),
+                    $request->json()->get('currency'),
+                    $request->json()->get('description'),
                     $accountId,
                     $request->json()->get('regions'),
                     [
                         'originatorType' => "User",
-                        'originatorId' => $request->get('originator')['originatorId']
+                        'originatorId' => $request->json()->get('originator')['originatorId']
                     ],
                     'pending',
                     time()
