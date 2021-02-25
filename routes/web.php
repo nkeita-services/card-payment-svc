@@ -128,53 +128,6 @@ $router->get('/v1/cash-ins/events/topUp/{transactionId}/fees', [
     ]
 ]);
 
-$router->post('/v1/alipay/collecting-qr-code/payments/execute/{accountId}', [
-    'uses' => 'Payment\AliPayWechatPay\Alipay\CollectingQRCodeController@collectingQRCode',
-   // 'middleware' => 'auth',
-    'as'=>'payment-gateway/AlipayCollectingQRCode'
-]);
-
-$router->post('/v1/alipay/wap-pay/payments/execute/{accountId}', [
-    'uses' => 'Payment\AliPayWechatPay\Alipay\WapPaymentController@create',
-    //'middleware' => 'auth',
-    'as'=>'payment-gateway/AlipayWapPayment'
-]);
-
-$router->get('/v1/alipay/payments/notify', [
-    'uses' =>  'Payment\AliPayWechatPay\Alipay\NotificationController@notify',
-    'as'=>'AlipayNotify'
-]);
-
-
-$router->post('/v1/wechatpay/collecting-qr-code/payments/execute/{accountId}', [
-    'uses' => 'Payment\AliPayWechatPay\Wechatpay\CollectingQRCodeController@collectingQRCode',
-    //'middleware' => 'auth',
-    'as'=>'payment-gateway/WechatPayCollectingQRCode'
-]);
-
-$router->post('/v1/wechatpay/account-pay/payments/execute/{accountId}', [
-    'uses' => 'Payment\AliPayWechatPay\Wechatpay\AccountPayController@create',
-    //'middleware' => 'auth',
-    'as'=>'payment-gateway/AlipayAccountPay'
-]);
-
-$router->post('/v1/wechatpay/app-pay/payments/execute/{accountId}', [
-    'uses' => 'Payment\AliPayWechatPay\Wechatpay\AppPayController@create',
-    //'middleware' => 'auth',
-    'as'=>'payment-gateway/AlipayAppPay'
-]);
-
-$router->get('/v1/wechatpay/payments/notify', [
-    'uses' =>  'Payment\AliPayWechatPay\Wechatpay\NotificationController@notify',
-    'as'=>'WechatpayNotify'
-]);
-
-// Business collecting QRCODE
-$router->post('/v1/alipay-wechatpay/payments/execute/{accountId}/payment-type/{paymentMean}', [
-    'uses' => 'Payment\AliPayWechatPay\BusinessCollectingQRCodeController@collectingQRCode',
-   // 'middleware' => 'auth',
-    'as'=>'payment-gateway/AlipayWechatpay'
-]);
 
 
 
