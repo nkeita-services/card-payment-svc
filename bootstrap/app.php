@@ -51,9 +51,7 @@ use App\Providers\Infrastructure\Api\Rest\Client\WalletGateway\Fee\Quote\QuoteFe
 use App\Providers\Domain\Wallet\Fee\Quote\Repository\QuoteFeeRepositoryServiceProvider;
 use App\Providers\Domain\Wallet\Fee\Quote\Service\Mapper\QuoteMapperServiceProvider;
 use App\Providers\Domain\Wallet\Fee\Quote\Service\QuoteFeeServiceProvider;
-use App\Providers\Infrastructure\Api\Soap\Client\AliPayWechatPay\PaymentOrderApiServiceProvider;
-use App\Providers\Domain\AliPayWechatPay\PaymentOrder\Repository\PaymentOrderRepositoryServiceProvider;
-use App\Providers\Domain\AliPayWechatPay\PaymentOrder\Service\PaymentOrderServiceProvider;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -172,11 +170,6 @@ $app->middleware([
  $app->register(QuoteFeeRepositoryServiceProvider::class);
  $app->register(QuoteMapperServiceProvider::class);
  $app->register(QuoteFeeServiceProvider::class);
- $app->register(PaymentOrderApiServiceProvider::class);
- $app->register(PaymentOrderRepositoryServiceProvider::class);
- $app->register(PaymentOrderServiceProvider::class);
-
-
 
 /*
 |--------------------------------------------------------------------------
