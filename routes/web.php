@@ -59,7 +59,11 @@ $router->put('/v1/mtn/payments/callback', [
 $router->post('/v1/paypal/payments/execute/{accountId}', [
     'uses' => 'Payment\Paypal\PaymentExecutionController@createOrder',
     'middleware' => 'auth',
-    'as'=>'payment-gateway/PaypalPaymentExecutionCreateExecution'
+    'as'=>'payment-gateway/PaypalPaymentExecutionCreateExecution',
+    'groups'=> [
+        'root',
+        'admin'
+    ]
 ]);
 
 $router->post('/v1/paypal/payments/paypalwebhook', [

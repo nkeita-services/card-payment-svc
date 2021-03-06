@@ -47,7 +47,9 @@
         amount: <?php echo $amount ?>,
         accountId: "<?php echo $accountId ?>",
         description: "<?php echo $description ?>",
+          regions: ["5e99a07063389569485205f3"],
         originator: originator
+
       };
       var accessToken = "<?php echo $accessToken ?>"
   </script>
