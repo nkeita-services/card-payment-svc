@@ -42,7 +42,6 @@
           originatorId: "<?php echo $userId ?>"
       };
       var orderData = {
-        items: [{ id: "photo-subscription" }],
         currency: "<?php echo $currency ?>",
         amount: <?php echo $amount ?>,
         accountId: "<?php echo $accountId ?>",
