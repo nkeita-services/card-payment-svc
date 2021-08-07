@@ -34,7 +34,7 @@ class CashInController extends Controller
     private $accountService;
 
     /**
-     * IndexController constructor.
+     * CashInController constructor.
      * @param CollectionService $collectionService
      * @param CashInTransactionService $cashInTransactionService
      * @param AccountService $accountService
