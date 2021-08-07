@@ -106,12 +106,12 @@ class QuoteRequestEntity implements QuoteRequestEntityInterface
         $transactionData =  [
             "paymentMean"=> ucfirst(strtolower($this->paymentMean)),
             "amount"=> floatval($this->amount),
-            "accountId"=>$this->currency,
-            "walletOrganizations"=>$this->walletOrganizations,
-            "regions"=>$this->regions,
-            'operation'=>$this->operation,
-            'currency'=>$this->currency,
-            'originator'=>$this->originator
+            "accountId"=> $this->accountId,
+            "walletOrganizations"=> $this->walletOrganizations,
+            "regions"=> $this->regions,
+            'operation'=> $this->operation,
+            'currency'=> $this->currency,
+            'originator'=> $this->originator
         ];
 
         return array_filter(

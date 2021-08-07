@@ -25,13 +25,13 @@ class UserMapper implements UserMapperInterface
         );
 
         return new UserEntity(
-            $userData['data']['walletAccountUser']['lastName'],
-            $userData['data']['walletAccountUser']['firstName'],
-            $userData['data']['walletAccountUser']['address'],
-            $userData['data']['walletAccountUser']['email'],
-            $userData['data']['walletAccountUser']['phoneNumber'],
-            $userData['data']['walletAccountUser']['mobileNumber'],
-            $userData['data']['walletAccountUser']['language'],
+            $userData['data']['walletAccountUser']['lastName'] ?? null,
+            $userData['data']['walletAccountUser']['firstName'] ?? null,
+            $userData['data']['walletAccountUser']['address'] ?? null,
+            $userData['data']['walletAccountUser']['email'] ?? null,
+            $userData['data']['walletAccountUser']['phoneNumber'] ?? null,
+            $userData['data']['walletAccountUser']['mobileNumber'] ?? null,
+            $userData['data']['walletAccountUser']['language'] ?? null,
             $userData['data']['walletAccountUser']['walletOrganizations'],
             $userData['data']['walletAccountUser']['userId']
         );
