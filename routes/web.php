@@ -60,7 +60,8 @@ $router->post('/v1/paypal/payments/execute/{accountId}', [
     'as'=>'payment-gateway/PaypalPaymentExecutionCreateExecution',
     'groups'=> [
         'root',
-        'admin'
+        'admin',
+       'user'
     ]
 ]);
 
@@ -129,6 +130,12 @@ $router->get('/v1/cash-ins/events/topUp/{transactionId}/fees', [
         'admin'
     ]
 ]);
+
+
+$router->get('/v1/nbk/payments/update-wallet-accounts/cash-in', [
+    'uses' => 'Payment\CashIn\MTN\TransactionsController@updateWalletAccounts',
+]);
+
 
 
 

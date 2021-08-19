@@ -75,6 +75,7 @@ class PaymentExecutionController extends Controller
             ]
         );
 
+
         if ($validator->fails()) {
             return response()->json(
                 [
@@ -141,7 +142,8 @@ class PaymentExecutionController extends Controller
             ]
         ]);
 
-/*        return redirect(
+
+      /* return redirect(
             $transaction->getExtras()
             ['approveUrl']
         );*/
