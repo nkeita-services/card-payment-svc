@@ -36,7 +36,8 @@ $router->post('/v1/mtn/payments/accounts/{accountId}/cash-in', [
     'as'=>'payment-gateway/MTNCashIn',
     'groups'=> [
         'root',
-        'admin'
+        'admin',
+        'user'
     ]
 ]);
 
@@ -61,7 +62,7 @@ $router->post('/v1/paypal/payments/execute/{accountId}', [
     'groups'=> [
         'root',
         'admin',
-       'user'
+        'user'
     ]
 ]);
 

@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Payment\CashIn\MTN;
 
 use App\Http\Controllers\Controller;
+use GPBMetadata\Google\Api\Log;
 use Illuminate\Http\Request;
 use Payment\Account\Service\AccountService;
 use Payment\Account\Service\AccountServiceInterface;
@@ -83,6 +84,8 @@ class CashInController extends Controller
             $cashInTransactionEntity = $this->collectionService->requestToPayStatus(
                 $cashInTransactionEntity->getTransactionId()
             );
+
+            \Illuminate\Support\Facades\Log::debug(json_encode($cashInTransactionEntity));
 
             if ($cashInTransactionEntity->isSuccessful()) {
                 $result = $this
