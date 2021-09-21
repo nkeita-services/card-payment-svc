@@ -161,6 +161,14 @@ class CashOutTransactionEntity implements CashOutTransactionEntityInterface
         return $this->originator['originatorId'];
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getOriginatorExternalMobileNumber(): ?string
+    {
+        return $this->originator['mobileNumber'] ?? null;
+    }
+
 
     /**
      * @return string
