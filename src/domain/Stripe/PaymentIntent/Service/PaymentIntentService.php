@@ -84,7 +84,11 @@ class PaymentIntentService implements PaymentIntentServiceInterface
                 $transaction->getTransactionId(),
                 $fees->toArray()
             );
-        } catch (QuoteNotFoundServiceException $e) {}
+        } catch (QuoteNotFoundServiceException $e) {
+            /*throw new PaymentIntentException(
+                   $e->getMessage()
+               );*/
+        }
 
         try {
             $intent = PaymentIntent::create([
