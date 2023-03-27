@@ -231,7 +231,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
      */
     public function isSuccessful(): bool
     {
-        return $this->status == 'successful';
+        return $this->status == true;
     }
 
     /**
