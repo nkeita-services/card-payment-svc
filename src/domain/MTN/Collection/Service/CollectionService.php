@@ -123,7 +123,7 @@ class CollectionService implements CollectionServiceInterface
                             $accountId
                         ),
                         RequestToPayEntityInterface::PARTY_ID_TYPE_MSISDN,
-                        $this->walletGatewayService->mobileNumberFromUserId($originator['originatorId']),
+                        $originator['mobileNumber'] ?? $this->walletGatewayService->mobileNumberFromUserId($originator['originatorId']),
                         $message ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $note ?? CashInTransactionEntityInterface::DESCRIPTION_DEFAULT,
                         $cashInTransactionEntity->getTransactionId()

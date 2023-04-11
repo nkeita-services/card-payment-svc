@@ -36,7 +36,8 @@ $router->post('/v1/mtn/payments/accounts/{accountId}/cash-in', [
     'as'=>'payment-gateway/MTNCashIn',
     'groups'=> [
         'root',
-        'admin'
+        'admin',
+        'user'
     ]
 ]);
 
@@ -51,10 +52,8 @@ $router->get('/v1/mtn/payments/update-wallet-accounts/cash-in', [
 ]);
 
 $router->put('/v1/mtn/payments/callback', [
-    'uses' => 'Payment\CashIn\MTN\IndexController@callback',
+    'uses' => 'Payment\CashIn\MTN\CashInController@callback',
 ]);
-
-
 
 $router->post('/v1/paypal/payments/execute/{accountId}', [
     'uses' => 'Payment\Paypal\PaymentExecutionController@createOrder',
@@ -62,7 +61,8 @@ $router->post('/v1/paypal/payments/execute/{accountId}', [
     'as'=>'payment-gateway/PaypalPaymentExecutionCreateExecution',
     'groups'=> [
         'root',
-        'admin'
+        'admin',
+        'user'
     ]
 ]);
 
@@ -73,7 +73,7 @@ $router->post('/v1/paypal/payments/paypalwebhook', [
 
 
 $router->get('/v1/stripe/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\Stripe\PaymentIntentController@form');
-$router->get('/v1/mtn/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\CashIn\MTN\IndexController@form');
+$router->get('/v1/mtn/payments/form/{amount}/{currency}/{accountId}/{userId}', 'Payment\CashIn\MTN\CashInController@form');
 
 $router->post('/v1/mtn/payments/accounts/{accountId}/cash-out', [
     'uses' => 'Payment\CashOut\MTN\CashOutController@create',
@@ -131,6 +131,12 @@ $router->get('/v1/cash-ins/events/topUp/{transactionId}/fees', [
         'admin'
     ]
 ]);
+
+
+$router->get('/v1/nbk/payments/update-wallet-accounts/cash-in', [
+    'uses' => 'Payment\CashIn\MTN\TransactionsController@updateWalletAccounts',
+]);
+
 
 
 

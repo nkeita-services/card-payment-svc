@@ -101,6 +101,7 @@ class MTNRemittanceService implements MTNRemittanceServiceInterface
                     $entity->getAmount(),
                     $entity->getCurrency(),
                     RequestToPayEntityInterface::PARTY_ID_TYPE_MSISDN,
+                    $entity->getOriginatorExternalMobileNumber() ??
                     $this->walletGatewayService->mobileNumberFromUserId(
                         $entity->getOriginatorId()
                     ),

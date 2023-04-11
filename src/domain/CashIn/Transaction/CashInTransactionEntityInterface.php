@@ -46,6 +46,11 @@ interface CashInTransactionEntityInterface
     /**
      * @return string
      */
+    public function getOriginatorExternalMobileNumber(): ?string;
+
+    /**
+     * @return string
+     */
     public function getTransactionId(): string;
 
     /**

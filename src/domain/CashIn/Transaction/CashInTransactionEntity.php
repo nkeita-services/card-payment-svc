@@ -159,6 +159,14 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
         return $this->originator['originatorId'];
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getOriginatorExternalMobileNumber(): ?string
+    {
+        return $this->originator['mobileNumber'] ?? null;
+    }
+
 
     /**
      * @return string
@@ -223,7 +231,7 @@ class CashInTransactionEntity implements CashInTransactionEntityInterface
      */
     public function isSuccessful(): bool
     {
-        return $this->status == 'successful';
+        return $this->status == true;
     }
 
     /**
