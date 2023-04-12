@@ -46,7 +46,7 @@
         amount: <?php echo $amount ?>,
         accountId: "<?php echo $accountId ?>",
         description: "<?php echo $description ?>",
-          regions: ["5e99a07063389569485205f3"],
+          regions: ["5ff7413f43916700d8666ed2"],
         originator: originator
 
       };
