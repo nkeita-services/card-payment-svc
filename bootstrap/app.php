@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 
+use App\Providers\AppServiceProvider;
 use Jenssegers\Mongodb\MongodbServiceProvider;
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -128,6 +129,7 @@ $app->middleware([
 | totally optional, so you are not required to uncomment this line.
 |
 */
+$app->register(AppServiceProvider::class);
  $app->register(CorsServiceProvider::class);
  $app->register(AccountApiClientProvider::class);
  $app->register(AccountServiceProvider::class);

@@ -6,7 +6,9 @@
     <meta name="description" content="A demo of Stripe Payment Intents" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="icon" href="<?php echo URL::to('/img/stripe/favicon.ico')?>" type="image/x-icon" />
+    <link rel="icon" href="<?php use Illuminate\Support\Facades\URL;
+
+    echo URL::to('/img/stripe/favicon.ico')?>" type="image/x-icon" />
     <link rel="stylesheet" href="<?php echo URL::to('/css/stripe/normalize.css')?>" />
     <link rel="stylesheet" href="<?php echo URL::to('/css/stripe/global.css')?>" />
     <script src="https://js.stripe.com/v3/"></script>
