@@ -27,7 +27,12 @@ $router->post('/v1/stripe/payments/webhook', [
 $router->post('/v1/stripe/payments/intents/{accountId}', [
     'uses' => 'Payment\Stripe\PaymentIntentController@create',
     'middleware' => 'auth',
-    'as'=>'payment-gateway/StripeCreatePaymentIntent'
+    'as'=>'payment-gateway/StripeCreatePaymentIntent',
+    'groups'=> [
+        'root',
+        'admin',
+        'user'
+    ]
 ]);
 
 $router->post('/v1/mtn/payments/accounts/{accountId}/cash-in', [
