@@ -51,5 +51,6 @@
 
       };
       var accessToken = "<?php echo $accessToken ?>"
+      var stripePaymentIntentEndpoint = "<?php echo URL::to('/v1/stripe/payments/intents/') ?>"
   </script>
 </html>
