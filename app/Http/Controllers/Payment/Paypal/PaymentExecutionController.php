@@ -96,8 +96,8 @@ class PaymentExecutionController extends Controller
             $request->json()->get('amount'),
             $request->json()->get('currency'),
             $accountId,
-            isset($successUrl)? $successUrl : null,
-            isset($cancelOrFailUrl)? $cancelOrFailUrl : null
+            $successUrl ? $successUrl : "https://wallet-payment-svc-x6fr3lwlgq-nw.a.run.app/v1/paypal/payments/sucess",
+            $cancelOrFailUrl? : "https://wallet-payment-svc-x6fr3lwlgq-nw.a.run.app/v1/paypal/payments/cancel"
         );
 
         try {
@@ -226,8 +226,8 @@ class PaymentExecutionController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'token' => ['required', 'string'],
-                'PayerID' => ['required', 'string'],
+                'orderId' => ['required', 'string'],
+                'paymentId' => ['required', 'string'],
             ]
         );
 
@@ -243,7 +243,7 @@ class PaymentExecutionController extends Controller
         try {
 
             $transaction = $this->paymentExecutionService->captureOrder(
-                $request->get('token')
+                $request->get('orderId')
             );
 
             $this->accountService->topUpFromCashInTransaction(
