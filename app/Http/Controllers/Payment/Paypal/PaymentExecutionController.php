@@ -226,8 +226,8 @@ class PaymentExecutionController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'orderId' => ['required', 'string'],
-                'paymentId' => ['required', 'string'],
+                'token' => ['required', 'string'],
+                'PayerID' => ['required', 'string'],
             ]
         );
 
@@ -240,18 +240,23 @@ class PaymentExecutionController extends Controller
                 ]
             );
         }
+
+        $nbkSuccess = "https://wallet-payment-svc-x6fr3lwlgq-nw.a.run.app/v1/paypal/payments/sucess";
         try {
 
             $transaction = $this->paymentExecutionService->captureOrder(
-                $request->get('token') ? $request->get('token'): $request->get('orderId')
+                $request->get('token')
             );
 
             $this->accountService->topUpFromCashInTransaction(
                 $transaction
             );
 
-            if (!is_null( $transaction->getExtras()['successUrl']))
-            {
+            if (
+                !is_null($transaction->getExtras()['successUrl'])
+                &&
+                $transaction->getExtras()['successUrl'] !== $nbkSuccess
+            ) {
                 return redirect(
                     sprintf('%s?orderId=%s&paymentId=%s&transactionId=%s',
                         $transaction->getExtras()['successUrl'],
