@@ -243,7 +243,7 @@ class PaymentExecutionController extends Controller
         try {
 
             $transaction = $this->paymentExecutionService->captureOrder(
-                $request->get('orderId')
+                $request->get('token') ? $request->get('token'): $request->get('orderId')
             );
 
             $this->accountService->topUpFromCashInTransaction(
